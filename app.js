@@ -5,8 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var createIndexRouter = require('./routes/index');
+var createTutorCenterRouter = require('./routes/tutorCenter');
+var createAdminRouter = require('./routes/admin');
+
+
+var index = createIndexRouter();
+var tutorCenter = createTutorCenterRouter();
+var admin = createAdminRouter();
 
 var app = express();
 
@@ -23,7 +29,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/tutorCenter', tutorCenter);
+app.use('/admin', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

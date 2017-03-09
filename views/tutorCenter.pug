@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    div(class='students')
+        table(id='studentTable' style='padding:20px')
+            thead
+                th Name
+                th Course
+            tbody
+                - for(var i = 0; i < students.length; i ++)
+                    tr
+                        td #{students[i].name}
+                        td #{students[i].course}
+
