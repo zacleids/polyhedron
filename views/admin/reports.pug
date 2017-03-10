@@ -6,3 +6,6 @@ block secondaryNav
 block content
     h1= title
     p Welcome to #{title}
+
+    form#linkDisplay(action='/admin/downloadReport' method='post')
+        input(type='submit' value='Get Report')
