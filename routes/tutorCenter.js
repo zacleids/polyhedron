@@ -8,7 +8,7 @@ function student(name, course) {
     this.course = course || '';
 }
 
-function makeStudent(line){
+function makeStudent(line) {
     var parts = line.split(',');
     return new student(parts[0], parts[1]);
 }
@@ -16,13 +16,13 @@ function makeStudent(line){
 function createTutorCenterRouter(opts) {
     var router = express.Router();
 
-    router.get('/', function(req, res, next) {
+    router.get('/', function (req, res, next) {
         var students = [];
         var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
         fs.readFile(file, renderResponse);
 
         function renderResponse(err, data) {
-            if(err){
+            if (err) {
                 console.log('An unknown error occurred: ', err);
                 return;
             }
@@ -31,14 +31,13 @@ function createTutorCenterRouter(opts) {
             lines.forEach(function (line) {
                 students.push(makeStudent(line));
             });
-            res.render('tutorCenter', { students: students });
+            res.render('tutorCenter', {students: students});
         }
 
     });
 
     return router;
 }
-
 
 
 module.exports = createTutorCenterRouter;
