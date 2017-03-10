@@ -12,6 +12,10 @@ var createAdminRouter = require('./routes/admin');
 
 var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.json'), 'UTF-8'));
 
+//var createDBconnection = require('./db/db');
+//var db = createDBconnection();
+//opts.db = db;
+
 
 var index = createIndexRouter(opts);
 var tutorCenter = createTutorCenterRouter(opts);
