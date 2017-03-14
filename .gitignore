@@ -72,3 +72,5 @@ rt-jenkins/
 # Ignore all emacs backup files #
 #################################
 *~
+
+fakeData/excelGeneration
