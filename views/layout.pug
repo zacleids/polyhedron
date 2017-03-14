@@ -1,16 +1,35 @@
 doctype html
-html
+html(lang='en')
     head
-        title= title
-        link(rel='stylesheet', href='/stylesheets/style.css')
-    body
-        nav(class='top-nav')
-            div
-                ul
-                    li
-                        a(href='/tutorCenter') Poly:MLC
-                    li
-                        a(href='/admin') Admin
-        block secondaryNav
+        meta(charset='UTF-8')
+        meta(http-equiv='X-UA-Compatible', content='IE=edge')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        meta(name='description', content='Polyhedron: Tutoring center System application')
+        meta(name='author', content='Polyhedral Visionaries')
+        link(rel='icon', href='/images/favicon_png.ico')
+        title Polyhedron
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css')
+        link(href='/stylesheets/style.css', rel='stylesheet')
+    body(data-spy='scroll', data-target='.scrollspy')
+        nav.navbar.navbar-inverse.navbar-fixed-top
+            .container
+                .navbar-header
+                    button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+                        span.sr-only Toggle navigation
+                        span.icon-bar
+                        span.icon-bar
+                        span.icon-bar
+                    a.navbar-brand(href='/tutorCenter') Polyhedron
+                #navbar.navbar-collapse.collapse
+                    ul.nav.navbar-nav
+                        li
+                            a(href='#') Sign In
+                        li
+                            a(href='#') Sign Out
+                        li
+                            a(href='/admin') Admin Section
+        div
+            block adminNav
         div
             block content
