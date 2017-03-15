@@ -1,11 +1,12 @@
 block adminNav
-    ul.nav.nav-pills(role='tablist')
-        li(role='presentation')
-            a(href='/admin/options')
-                | Configuration
-        li(role='presentation')
-            a(href='/admin/reports')
-                | Reports
-        li(role='presentation')
-            a(href='/admin/statistics')
-                | Statistics
+    div.adminNavWrapper
+        ul.nav.nav-pills(role='tablist')
+            li(role='presentation')
+                a.adminNavLink(href='/admin/options')
+                    | Configuration
+            li(role='presentation')
+                a.adminNavLink(href='/admin/reports')
+                    | Reports
+            li(role='presentation')
+                a.adminNavLink(href='/admin/statistics')
+                    | Statistics
