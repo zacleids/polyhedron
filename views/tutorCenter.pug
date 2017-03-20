@@ -1,13 +1,51 @@
 extends layout
 
 block content
-    div(class='students')
-        table(id='studentTable' style='padding:20px')
-            thead
-                th Name
-                th Course
-            tbody
-                - for(var i = 0; i < students.length; i++)
-                    tr
-                        td #{students[i].name}
-                        td #{students[i].course}
+    .container-fluid
+        .row
+            .col-md-2
+            .col-md-4
+                .row
+                    .col-md-12
+                        fieldset.tableBorder
+                            legend.tableBorder Students
+                                .insideLegend.insideStudentLegend
+                                    table.table.table-striped(id='studentTable' )
+                                        thead
+                                            th Name
+                                            th Course
+                                        tbody
+                                            - for(var i = 0; i < students.length; i++)
+                                                tr
+                                                    td #{students[i].name}
+                                                    td #{students[i].course}
+            .col-md-4
+                .row
+                    .col-md-12
+                        fieldset.tableBorder
+                            legend.tableBorder Requests
+                                .insideLegend.insideRequestLegend
+                                    table.table.table-striped(id='requestsTable')
+                                        thead
+                                            th Name
+                                            th Course
+                                        tbody
+                                            - for(var i = 0; i < students.length; i++)
+                                                tr
+                                                    td #{students[i].name}
+                                                        td #{students[i].course}
+                .row
+                    .col-md-12
+                        fieldset.tableBorder
+                            legend.tableBorder Tutors
+                                .insideLegend.insideTutorLegend
+                                    table.table.table-striped(id='tutorsTable')
+                                        thead
+                                            th Name
+                                            th Course
+                                        tbody
+                                            - for(var i = 0; i < students.length; i++)
+                                                tr
+                                                    td #{students[i].name}
+                                                    td #{students[i].course}
+            .col-md-2
