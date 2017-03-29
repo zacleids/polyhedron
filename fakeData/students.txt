@@ -1,28 +1,28 @@
-Cody Patterson, CST 438
-Zac Leids, MATH 151
-Sean Patterson, CST 336
-firstName lastName, ART 123
-Salad Fingers, LOL 666
-Fake Student, KEK 123
-Another One, LOL 123
-Cody Patterson, CST 438
-Zac Leids, MATH 151
-Sean Patterson, CST 336
-firstName lastName, ART 123
-Salad Fingers, LOL 666
-Fake Student, KEK 123
-Another One, LOL 123
-Cody Patterson, CST 438
-Zac Leids, MATH 151
-Sean Patterson, CST 336
-firstName lastName, ART 123
-Salad Fingers, LOL 666
-Fake Student, KEK 123
-Another One, LOL 123
-Cody Patterson, CST 438
-Zac Leids, MATH 151
-Sean Patterson, CST 336
-firstName lastName, ART 123
-Salad Fingers, LOL 666
-Fake Student, KEK 123
-Another One, LOL 123
+Cody Patterson, CST 438, center 1
+Zac Leids, MATH 151, center 2
+Sean Patterson, CST 336, center 3
+firstName lastName, ART 123, center 1
+Salad Fingers, LOL 666, center 1
+Fake Student, KEK 123, center 2
+Another One, LOL 123, center 1
+Cody Patterson, CST 438, center 1
+Zac Leids, MATH 151, center 2
+Sean Patterson, CST 336, center 3
+firstName lastName, ART 123, center 1
+Salad Fingers, LOL 666, center 1
+Fake Student, KEK 123, center 2
+Another One, LOL 123, center 1
+Cody Patterson, CST 438, center 1
+Zac Leids, MATH 151, center 2
+Sean Patterson, CST 336, center 3
+firstName lastName, ART 123, center 1
+Salad Fingers, LOL 666, center 1
+Fake Student, KEK 123, center 2
+Another One, LOL 123, center 1
+Cody Patterson, CST 438, center 1
+Zac Leids, MATH 151, center 2
+Sean Patterson, CST 336, center 3
+firstName lastName, ART 123, center 1
+Salad Fingers, LOL 666, center 1
+Fake Student, KEK 123, center 2
+Another One, LOL 123, center 1

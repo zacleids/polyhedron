@@ -14,11 +14,13 @@ block content
                                         thead
                                             th Name
                                             th Course
+                                            th Location
                                         tbody
                                             - for(var i = 0; i < students.length; i++)
                                                 tr
                                                     td #{students[i].name}
                                                     td #{students[i].course}
+                                                    td #{students[i].location}
             .col-md-4
                 .row
                     .col-md-12
@@ -29,11 +31,19 @@ block content
                                         thead
                                             th Name
                                             th Course
+                                            th Location
+                                            th Wait Time
+                                            th Request
+                                            th Tutor
                                         tbody
-                                            - for(var i = 0; i < students.length; i++)
+                                            - for(var i = 0; i < requests.length; i++)
                                                 tr
-                                                    td #{students[i].name}
-                                                        td #{students[i].course}
+                                                    td #{requests[i].name}
+                                                    td #{requests[i].course}
+                                                    td #{requests[i].location}
+                                                    td #{requests[i].waitTime}
+                                                    td #{requests[i].request}
+                                                    td #{requests[i].tutor}
                 .row
                     .col-md-12
                         fieldset.tableBorder
@@ -42,10 +52,10 @@ block content
                                     table.table.table-striped(id='tutorsTable')
                                         thead
                                             th Name
-                                            th Course
+                                            th Login Time
                                         tbody
-                                            - for(var i = 0; i < students.length; i++)
+                                            - for(var i = 0; i < tutors.length; i++)
                                                 tr
-                                                    td #{students[i].name}
-                                                    td #{students[i].course}
+                                                    td #{tutors[i].name}
+                                                    td #{tutors[i].loginTime}
             .col-md-2
