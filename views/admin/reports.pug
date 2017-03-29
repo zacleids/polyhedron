@@ -6,24 +6,16 @@ block adminNav
 block content
     h1= title
     p Welcome to #{title}
-    <div class="row">
-        <div class="col-md-1">left margin</div>
-        <div class="col-md-3">Option Pane 1</div>
-        <div class="col-md-3">Option Pane 2</div>
-        <div class="col-md-1">separation margin</div>
-        <div class="col-md-3">
-            div.form-group
-                form#linkDisplay(action='/admin/generateReport' method='post')
-                    button.btn.btn-default(type='submit') Generate Report
 
-            div.form-group
-                form#listReports(action='/admin/downloadReport' method='post')
-                    if (files)
-                        label(class='label' for='fileSelector') File
-                            select.form-control(name='fileSelector' id='fileSelector')
-                                - for (var i = 0; i < files.length; i++)
-                                option(value=files[i]) #{files[i]}
-                    button.btn.btn-default(type='submit') Download Report
-        </div>
-        <div class="col-md-1">right margin</div>
-    </div>
+div.form-group
+    form#linkDisplay(action='/admin/generateReport' method='post')
+        button.btn.btn-default(type='submit') Generate Report
+
+div.form-group
+    form#listReports(action='/admin/downloadReport' method='post')
+        if (files)
+            label(class='label' for='fileSelector') File
+                select.form-control(name='fileSelector' id='fileSelector')
+                    - for (var i = 0; i < files.length; i++)
+                    option(value=files[i]) #{files[i]}
+        button.btn.btn-default(type='submit') Download Report
