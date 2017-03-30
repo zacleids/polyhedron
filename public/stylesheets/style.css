@@ -1,7 +1,6 @@
 body {
     padding: 65px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-    overflow: hidden;
 }
 
 a {
@@ -29,4 +28,9 @@ a {
 
 .insideStudentLegend {
     height: 38.3em;
+}
+
+#classOccurrences {
+    height:500px;
+    width:900px;
 }

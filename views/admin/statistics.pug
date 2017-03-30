@@ -5,4 +5,12 @@ block adminNav
 
 block content
     h1= title
-    p Welcome to #{title}
+    table.table.table-striped(id='classOccurrences')
+        thead
+            th CourseName
+            th Occurrence
+        tbody
+            - for(var course in classWithOccurrences)
+                tr
+                    td #{course}
+                    td #{classWithOccurrences[course]}

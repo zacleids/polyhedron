@@ -3,7 +3,6 @@ var path = require('path');
 var express = require('express');
 var async = require('async');
 
-
 function student(name, course, location) {
     this.name = name || '';
     this.course = course || '';

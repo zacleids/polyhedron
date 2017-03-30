@@ -1,7 +1,12 @@
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
-var excelbuilder = require('msexcel-builder');
+var excelBuilder = require('msexcel-builder');
+
+function ClassWithOccurrence(courseName, occurrence) {
+    this.course = courseName || '';
+    this.count = occurrence || '';
+}
 
 function createAdminRouter(opts) {
     var router = express.Router();
@@ -9,6 +14,8 @@ function createAdminRouter(opts) {
     router.get('/', function (req, res, next) {
         res.render('admin/admin', {title: 'admin'});
     });
+
+    // *************** reports page ***************
 
     router.get('/reports', function (req, res, next) {
         fs.readdir(path.join(__dirname, '..', 'fakeData', 'excelGeneration'), function(err, files){
@@ -28,7 +35,7 @@ function createAdminRouter(opts) {
         var dateString = (date.getMonth()+1)  + "-" + date.getDate() + "-" + date.getFullYear() + "T" +
             date.getHours() + "-" + date.getMinutes() + '-' + date.getSeconds();
         var newFile = 'sample-' + dateString + '.xlsx';
-        var workbook = excelbuilder.createWorkbook(path.join(__dirname, '..', 'fakeData', 'excelGeneration'), newFile);
+        var workbook = excelBuilder.createWorkbook(path.join(__dirname, '..', 'fakeData', 'excelGeneration'), newFile);
 
         var sheet1 = workbook.createSheet('sheet1', 100, 100);
         sheet1.set(1, 1, 'Name');
@@ -75,16 +82,56 @@ function createAdminRouter(opts) {
         });
     });
 
+    // *************** configurations page ***************
+
     router.get('/options', function (req, res, next) {
         res.render('admin/options', {title: 'options'});
     });
 
+    // *************** statistics page ***************
+
     router.get('/statistics', function (req, res, next) {
-        res.render('admin/statistics', {title: 'statistics'});
+        var classWithOccurrences = {};
+        var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
+        fs.readFile(file, renderResponse);
+
+        function renderResponse(err, data) {
+            if (err) {
+                console.log('An unknown error occurred: ', err);
+                return;
+            }
+
+            // finding the number of occurrences of each class.
+            // normally this would be done in an SQL query.
+
+            var lines = data.toString().split('\n');
+            var distinctClasses = [];
+            var courseName = '';
+            var len = lines.length;
+
+            for(var i = 0; i < len; i++) {
+                courseName = lines[i].split(',')[1];
+                if (!distinctClasses.indexOf(courseName) > -1) {
+                    distinctClasses.push(courseName);
+                }
+            }
+
+            for(i = 0; i < distinctClasses.length; i++) {
+                classWithOccurrences[distinctClasses[i]] = 0;
+            }
+
+            for(i = 0; i < len; i++) {
+                courseName = lines[i].split(',')[1];
+                classWithOccurrences[courseName]++;
+            }
+
+            console.log(classWithOccurrences);
+            res.render('admin/statistics', {title: 'statistics', classWithOccurrences: classWithOccurrences});
+        }
+
     });
 
     return router;
 }
-
 
 module.exports = createAdminRouter;
