@@ -122,6 +122,9 @@ function createTutorCenterRouter(opts) {
             },
             tutorTable: function (cb) {
                 cb(null, opts.tutorTable);
+            },
+            scrollingText: function(cb) {
+                cb(null, opts.scrollingText);
             }
         }, function (err, result) {
             res.render('tutorCenter', result);

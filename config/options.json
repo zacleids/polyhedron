@@ -1,4 +1,5 @@
 {
   "requestsTable": true,
-  "tutorTable": true
+  "tutorTable": true,
+  "scrollingText": true
 }
