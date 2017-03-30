@@ -85,7 +85,23 @@ function createAdminRouter(opts) {
     // *************** configurations page ***************
 
     router.get('/options', function (req, res, next) {
-        res.render('admin/options', {title: 'options'});
+        res.render('admin/options', {
+            title: 'options',
+            tutorTable: opts.tutorTable,
+            requestsTable: opts.requestsTable
+        });
+    });
+
+    router.post('/options', function (req, res, next) {
+        opts.requestsTable = !!req.body.requestsTable;
+        opts.tutorTable = !!req.body.tutorTable;
+
+        res.render('admin/options', {
+            title: 'options',
+            tutorTable: opts.tutorTable,
+            requestsTable: opts.requestsTable,
+            done: true
+        });
     });
 
     // *************** statistics page ***************

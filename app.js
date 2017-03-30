@@ -4,15 +4,18 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 var createIndexRouter = require('./routes/index');
 var createTutorCenterRouter = require('./routes/tutorCenter');
 var createAdminRouter = require('./routes/admin');
 
+var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.json'), 'UTF-8'));
 
-var index = createIndexRouter();
-var tutorCenter = createTutorCenterRouter();
-var admin = createAdminRouter();
+
+var index = createIndexRouter(opts);
+var tutorCenter = createTutorCenterRouter(opts);
+var admin = createAdminRouter(opts);
 
 var app = express();
 

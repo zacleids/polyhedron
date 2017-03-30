@@ -6,3 +6,17 @@ block adminNav
 block content
     h1= title
     p Welcome to #{title}
+
+    div.form-group
+        form#submitOptions(action='/admin/options' method='post')
+            div
+                input.checkbox-input(type='checkbox' name='requestsTable' id='requestsTable' value='requestsTable' checked=requestsTable)
+                label(for='requestsTable')='Request Table'
+            div
+                input.checkbox-input(type='checkbox' name='tutorTable' id='tutorTable' value='tutorTable' checked=tutorTable)
+                label(for='tutorTable')='Tutor Table'
+            div
+                button.btn.btn-default(type='submit') Apply Options
+    if(done)
+        div
+            p Changes made!

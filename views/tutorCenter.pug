@@ -22,40 +22,42 @@ block content
                                                     td #{students[i].course}
                                                     td #{students[i].location}
             .col-md-4
-                .row
-                    .col-md-12
-                        fieldset.tableBorder
-                            legend.tableBorder Requests
-                                .insideLegend.insideRequestLegend
-                                    table.table.table-striped(id='requestsTable')
-                                        thead
-                                            th Name
-                                            th Course
-                                            th Location
-                                            th Wait Time
-                                            th Request
-                                            th Tutor
-                                        tbody
-                                            - for(var i = 0; i < requests.length; i++)
-                                                tr
-                                                    td #{requests[i].name}
-                                                    td #{requests[i].course}
-                                                    td #{requests[i].location}
-                                                    td #{requests[i].waitTime}
-                                                    td #{requests[i].request}
-                                                    td #{requests[i].tutor}
-                .row
-                    .col-md-12
-                        fieldset.tableBorder
-                            legend.tableBorder Tutors
-                                .insideLegend.insideTutorLegend
-                                    table.table.table-striped(id='tutorsTable')
-                                        thead
-                                            th Name
-                                            th Login Time
-                                        tbody
-                                            - for(var i = 0; i < tutors.length; i++)
-                                                tr
-                                                    td #{tutors[i].name}
-                                                    td #{tutors[i].loginTime}
+                if(requestsTable)
+                    .row
+                        .col-md-12
+                            fieldset.tableBorder
+                                legend.tableBorder Requests
+                                    .insideLegend.insideRequestLegend
+                                        table.table.table-striped(id='requestsTable')
+                                            thead
+                                                th Name
+                                                th Course
+                                                th Location
+                                                th Wait Time
+                                                th Request
+                                                th Tutor
+                                            tbody
+                                                - for(var i = 0; i < requests.length; i++)
+                                                    tr
+                                                        td #{requests[i].name}
+                                                        td #{requests[i].course}
+                                                        td #{requests[i].location}
+                                                        td #{requests[i].waitTime}
+                                                        td #{requests[i].request}
+                                                        td #{requests[i].tutor}
+                if(tutorTable)
+                    .row
+                        .col-md-12
+                            fieldset.tableBorder
+                                legend.tableBorder Tutors
+                                    .insideLegend.insideTutorLegend
+                                        table.table.table-striped(id='tutorsTable')
+                                            thead
+                                                th Name
+                                                th Login Time
+                                            tbody
+                                                - for(var i = 0; i < tutors.length; i++)
+                                                    tr
+                                                        td #{tutors[i].name}
+                                                        td #{tutors[i].loginTime}
             .col-md-2

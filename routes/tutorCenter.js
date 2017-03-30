@@ -116,6 +116,12 @@ function createTutorCenterRouter(opts) {
                     });
                     cb(null, tutors);
                 }
+            },
+            requestsTable: function (cb) {
+                cb(null, opts.requestsTable);
+            },
+            tutorTable: function (cb) {
+                cb(null, opts.tutorTable);
             }
         }, function (err, result) {
             res.render('tutorCenter', result);
