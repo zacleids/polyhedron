@@ -1,4 +1,5 @@
 body {
+    overflow:hidden;
     padding: 65px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -17,20 +18,20 @@ a {
 }
 
 .table {
+    font-size:13px;
     border: solid lightgrey 1px;
     padding: 20px;
 }
 
 .insideLegend {
     overflow-y: scroll;
-    height: 18em;
+    height: 40vh;
 }
 
 .insideStudentLegend {
-    height: 38.3em;
+    height: 85vh;
 }
 
 #classOccurrences {
-    height:500px;
-    width:900px;
+    width:500px;
 }
