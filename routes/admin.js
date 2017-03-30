@@ -88,18 +88,21 @@ function createAdminRouter(opts) {
         res.render('admin/options', {
             title: 'options',
             tutorTable: opts.tutorTable,
-            requestsTable: opts.requestsTable
+            requestsTable: opts.requestsTable,
+            scrollingText: opts.scrollingText
         });
     });
 
     router.post('/options', function (req, res, next) {
         opts.requestsTable = !!req.body.requestsTable;
         opts.tutorTable = !!req.body.tutorTable;
+        opts.scrollingText = !!req.body.scrollingText;
 
         res.render('admin/options', {
             title: 'options',
             tutorTable: opts.tutorTable,
             requestsTable: opts.requestsTable,
+            scrollingText: opts.scrollingText,
             done: true
         });
     });
