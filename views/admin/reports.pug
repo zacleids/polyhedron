@@ -121,4 +121,14 @@ block content
                                         - for (var i = 0; i < files.length; i++)
                                         option(value=files[i]) #{files[i]}
                             button.btn.btn-default(type='submit') Download Report
+
+                    div.form-group
+                        .form-check
+                            label.form-check-label
+                                input.form-check-input(type='checkbox')
+                                |  Save Current Report
+                        .form-group.row
+                            label.col-sm-5.col-form-label(for='inputReportName') Report Name
+                            .col-sm-6
+                                input#inputReportName.form-control(type='email', placeholder='Enter Report Name')
         .col.col-md-1
