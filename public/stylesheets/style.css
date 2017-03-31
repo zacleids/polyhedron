@@ -13,6 +13,13 @@ a {
     display: inline-block;
 }
 
+.reportPane {
+    border: solid lightgray 1px;
+    padding: 5px;
+    margin: 5px;
+    height: 75vh;
+}
+
 .adminNavLink {
     color: dodgerblue;
 }

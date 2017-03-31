@@ -5,17 +5,107 @@ block adminNav
 
 block content
     h1= title
-    p Welcome to #{title}
 
-    div.form-group
-        form#linkDisplay(action='/admin/generateReport' method='post')
-            button.btn.btn-default(type='submit') Generate Report
+    .row
+        .col.col-md-1
+        .col.col-md-3.reportPane
+            .container
+                form
+                    fieldset.form-group.row
+                        label.col-form-legend.col-sm-2 Select Individual
+                        .col-sm-2
+                            .form-check
+                                label.form-check-label
+                                    input#gridRadios1.form-check-input(type='radio', name='gridRadios', value='student', checked='')
+                                    |  Student
+                            .form-check
+                                label.form-check-label
+                                    input#gridRadios2.form-check-input(type='radio', name='gridRadios', value='tutor')
+                                    |  Tutor
+                    .form-group.row
+                        label.col-sm-2.col-form-label(for='inputEmail3') ID Number
+                        .col-sm-2
+                            input#inputEmail3.form-control(type='email', placeholder='Enter ID Number')
+                    .form-group.row
+                        label.col-sm-2 Checkbox
+                        .col-sm-2
+                            .form-check
+                                label.form-check-label
+                                    input.form-check-input(type='checkbox')
+                                    |  Check me out
+                    .form-group.row
+                        .col-sm-2
+                            label(for='exampleSelect1') Example select
+                            |
+                            select#exampleSelect1.form-control
+                                option 1
+                                option 2
+                                option 3
+                                option 4
+                                option 5
 
-    div.form-group
-        form#listReports(action='/admin/downloadReport' method='post')
-            if (files)
-                label(class='label' for='fileSelector') File
-                    select.form-control(name='fileSelector' id='fileSelector')
-                        - for (var i = 0; i < files.length; i++)
-                            option(value=files[i]) #{files[i]}
-            button.btn.btn-default(type='submit') Download Report
+
+
+        .col.col-md-3.reportPane
+            .container
+                form
+                    .form-group.row
+                        label.col-sm-2.col-form-label(for='inputEmail3') Email
+                        .col-sm-2
+                            input#inputEmail3.form-control(type='email', placeholder='Email')
+                    .form-group.row
+                        label.col-sm-2.col-form-label(for='inputPassword3') Password
+                        .col-sm-2
+                            input#inputPassword3.form-control(type='password', placeholder='Password')
+                    fieldset.form-group.row
+                        label.col-form-legend.col-sm-2 Radios
+                        .col-sm-2
+                            .form-check
+                                label.form-check-label
+                                    input#gridRadios1.form-check-input(type='radio', name='gridRadios', value='option1', checked='')
+                                    |  Option one is this and that&mdash;be sure to include why it&apos;s great
+                            .form-check
+                                label.form-check-label
+                                    input#gridRadios2.form-check-input(type='radio', name='gridRadios', value='option2')
+                                    |  Option two can be something else and selecting it will deselect option one
+                            .form-check.disabled
+                                label.form-check-label
+                                    input#gridRadios3.form-check-input(type='radio', name='gridRadios', value='option3', disabled='')
+                                    |  Option three is disabled
+                    .form-group.row
+                        label.col-sm-2 Checkbox
+                        .col-sm-2
+                            .form-check
+                                label.form-check-label
+                                    input.form-check-input(type='checkbox')
+                                    |  Check me out
+                    .form-group.row
+                        .col-sm-2
+                            label(for='exampleSelect1') Example select
+                            |
+                            select#exampleSelect1.form-control
+                                option 1
+                                option 2
+                                option 3
+                                option 4
+                                option 5
+
+
+
+        .col.col-md-1
+        .col.col-md-3.reportPane
+            fieldset
+                legend File Info Pane
+                    div.form-group
+                        form#linkDisplay(action='/admin/generateReport' method='post')
+                            button.btn.btn-default(type='submit') Generate Report
+
+                    div.form-group
+                        form#listReports(action='/admin/downloadReport' method='post')
+                            if (files)
+                                label(class='label' for='fileSelector') File
+                                    select.form-control(name='fileSelector' id='fileSelector')
+                                        - for (var i = 0; i < files.length; i++)
+                                        option(value=files[i]) #{files[i]}
+                            button.btn.btn-default(type='submit') Download Report
+        .col.col-md-1
