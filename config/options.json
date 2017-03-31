@@ -1,5 +1,8 @@
 {
   "requestsTable": true,
   "tutorTable": true,
-  "scrollingText": true
+  "scrollingText": {
+    "enabled": true,
+    "text": "Message of the day, announcements, center hours... etc."
+  }
 }

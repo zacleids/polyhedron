@@ -61,7 +61,7 @@ block content
                                                         td #{tutors[i].name}
                                                         td #{tutors[i].loginTime}
             .col-md-2
-        if(scrollingText)
+        if(scrollingText.enabled)
             .bottom-bar
                 .scrollingText
-                    h3 Message of the day, announcements, center hours... etc.
+                    h3 #{scrollingText.text}

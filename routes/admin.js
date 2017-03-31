@@ -96,7 +96,8 @@ function createAdminRouter(opts) {
     router.post('/options', function (req, res, next) {
         opts.requestsTable = !!req.body.requestsTable;
         opts.tutorTable = !!req.body.tutorTable;
-        opts.scrollingText = !!req.body.scrollingText;
+        opts.scrollingText.enabled = !!req.body.scrollingText;
+        opts.scrollingText.text = req.body.message;
 
         res.render('admin/options', {
             title: 'options',

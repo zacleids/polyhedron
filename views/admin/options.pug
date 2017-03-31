@@ -16,8 +16,11 @@ block content
                 input.checkbox-input(type='checkbox' name='tutorTable' id='tutorTable' value='tutorTable' checked=tutorTable)
                 label(for='tutorTable')='Tutor Table'
             div
-                input.checkboc-input(type='checkbox' name='scrollingText' id='scrollingText' value='scrollingText' checked=scrollingText)
+                input.checkboc-input(type='checkbox' name='scrollingText' id='scrollingText' value='scrollingText' checked=scrollingText.enabled)
                 label(for='scrollingText')='Scrolling Marquee'
+            div
+                b Scrolling Text:
+                input(type='text' name='message' size=100 value=scrollingText.text)
             div
                 button.btn.btn-default(type='submit') Apply Options
     if(done)
