@@ -13,11 +13,18 @@ a {
     display: inline-block;
 }
 
+.form-group {
+    margin-top: 20px;
+}
+
 .reportPane {
-    border: solid lightgray 1px;
-    padding: 5px;
-    margin: 5px;
+    padding: 20px;
+    margin: 20px;
     height: 75vh;
+}
+
+.reportPaneFieldset {
+    border: solid lightgray 1px;
 }
 
 .adminNavLink {

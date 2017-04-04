@@ -1,0 +1,125 @@
+extends ../layout
+
+block adminNav
+    include ../adminNav
+
+block content
+    h1= title
+
+    .container-fluid
+        .row
+            .col.col-md-1
+            .col.col-md-3.reportPane
+                .container
+                    form
+                        fieldset.form-group.row
+                            label.col-form-legend.col-sm-2 Select Individual
+                            .col-sm-2
+                                .form-check
+                                    label.form-check-label
+                                        input#gridRadios1.form-check-input(type='radio', name='gridRadios', value='student', checked='')
+                                        |  Student
+                                .form-check
+                                    label.form-check-label
+                                        input#gridRadios2.form-check-input(type='radio', name='gridRadios', value='tutor')
+                                        |  Tutor
+                        .form-group.row
+                            label.col-sm-2.col-form-label(for='inputEmail3') ID Number
+                            .col-sm-2
+                                input#inputEmail3.form-control(type='email', placeholder='Enter ID Number')
+                        .form-group.row
+                            label.col-sm-3 Student Checkboxes
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Tutors Utilized
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Classes Helped
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Lab Hours
+                        .form-group.row
+                            label.col-sm-3 Tutor Checkboxes
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Students Tutored
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Hours Worked
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Hours Spent Tutoring
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  "Weight Pulled" Ratio
+
+            .col.col-md-3.reportPane
+                .container
+                    form
+                        .form-group.row
+                            label.col-sm-2 Local Center Stats
+                            .col-sm-3
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Tutor Request Frequency
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Hours Logged
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Hours Spent Tutoring
+                                .form-check
+                                    label.form-check-label
+                                        input.form-check-input(type='checkbox')
+                                        |  Tutor "Weight Pulled" Ratios
+
+                        .form-group.row
+                            .col-sm-2
+                                label(for='exampleSelect1') Example select
+                                |
+                                select#exampleSelect1.form-control
+                                    option 1
+                                    option 2
+                                    option 3
+                                    option 4
+                                    option 5
+
+
+
+            .col.col-md-1
+            .col.col-md-3.reportPane
+                fieldset
+                    legend File Info Pane
+                        div.form-group
+                            form#linkDisplay(action='/admin/generateReport' method='post')
+                                button.btn.btn-default(type='submit') Generate Report
+
+                        div.form-group
+                            form#listReports(action='/admin/downloadReport' method='post')
+                                if (files)
+                                    label(class='label' for='fileSelector') File
+                                        select.form-control(name='fileSelector' id='fileSelector')
+                                            - for (var i = 0; i < files.length; i++)
+                                            option(value=files[i]) #{files[i]}
+                                button.btn.btn-default(type='submit') Download Report
+
+                        div.form-group
+                            .form-check
+                                label.form-check-label
+                                    input.form-check-input(type='checkbox')
+                                    |  Save Current Report
+                            .form-group.row
+                                label.col-sm-5.col-form-label(for='inputReportName') Report Name
+                                .col-sm-6
+                                    input#inputReportName.form-control(type='email', placeholder='Enter Report Name')
+            .col.col-md-1
