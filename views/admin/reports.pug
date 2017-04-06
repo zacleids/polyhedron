@@ -28,8 +28,10 @@ block content
         function enableReportDropDown() {
             if ($("#useSavedReportCheckbox").is(":checked")) {
                 $("#fileSelector").attr("disabled", false);
+                $("#inputFilename").attr("disabled", true);
             } else {
                 $("#fileSelector").attr("disabled", true);
+                $("#inputFilename").attr("disabled", false);
             }
         }
 
