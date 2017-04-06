@@ -4,8 +4,22 @@ block adminNav
     include ../adminNav
 
 block content
+
+    script.
+        $(function () {
+            enableCBGroup();
+            $("#scrollingText").click(enableCBGroup);
+        });
+
+        function enableCBGroup() {
+            if ($("#scrollingText").is(":checked")) {
+                $("input.textScrollMessage").attr("hidden", false);
+            } else {
+                $("input.textScrollMessage").attr("hidden", true);
+            }
+        }
+
     h1= title
-    p Welcome to #{title}
 
     div.form-group
         form#submitOptions(action='/admin/options' method='post')
@@ -19,8 +33,8 @@ block content
                 input.checkboc-input(type='checkbox' name='scrollingText' id='scrollingText' value='scrollingText' checked=scrollingText.enabled)
                 label(for='scrollingText')='Scrolling Marquee'
             div
-                b Scrolling Text:
-                input(type='text' name='message' size=100 value=scrollingText.text)
+                span.textScrollMessage Scrolling Text:
+                input.textScrollMessage(type='text' name='message' size=100 value=scrollingText.text hidden='false')
             div
                 button.btn.btn-default(type='submit') Apply Options
     if(done)
