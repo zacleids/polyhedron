@@ -1,12 +1,27 @@
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
+var async = require('async');
 var excelBuilder = require('msexcel-builder');
 var ExcelWorkbookGenerator = require('../excelGenerator.js');
 
 function ClassWithOccurrence(courseName, occurrence) {
     this.course = courseName || '';
     this.count = occurrence || '';
+}
+
+function request(name, course, location, waitTime, request, tutor) {
+    this.name = name || '';
+    this.course = course || '';
+    this.location = location || '';
+    this.waitTime = waitTime + " mins" || "0 mins";
+    this.request = request || '';
+    this.tutor = tutor || '';
+}
+
+function makeRequest(line) {
+    var parts = line.split(',');
+    return new request(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5]);
 }
 
 function createAdminRouter(opts) {
@@ -141,43 +156,89 @@ function createAdminRouter(opts) {
     // *************** statistics page ***************
 
     router.get('/statistics', function (req, res, next) {
-        var classWithOccurrences = {};
-        var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
-        fs.readFile(file, renderResponse);
+        async.parallel({
+            classWithOccurrences: function (cb) {
+                var classWithOccurrences = {};
+                var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
+                fs.readFile(file, renderResponse);
 
-        function renderResponse(err, data) {
-            if (err) {
-                console.log('An unknown error occurred: ', err);
-                return;
-            }
+                function renderResponse(err, data) {
+                    if (err) {
+                        console.log('An unknown error occurred: ', err);
+                        cb(err, null);
+                    }
 
-            // finding the number of occurrences of each class.
-            // normally this would be done in an SQL query.
+                    // finding the number of occurrences of each class.
+                    // normally this would be done in an SQL query.
 
-            var lines = data.toString().split('\n');
-            var distinctClasses = [];
-            var courseName = '';
-            var len = lines.length;
+                    var lines = data.toString().split('\n');
+                    var distinctClasses = [];
+                    var courseName = '';
+                    var len = lines.length;
 
-            for(var i = 0; i < len; i++) {
-                courseName = lines[i].split(',')[1];
-                if (!distinctClasses.indexOf(courseName) > -1) {
-                    distinctClasses.push(courseName);
+                    for(var i = 0; i < len; i++) {
+                        courseName = lines[i].split(',')[1];
+                        if (!distinctClasses.indexOf(courseName) > -1) {
+                            distinctClasses.push(courseName);
+                        }
+                    }
+
+                    for(i = 0; i < distinctClasses.length; i++) {
+                        classWithOccurrences[distinctClasses[i]] = 0;
+                    }
+
+                    for(i = 0; i < len; i++) {
+                        courseName = lines[i].split(',')[1];
+                        classWithOccurrences[courseName]++;
+                    }
+                    cb(null, classWithOccurrences);
+                }
+            },
+            title: function(cb){
+                cb(null, 'statistics');
+            },
+            numTutorsInCenter: function (cb) {
+                var tutors = [];
+                var file = path.join(__dirname, '..', 'fakeData', 'tutors.txt');
+                fs.readFile(file, readtutorsData);
+
+                function readtutorsData(err, data) {
+                    if (err) {
+                        console.log('An unknown error occurred: ', err);
+                        cb(err, null);
+                    }
+
+                    var lines = data.toString().split('\n');
+                    cb(null, lines.length);
+                }
+            },
+            numTutorsTutoring: function (cb) {
+                var requests = [];
+                var file = path.join(__dirname, '..', 'fakeData', 'requests.txt');
+                fs.readFile(file, readrequestsData);
+
+                function readrequestsData(err, data) {
+                    if (err) {
+                        console.log('An unknown error occurred: ', err);
+                        cb(err, null);
+                    }
+
+                    var lines = data.toString().split('\n');
+                    lines.forEach(function (line) {
+                        requests.push(makeRequest(line));
+                    });
+                    var numPeopleBeingTutored = 0;
+                    requests.forEach(function(request){
+                        if(request.tutor){
+                            numPeopleBeingTutored++;
+                        }
+                    });
+                    cb(null, numPeopleBeingTutored);
                 }
             }
-
-            for(i = 0; i < distinctClasses.length; i++) {
-                classWithOccurrences[distinctClasses[i]] = 0;
-            }
-
-            for(i = 0; i < len; i++) {
-                courseName = lines[i].split(',')[1];
-                classWithOccurrences[courseName]++;
-            }
-
-            console.log(classWithOccurrences);
-            res.render('admin/statistics', {title: 'statistics', classWithOccurrences: classWithOccurrences});
-        }
+        }, function (err, result) {
+            res.render('admin/statistics', result);
+        });
 
     });
 

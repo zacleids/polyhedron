@@ -25,4 +25,4 @@ Sean Patterson, CST 336, center 3
 firstName lastName, ART 123, center 1
 Salad Fingers, LOL 666, center 1
 Fake Student, KEK 123, center 2
-Another One, LOL 123, center 1
+Different One, LOL 124, center 1
