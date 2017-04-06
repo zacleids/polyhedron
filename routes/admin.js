@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var excelBuilder = require('msexcel-builder');
+var ExcelWorkbookGenerator = require('../excelGenerator.js');
 
 function ClassWithOccurrence(courseName, occurrence) {
     this.course = courseName || '';
@@ -23,9 +24,15 @@ function createAdminRouter(opts) {
                 console.log('An unknown error occurred: ', err);
                 return;
             }
+            finalFiles = [];
+            files.forEach(function(file){
+                if(path.extname(file) === '.xlsx'){
+                    finalFiles.push(file);
+                }
+            });
             res.render('admin/reports', {
                 title: 'reports',
-                files: files
+                files: finalFiles
             });
         });
     });
@@ -71,15 +78,38 @@ function createAdminRouter(opts) {
     });
 
     router.post('/downloadReport', function (req, res, next) {
-        var filename = req.body.fileSelector;
-        var file = path.join(__dirname, '..', 'fakeData', 'excelGeneration', filename);
-        fs.access(file, function(err){
-            if(err){
-                console.log('file not there: ', err);
-                return;
-            }
-            res.download(file, filename);
-        });
+        var fileSelector = req.body.fileSelector;
+        var useSavedReportCheckbox = !!req.body.useSavedReportCheckbox;
+        var name = req.body.inputFilename;
+        var file;
+        if(useSavedReportCheckbox){
+            file = path.join(__dirname, '..', 'fakeData', 'excelGeneration', fileSelector);
+            sendFile(file);
+        }
+        else{
+            var excelGenerator = new ExcelWorkbookGenerator({
+                name: name,
+                textFile: path.join(__dirname, '..', 'fakeData', 'students.txt')
+            });
+            excelGenerator.generate(function(err, file){
+                if(err){
+                    console.log('an error occurred generating the excel workbook: ', err);
+                    return;
+                }
+                sendFile(file);
+            });
+        }
+
+        function sendFile(file){
+            fs.access(file, function(err){
+                if(err){
+                    console.log('file not there: ', err);
+                    return;
+                }
+                res.download(file, path.basename(file));
+            });
+        }
+
     });
 
     // *************** configurations page ***************

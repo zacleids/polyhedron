@@ -8,7 +8,7 @@ block content
 
     .container-fluid
         .row
-            form.masterReportsForm
+            form.masterReportsForm(action='/admin/downloadReport' method='post')
                 .col.col-md-1
                 .col.col-md-3
                     fieldset.reportPaneFieldset
@@ -115,9 +115,9 @@ block content
                                     .form-group.savedReports
                                         .form-check
                                             label.form-check-label
-                                                input#useSavedReportCheckbox.form-check-input(type='checkbox' value='useSavedReport')
+                                                input#useSavedReportCheckbox.form-check-input(type='checkbox' value='useSavedReport' name='useSavedReportCheckbox')
                                                 |  Use a saved report
-                                            select#savedReports.form-control
+                                            select#fileSelector.form-control(name='fileSelector')
                                                 - for (var i = 0; i < files.length; i++)
                                                     option(value=files[i]) #{files[i]}
                             .row
@@ -130,7 +130,7 @@ block content
                                     .form-group.idNumber
                                         label(for='inputFilename') Enter filename for report:
                                         |
-                                        input#inputFilename.form-control(type='text', placeholder='example-filename')
+                                        input#inputFilename.form-control(type='text' name='inputFilename' placeholder='example-filename')
                             .row
                                 .col.col-md-12
                                     button.btn.btn-primary(type='submit') Generate Report
