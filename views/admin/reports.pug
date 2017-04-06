@@ -4,6 +4,35 @@ block adminNav
     include ../adminNav
 
 block content
+
+    script.
+
+        $(function () {
+            enableCBGroup();
+            enableReportDropDown();
+            $("#optionsRadiosStudent").click(enableCBGroup);
+            $("#optionsRadiosTutor").click(enableCBGroup);
+            $("#useSavedReportCheckbox").click(enableReportDropDown)
+        });
+
+        function enableCBGroup() {
+            if ($("#optionsRadiosStudent").is(":checked")) {
+                $("input.studentCheckBoxes").attr("disabled", false);
+                $("input.tutorCheckBoxes").attr("disabled", true);
+            } else {
+                $("input.studentCheckBoxes").attr("disabled", true);
+                $("input.tutorCheckBoxes").attr("disabled", false);
+            }
+        }
+
+        function enableReportDropDown() {
+            if ($("#useSavedReportCheckbox").is(":checked")) {
+                $("#fileSelector").attr("disabled", false);
+            } else {
+                $("#fileSelector").attr("disabled", true);
+            }
+        }
+
     h1= title
 
     .container-fluid
@@ -35,39 +64,39 @@ block content
                                         small#idHelp.form-text.text-muted (Cabrillo College student ID number)
                             .row
                                 .col.col-md-12
-                                    .form-group.studentCheckBoxes
+                                    .form-group
                                         label Student Checkboxes
                                             .form-check
                                                 label.form-check-label
-                                                    input#tutorsUtilized.form-check-input(type='checkbox' value='tutorsUtilized')
+                                                    input#tutorsUtilized.form-check-input.studentCheckBoxes(type='checkbox' value='tutorsUtilized')
                                                     |  Tutors utilized
                                             .form-check
                                                 label.form-check-label
-                                                    input#classesHelped.form-check-input(type='checkbox' value='classesHelped')
+                                                    input#classesHelped.form-check-input.studentCheckBoxes(type='checkbox' value='classesHelped')
                                                     |  Classes helped
                                             .form-check
                                                 label.form-check-label
-                                                    input#labHours.form-check-input(type='checkbox' value='labHours')
+                                                    input#labHours.form-check-input.studentCheckBoxes(type='checkbox' value='labHours')
                                                     |  Lab hours
                             .row
                                 .col.col-md-12
-                                    .form-group.tutorCheckBoxes
+                                    .form-group
                                         label Tutor Checkboxes
                                             .form-check
                                                 label.form-check-label
-                                                    input#studentTutored.form-check-input(type='checkbox' value='studentTutored')
+                                                    input#studentTutored.form-check-input.tutorCheckBoxes(type='checkbox' value='studentTutored')
                                                     |  Students tutored
                                             .form-check
                                                 label.form-check-label
-                                                    input#hoursWorked.form-check-input(type='checkbox' value='hoursWorked')
+                                                    input#hoursWorked.form-check-input.tutorCheckBoxes(type='checkbox' value='hoursWorked')
                                                     |  Hours worked
                                             .form-check
                                                 label.form-check-label
-                                                    input#hoursSpentTutoring.form-check-input(type='checkbox' value='hoursSpentTutoring')
+                                                    input#hoursSpentTutoring.form-check-input.tutorCheckBoxes(type='checkbox' value='hoursSpentTutoring')
                                                     |  Hours spent tutoring
                                             .form-check
                                                 label.form-check-label
-                                                    input#individualWeightPulled.form-check-input(type='checkbox' value='individualWeightPulled')
+                                                    input#individualWeightPulled.form-check-input.tutorCheckBoxes(type='checkbox' value='individualWeightPulled')
                                                     |  "weight pulled" ratio
                 .col.col-md-3
                     fieldset.reportPaneFieldset
