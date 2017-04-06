@@ -13,30 +13,59 @@ block content
 
         function enableCBGroup() {
             if ($("#scrollingText").is(":checked")) {
-                $("input.textScrollMessage").attr("hidden", false);
+                $("input.textScrollMessage").attr("disabled", false);
+                $("input.textScrollMessage").attr("value", scrollingText.text);
             } else {
-                $("input.textScrollMessage").attr("hidden", true);
+                $("input.textScrollMessage").attr("disabled", true);
+                $("input.textScrollMessage").attr("value", scrollingText.disabledMsg);
             }
         }
 
     h1= title
-
-    div.form-group
-        form#submitOptions(action='/admin/options' method='post')
-            div
-                input.checkbox-input(type='checkbox' name='requestsTable' id='requestsTable' value='requestsTable' checked=requestsTable)
-                label(for='requestsTable')='Request Table'
-            div
-                input.checkbox-input(type='checkbox' name='tutorTable' id='tutorTable' value='tutorTable' checked=tutorTable)
-                label(for='tutorTable')='Tutor Table'
-            div
-                input.checkboc-input(type='checkbox' name='scrollingText' id='scrollingText' value='scrollingText' checked=scrollingText.enabled)
-                label(for='scrollingText')='Scrolling Marquee'
-            div
-                span.textScrollMessage Scrolling Text:
-                input.textScrollMessage(type='text' name='message' size=100 value=scrollingText.text hidden='false')
-            div
-                button.btn.btn-default(type='submit') Apply Options
-    if(done)
-        div
-            p Changes made!
+    .container-fluid
+        .row
+            .col.col-md-1
+            .col.col-md-5
+                fieldset.optionPaneFieldset
+                    .optionPane
+                        form#submitOptions(action='/admin/options' method='post')
+                            .row
+                                .col.col-md-12
+                                    h3 Tutor Center Customization
+                            .row
+                                .col.col-md-12
+                                    fieldset.form-group.centerOptionsCheckboxes
+                                        div
+                                            b Display Features
+                                                .form-check
+                                                    label.form-check-label
+                                                        input.checkbox-input(type='checkbox' name='requestsTable' id='requestsTable' value='requestsTable' checked=requestsTable)
+                                                        |  Enable request table
+                                                .form-check
+                                                    label.form-check-label
+                                                        input.checkbox-input(type='checkbox' name='tutorTable' id='tutorTable' value='tutorTable' checked=tutorTable)
+                                                        |  Enable tutor table
+                            .row
+                                .col.col-md-12
+                                    fieldset.form-group.optionScrollingText
+                                        .form-check
+                                            label.form-check-label
+                                                input.checkbox-input(type='checkbox' name='scrollingText' id='scrollingText' value='scrollingText' checked=scrollingText.enabled)
+                                                |  Enable scrolling marquee
+                                        label(for'scrollMsg') Scrolling text to display:
+                                        |
+                                        input#scrollMsg.textScrollMessage.form-control(type='text' name='message' value=scrollingText.text disabled='false')
+                            .row
+                                .col.col-md-12
+                                    fieldset.form-group
+                                        button.btn.btn-primary(type='submit') Apply Options
+                                        if (done)
+                                            div
+                                                p Changes Made!
+            .col.col-md-5
+                fieldset.optionPaneFieldset
+                    .optionPane
+                        .row
+                            .col-md-12
+                                h3 Other Customizations
+            .col.col-md-1

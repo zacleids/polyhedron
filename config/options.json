@@ -3,6 +3,7 @@
   "tutorTable": true,
   "scrollingText": {
     "enabled": true,
+    "disabledMsg": "You must enable this feature to write a custom message.",
     "text": "Message of the day, announcements, center hours... etc."
   }
 }

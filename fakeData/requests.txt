@@ -1,4 +1,4 @@
-Cody Patterson, CST 438, center 1, 10, request?, turor1 lastName
-Zac Leids, MATH 151, center 2, 5, ,turor1 lastName
-Sean Patterson, CST 336, center 3, 7
-firstName lastName, ART 123, center 1, 1
+Cody Patterson, CST 438, center 1, 10, Ed Braunhut, Ed Braunhut
+Zac Leids, MATH 151, center 2, 5, , Cody Patterson
+Sean Carpenter, CST 336, center 3, 7
+FirstName LastName, ART 123, center 1, 1

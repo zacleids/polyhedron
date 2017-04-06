@@ -47,18 +47,19 @@ block content
                             .row
                                 .col.col-md-12
                                     fieldset.form-group
-                                        label Select Individual
-                                            .form-check
-                                                label.form-check-label
-                                                    input#optionsRadiosStudent.form-check-input(type='radio', name='studentOrTutor', value='student', checked='true')
-                                                    |  Student
-                                            .form-check
-                                                label.form-check-label
-                                                    input#optionsRadiosTutor.form-check-input(type='radio', name='studentOrTutor', value='tutor')
-                                                    |  Tutor
+                                        div
+                                            b Select Individual
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#optionsRadiosStudent.form-check-input(type='radio', name='studentOrTutor', value='student', checked='true')
+                                                        |  Student
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#optionsRadiosTutor.form-check-input(type='radio', name='studentOrTutor', value='tutor')
+                                                        |  Tutor
                             .row
                                 .col.col-md-12
-                                    .form-group.idNumber
+                                    fieldset.form-group.idNumber
                                         label(for='studentIdNumber') ID Number
                                         |
                                         input#studentIdNumber.form-control(type='text', aria-describedby='idHelp', placeholder='Enter ID Number')
@@ -66,8 +67,9 @@ block content
                                         small#idHelp.form-text.text-muted (Cabrillo College student ID number)
                             .row
                                 .col.col-md-12
-                                    .form-group
-                                        label Student Checkboxes
+                                    fieldset.form-group
+                                        div
+                                            b Student Checkboxes
                                             .form-check
                                                 label.form-check-label
                                                     input#tutorsUtilized.form-check-input.studentCheckBoxes(type='checkbox' value='tutorsUtilized')
@@ -82,50 +84,52 @@ block content
                                                     |  Lab hours
                             .row
                                 .col.col-md-12
-                                    .form-group
-                                        label Tutor Checkboxes
-                                            .form-check
-                                                label.form-check-label
-                                                    input#studentTutored.form-check-input.tutorCheckBoxes(type='checkbox' value='studentTutored')
-                                                    |  Students tutored
-                                            .form-check
-                                                label.form-check-label
-                                                    input#hoursWorked.form-check-input.tutorCheckBoxes(type='checkbox' value='hoursWorked')
-                                                    |  Hours worked
-                                            .form-check
-                                                label.form-check-label
-                                                    input#hoursSpentTutoring.form-check-input.tutorCheckBoxes(type='checkbox' value='hoursSpentTutoring')
-                                                    |  Hours spent tutoring
-                                            .form-check
-                                                label.form-check-label
-                                                    input#individualWeightPulled.form-check-input.tutorCheckBoxes(type='checkbox' value='individualWeightPulled')
-                                                    |  "weight pulled" ratio
+                                    fieldset.form-group
+                                        div
+                                            b Tutor Checkboxes
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#studentTutored.form-check-input.tutorCheckBoxes(type='checkbox' value='studentTutored')
+                                                        |  Students tutored
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#hoursWorked.form-check-input.tutorCheckBoxes(type='checkbox' value='hoursWorked')
+                                                        |  Hours worked
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#hoursSpentTutoring.form-check-input.tutorCheckBoxes(type='checkbox' value='hoursSpentTutoring')
+                                                        |  Hours spent tutoring
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#individualWeightPulled.form-check-input.tutorCheckBoxes(type='checkbox' value='individualWeightPulled')
+                                                        |  "weight pulled" ratio
                 .col.col-md-3
                     fieldset.reportPaneFieldset
                         .reportPane
                             .row
                                 .col.col-md-12
-                                    .form-group.centerCheckboxes
-                                        label Local Center Statistics
-                                            .form-check
-                                                label.form-check-label
-                                                    input#tutorRequestFrequency.form-check-input(type='checkbox' value='tutorRequestFrequency')
-                                                    |  Tutor request frequency
-                                            .form-check
-                                                label.form-check-label
-                                                    input#totalWorkingHours.form-check-input(type='checkbox' value='totalWorkingHours')
-                                                    |  Total working hours
-                                            .form-check
-                                                label.form-check-label
-                                                    input#totalHoursTutored.form-check-input(type='checkbox' value='totalHoursTutored')
-                                                    |  Total hours tutored
-                                            .form-check
-                                                label.form-check-label
-                                                    input#totalWeightPulled.form-check-input(type='checkbox' value='totalWeightPulled')
-                                                    |  Tutors "weight pulled" ratios
+                                    fieldset.form-group.centerCheckboxes
+                                        div
+                                            b Local Center Statistics
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#tutorRequestFrequency.form-check-input(type='checkbox' value='tutorRequestFrequency')
+                                                        |  Tutor request frequency
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#totalWorkingHours.form-check-input(type='checkbox' value='totalWorkingHours')
+                                                        |  Total working hours
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#totalHoursTutored.form-check-input(type='checkbox' value='totalHoursTutored')
+                                                        |  Total hours tutored
+                                                .form-check
+                                                    label.form-check-label
+                                                        input#totalWeightPulled.form-check-input(type='checkbox' value='totalWeightPulled')
+                                                        |  Tutors "weight pulled" ratios
                             .row
                                 .col.col-md-12
-                                    .form-group.limitResults
+                                    fieldset.form-group.limitResults
                                         label(for='selectLimit') Limit number of results to:
                                             |
                                             select#selectLimit.form-control
@@ -143,7 +147,7 @@ block content
                                     button#saveReportAsButton.btn.btn-default(type='button') Save Current Report Configuration
                             .row
                                 .col.col-md-12
-                                    .form-group.savedReports
+                                    fieldset.form-group.savedReports
                                         .form-check
                                             label.form-check-label
                                                 input#useSavedReportCheckbox.form-check-input(type='checkbox' value='useSavedReport' name='useSavedReportCheckbox')
