@@ -125,6 +125,9 @@ function createTutorCenterRouter(opts) {
             },
             scrollingText: function(cb) {
                 cb(null, opts.scrollingText);
+            },
+            centerLocation: function(cb) {
+                cb(null, opts.centerLocation);
             }
         }, function (err, result) {
             res.render('tutorCenter', result);

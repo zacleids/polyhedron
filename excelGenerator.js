@@ -5,7 +5,7 @@ var excelBuilder = require('msexcel-builder');
 
 String.prototype.sprintf = function()
 {
-    //copyed from https://github.com/ildar-shaimordanov/jsxt/blob/master/js/String.js#L623
+    //copied from https://github.com/ildar-shaimordanov/jsxt/blob/master/js/String.js#L623
     var args = arguments;
     var index = 0;
 

@@ -5,11 +5,6 @@ var async = require('async');
 var excelBuilder = require('msexcel-builder');
 var ExcelWorkbookGenerator = require('../excelGenerator.js');
 
-function ClassWithOccurrence(courseName, occurrence) {
-    this.course = courseName || '';
-    this.count = occurrence || '';
-}
-
 function request(name, course, location, waitTime, request, tutor) {
     this.name = name || '';
     this.course = course || '';
@@ -28,7 +23,10 @@ function createAdminRouter(opts) {
     var router = express.Router();
     
     router.get('/', function (req, res, next) {
-        res.render('admin/admin', {title: 'admin'});
+        res.render('admin/admin', {
+            title: 'admin',
+            centerLocation: opts.centerLocation
+        });
     });
 
     // *************** reports page ***************
@@ -47,6 +45,7 @@ function createAdminRouter(opts) {
             });
             res.render('admin/reports', {
                 title: 'reports',
+                centerLocation: opts.centerLocation,
                 files: finalFiles
             });
         });
@@ -132,6 +131,7 @@ function createAdminRouter(opts) {
     router.get('/options', function (req, res, next) {
         res.render('admin/options', {
             title: 'options',
+            centerLocation: opts.centerLocation,
             tutorTable: opts.tutorTable,
             requestsTable: opts.requestsTable,
             scrollingText: opts.scrollingText
@@ -139,6 +139,7 @@ function createAdminRouter(opts) {
     });
 
     router.post('/options', function (req, res, next) {
+        opts.centerLocation = req.body.centerLocation;
         opts.requestsTable = !!req.body.requestsTable;
         opts.tutorTable = !!req.body.tutorTable;
         opts.scrollingText.enabled = !!req.body.scrollingText;
@@ -146,6 +147,7 @@ function createAdminRouter(opts) {
 
         res.render('admin/options', {
             title: 'options',
+            centerLocation: opts.centerLocation,
             tutorTable: opts.tutorTable,
             requestsTable: opts.requestsTable,
             scrollingText: opts.scrollingText,
@@ -235,6 +237,9 @@ function createAdminRouter(opts) {
                     });
                     cb(null, numPeopleBeingTutored);
                 }
+            },
+            centerLocation: function(cb) {
+                cb(null, opts.centerLocation);
             }
         }, function (err, result) {
             res.render('admin/statistics', result);
