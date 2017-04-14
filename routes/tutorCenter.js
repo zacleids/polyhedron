@@ -3,6 +3,9 @@ var path = require('path');
 var express = require('express');
 var async = require('async');
 
+
+var redirectBase = 'http://localhost:3000/tutorCenter';
+
 function student(name, course, location) {
     this.name = name || '';
     this.course = course || '';
@@ -60,8 +63,16 @@ function createTutorCenterRouter(opts) {
         }
 
     });*/
-
     router.get('/', function (req, res, next) {
+        res.redirect(redirectBase + '/MLC');
+    });
+
+    router.get('/:center', function (req, res, next) {
+        var center = req.params.center;
+        if(!(center in opts.tutorCenters)){
+            res.redirect(redirectBase + '/MLC');
+            return;
+        }
         async.parallel({
             students: function (cb) {
                 var students = [];
@@ -118,16 +129,16 @@ function createTutorCenterRouter(opts) {
                 }
             },
             requestsTable: function (cb) {
-                cb(null, opts.requestsTable);
+                cb(null, opts.tutorCenters[center].requestsTable);
             },
             tutorTable: function (cb) {
-                cb(null, opts.tutorTable);
+                cb(null, opts.tutorCenters[center].tutorTable);
             },
             scrollingText: function(cb) {
-                cb(null, opts.scrollingText);
+                cb(null, opts.tutorCenters[center].scrollingText);
             },
             centerLocation: function(cb) {
-                cb(null, opts.centerLocation);
+                cb(null, opts.tutorCenters[center].centerLocation);
             }
         }, function (err, result) {
             res.render('tutorCenter', result);

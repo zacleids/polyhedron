@@ -9,7 +9,31 @@ block content
         $(function () {
             enableCBGroup();
             $("#scrollingText").click(enableCBGroup);
+            $('#centerSelector').change(function () {
+                getCenterData();
+            });
+            getCenterData();
+            enableCBGroup();
         });
+
+        function getCenterData() {
+            //alert($("#centerSelector").val());
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/admin/getCenterInfo',
+                dataType: 'json',
+                data: {'center': $('#centerSelector').val()},
+                success: function (data, status) {
+                    $('#requestsTable').prop('checked', data.requestsTable);
+                    $('#tutorTable').prop('checked', data.tutorTable);
+                    $('#scrollingText').prop('checked', data.scrollingText.enabled);
+                    $('input[name=message]').val(data.scrollingText.text);
+                }, complete: function (data, status) {
+                    //alert(JSON.stringify(data));
+                    enableCBGroup();
+                }
+            });
+        }
 
         function enableCBGroup() {
             if ($("#scrollingText").is(":checked")) {
@@ -18,6 +42,8 @@ block content
                 $("input.textScrollMessage").attr("disabled", true);
             }
         }
+
+
 
     h1= title
     .container-fluid
@@ -32,49 +58,13 @@ block content
                                     h3 General Center Customization
                             .row
                                 .col.col-md-12
-                                    fieldset.form-group.centerChoiceRadioButtons
+                                    fieldset.form-group
                                         div
                                             b Which center are you in?
-                                                .row
-                                                    .col.col-md-4
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioMLC.form-check-input(type='radio', name='centerLocation', value='MLC', checked=(centerLocation === "MLC"))
-                                                                |  MLC
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioELC.form-check-input(type='radio', name='centerLocation', value='ELC', checked=(centerLocation === "ELC"))
-                                                                |  ELC
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioHUBTutoringCenter.form-check-input(type='radio', name='centerLocation', value='TutoringCenter', checked=(centerLocation === "TutoringCenter"))
-                                                                |  Tutoring Center
-                                                    .col.col-md-4
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioSTEM.form-check-input(type='radio', name='centerLocation', value='STEM', checked=(centerLocation === "STEM"))
-                                                                |  STEM
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioILC.form-check-input(type='radio', name='centerLocation', value='ILC', checked=(centerLocation === "ILC"))
-                                                                |  ILC
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioHorticulture.form-check-input(type='radio', name='centerLocation', value='Horticulture', checked=(centerLocation === "Horticulture"))
-                                                                |  Horticulture
-                                                    .col.col-md-4
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioPE.form-check-input(type='radio', name='centerLocation', value='PE', checked=(centerLocation === "PE"))
-                                                                |  PE
-                                                        .form-check
-                                                            label.form-check-label
-                                                                input#centerRadioCTC.form-check-input(type='radio', name='centerLocation', value='CTC', checked=(centerLocation === "CTC"))
-                                                                |  CTC
-                                                        .form-check
-                                                            label.form-check-labelequestsTable
-                                                                input#centerRadioASC.form-check-input(type='radio', name='centerLocation', value='ASC', checked=(centerLocation === "ASC"))
-                                                                |  ASC
+                                                .select
+                                                    select.form-control(name='centerSelector' id='centerSelector')
+                                                        - for (var i = 0; i < centers.length; i++)
+                                                            option(value=centers[i]) #{centers[i]}
                             .row
                                 .col.col-md-12
                                     fieldset.form-group.centerOptionsCheckboxes
@@ -97,7 +87,7 @@ block content
                                                 |  Enable scrolling marquee
                                         label(for'scrollMsg') Scrolling text to display:
                                         |
-                                        input#scrollMsg.textScrollMessage.form-control(type='text' name='message' value=scrollingText.text disabled='false')
+                                        input#scrollMsg.textScrollMessage.form-control(type='text' name='message' value=scrollingText.text disabled=!scrollingText.enabled)
                             .row
                                 .col.col-md-12
                                     fieldset.form-group

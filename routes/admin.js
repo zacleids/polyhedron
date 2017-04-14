@@ -129,29 +129,43 @@ function createAdminRouter(opts) {
     // *************** configurations page ***************
 
     router.get('/options', function (req, res, next) {
+        center = 'MLC';
         res.render('admin/options', {
             title: 'options',
-            centerLocation: opts.centerLocation,
-            tutorTable: opts.tutorTable,
-            requestsTable: opts.requestsTable,
-            scrollingText: opts.scrollingText
+            centers: Object.keys(opts.tutorCenters),
+            tutorTable: opts.tutorCenters[center].tutorTable,
+            requestsTable: opts.tutorCenters[center].requestsTable,
+            scrollingText: opts.tutorCenters[center].scrollingText
         });
     });
 
     router.post('/options', function (req, res, next) {
-        opts.centerLocation = req.body.centerLocation;
-        opts.requestsTable = !!req.body.requestsTable;
-        opts.tutorTable = !!req.body.tutorTable;
-        opts.scrollingText.enabled = !!req.body.scrollingText;
-        opts.scrollingText.text = req.body.message;
+        center = req.body.centerSelector;
+        opts.tutorCenters[center].requestsTable = !!req.body.requestsTable;
+        opts.tutorCenters[center].tutorTable = !!req.body.tutorTable;
+        opts.tutorCenters[center].scrollingText.enabled = !!req.body.scrollingText;
+        if(!!req.body.scrollingText){
+            opts.tutorCenters[center].scrollingText.text = req.body.message;
+        }
 
+        center = 'MLC';
         res.render('admin/options', {
             title: 'options',
-            centerLocation: opts.centerLocation,
-            tutorTable: opts.tutorTable,
-            requestsTable: opts.requestsTable,
-            scrollingText: opts.scrollingText,
+            centers: Object.keys(opts.tutorCenters),
+            tutorTable: opts.tutorCenters[center].tutorTable,
+            requestsTable: opts.tutorCenters[center].requestsTable,
+            scrollingText: opts.tutorCenters[center].scrollingText,
             done: true
+        });
+    });
+
+    router.get('/getCenterInfo', function (req, res, next) {
+        var center = req.query.center;
+
+        res.send({
+            requestsTable: opts.tutorCenters[center].requestsTable,
+            tutorTable: opts.tutorCenters[center].tutorTable,
+            scrollingText: opts.tutorCenters[center].scrollingText
         });
     });
 
