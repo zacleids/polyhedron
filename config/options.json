@@ -6,7 +6,7 @@
       "tutorTable": true,
       "scrollingText": {
         "enabled": true,
-        "text": "Message of the day, announcements, center hours... etc."
+        "text": "Welcome to MLC.Message of the day, announcements, center hours... etc."
       }
     },
     "STEM": {
@@ -15,17 +15,71 @@
       "tutorTable": true,
       "scrollingText": {
         "enabled": true,
-        "text": "STEM center is WAYYYYYYYYY better than the MLC"
+        "text": "Welcome to STEM. Message of the day, announcements, center hours... etc."
       }
     }
   ,
     "ASC": {
       "centerLocation": "ASC",
-      "requestsTable": false,
+      "requestsTable": true,
       "tutorTable": true,
       "scrollingText": {
         "enabled": true,
-        "text": "ASC Rules"
+        "text": "Welcome to ASC. Message of the day, announcements, center hours... etc."
+      }
+    },
+    "ELC": {
+      "centerLocation": "ELC",
+      "requestsTable": true,
+      "tutorTable": true,
+      "scrollingText": {
+        "enabled": true,
+        "text": "Welcome to ELC. Message of the day, announcements, center hours... etc."
+      }
+    },
+    "TutoringCenter": {
+      "centerLocation": "TutoringCenter",
+      "requestsTable": true,
+      "tutorTable": true,
+      "scrollingText": {
+        "enabled": true,
+        "text": "Welcome to TutoringCenter. Message of the day, announcements, center hours... etc."
+      }
+    },
+    "ILC": {
+      "centerLocation": "ILC",
+      "requestsTable": true,
+      "tutorTable": true,
+      "scrollingText": {
+        "enabled": true,
+        "text": "Welcome to ILC. Message of the day, announcements, center hours... etc."
+      }
+    },
+    "Horticulture": {
+      "centerLocation": "Horticulture",
+      "requestsTable": true,
+      "tutorTable": true,
+      "scrollingText": {
+        "enabled": true,
+        "text": "Welcome to Horticulture. Message of the day, announcements, center hours... etc."
+      }
+    },
+    "PE": {
+      "centerLocation": "PE",
+      "requestsTable": true,
+      "tutorTable": true,
+      "scrollingText": {
+        "enabled": true,
+        "text": "Welcome to PE. Message of the day, announcements, center hours... etc."
+      }
+    },
+    "CTC": {
+      "centerLocation": "CTC",
+      "requestsTable": true,
+      "tutorTable": true,
+      "scrollingText": {
+        "enabled": true,
+        "text": "Welcome to CTC. Message of the day, announcements, center hours... etc."
       }
     }
   }
