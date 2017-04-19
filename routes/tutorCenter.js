@@ -44,33 +44,17 @@ function makeTutor(line) {
 function createTutorCenterRouter(opts) {
     var router = express.Router();
 
-/*    router.get('/', function (req, res, next) {
-        var students = [];
-        var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
-        fs.readFile(file, renderResponse);
-
-        function renderResponse(err, data) {
-            if (err) {
-                console.log('An unknown error occurred: ', err);
-                return;
-            }
-
-            var lines = data.toString().split('\n');
-            lines.forEach(function (line) {
-                students.push(makeStudent(line));
-            });
-            res.render('tutorCenter', {students: students});
-        }
-
-    });*/
     router.get('/', function (req, res, next) {
-        res.redirect(redirectBase + '/MLC');
+        res.render('centerList', {
+            centers: Object.keys(opts.tutorCenters),
+            redirectBase: redirectBase
+        });
     });
 
     router.get('/:center', function (req, res, next) {
         var center = req.params.center;
         if(!(center in opts.tutorCenters)){
-            res.redirect(redirectBase + '/MLC');
+            res.redirect(redirectBase);
             return;
         }
         async.parallel({

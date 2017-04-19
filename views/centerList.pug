@@ -1,0 +1,8 @@
+extends layout
+
+block content
+    h1
+    - for (var i = 0; i < centers.length; i++)
+        - var link = redirectBase + '/' + centers[i]
+        form.centerChoice(action=link)
+            button.btn.btn-default(type=submit value=centers[i]) #{centers[i]}
