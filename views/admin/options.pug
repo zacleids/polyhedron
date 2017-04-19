@@ -18,9 +18,11 @@ block content
 
         function getCenterData() {
             //alert($("#centerSelector").val());
+            var location = window.location.href;
+            var url = location.replace("options", "getCenterInfo");
             $.ajax({
                 type: 'get',
-                url: 'http://localhost:3000/admin/getCenterInfo',
+                url: url,
                 dataType: 'json',
                 data: {'center': $('#centerSelector').val()},
                 success: function (data, status) {
@@ -64,7 +66,10 @@ block content
                                                 .select
                                                     select.form-control(name='centerSelector' id='centerSelector')
                                                         - for (var i = 0; i < centers.length; i++)
-                                                            option(value=centers[i]) #{centers[i]}
+                                                            if (centers[i] === curCenter)
+                                                                option(value=centers[i] selected='selected') #{centers[i]}
+                                                            else
+                                                                option(value=centers[i]) #{centers[i]}
                             .row
                                 .col.col-md-12
                                     fieldset.form-group.centerOptionsCheckboxes

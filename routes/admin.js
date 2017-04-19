@@ -129,7 +129,7 @@ function createAdminRouter(opts) {
     // *************** configurations page ***************
 
     router.get('/options', function (req, res, next) {
-        center = 'MLC';
+        var center = 'MLC';
         res.render('admin/options', {
             title: 'options',
             centers: Object.keys(opts.tutorCenters),
@@ -140,7 +140,7 @@ function createAdminRouter(opts) {
     });
 
     router.post('/options', function (req, res, next) {
-        center = req.body.centerSelector;
+        var center = req.body.centerSelector;
         opts.tutorCenters[center].requestsTable = !!req.body.requestsTable;
         opts.tutorCenters[center].tutorTable = !!req.body.tutorTable;
         opts.tutorCenters[center].scrollingText.enabled = !!req.body.scrollingText;
@@ -148,10 +148,10 @@ function createAdminRouter(opts) {
             opts.tutorCenters[center].scrollingText.text = req.body.message;
         }
 
-        center = 'MLC';
         res.render('admin/options', {
             title: 'options',
             centers: Object.keys(opts.tutorCenters),
+            curCenter: center,
             tutorTable: opts.tutorCenters[center].tutorTable,
             requestsTable: opts.tutorCenters[center].requestsTable,
             scrollingText: opts.tutorCenters[center].scrollingText,

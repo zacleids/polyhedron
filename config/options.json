@@ -10,7 +10,7 @@
       }
     },
     "STEM": {
-      "centerLocation": "MLC",
+      "centerLocation": "STEM",
       "requestsTable": true,
       "tutorTable": true,
       "scrollingText": {
@@ -20,7 +20,7 @@
     }
   ,
     "ASC": {
-      "centerLocation": "MLC",
+      "centerLocation": "ASC",
       "requestsTable": false,
       "tutorTable": true,
       "scrollingText": {
