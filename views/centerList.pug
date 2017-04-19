@@ -1,8 +1,16 @@
 extends layout
 
 block content
-    h1
-    - for (var i = 0; i < centers.length; i++)
-        - var link = redirectBase + '/' + centers[i]
-        form.centerChoice(action=link)
-            button.btn.btn-default(type=submit value=centers[i]) #{centers[i]}
+    div.centerChoiceWrapper
+        h1 Choose a center to display
+            table
+                - var i = -1;
+                -for (var row = 0; row < tableLen; row++)
+                    tr
+                    -for (var col = 0; col < tableLen; col++)
+                        - i++
+                        if (centers[i])
+                            - var link = redirectBase + '/' + centers[i]
+                            td
+                                form.centerChoice(action=link)
+                                    button.centerChoicebtn.btn.btn-default(type=submit value=centers[i]) #{centers[i]}

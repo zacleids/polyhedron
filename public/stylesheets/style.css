@@ -7,6 +7,12 @@ a {
     color: #00B7FF;
 }
 
+.centerChoicebtn {
+    margin:20px;
+    padding:20px;
+    width: 150px;
+}
+
 .adminNavWrapper {
     background-color: #e9e9e9;
     display: inline-block;

@@ -46,6 +46,7 @@ function createTutorCenterRouter(opts) {
 
     router.get('/', function (req, res, next) {
         res.render('centerList', {
+            tableLen: Math.ceil(Math.sqrt(Object.keys(opts.tutorCenters).length)),
             centers: Object.keys(opts.tutorCenters),
             redirectBase: redirectBase
         });
