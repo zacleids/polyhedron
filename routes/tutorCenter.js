@@ -45,9 +45,11 @@ function createTutorCenterRouter(opts) {
     var router = express.Router();
 
     router.get('/', function (req, res, next) {
+        var centers = Object.keys(opts.tutorCenters);
+        centers.sort();
         res.render('centerList', {
-            tableLen: Math.ceil(Math.sqrt(Object.keys(opts.tutorCenters).length)),
-            centers: Object.keys(opts.tutorCenters),
+            tableLen: Math.ceil(Math.sqrt(centers.length)),
+            centers: centers,
             redirectBase: redirectBase
         });
     });
