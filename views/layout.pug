@@ -32,12 +32,60 @@ html(lang='en')
                 div.navbar-collapse.collapse(id='navbarContent')
                     ul.nav.navbar-nav
                         li
-                            a(href='#') Sign In
+                            a(data-toggle='modal', data-target='#signInModal') [ Student Sign In ]
                         li
-                            a(href='#') Sign Out
-                        li
-                            a(href='/admin') Admin Section
+                            a(data-toggle='modal', data-target='#adminSignInModal') [ Admin Section ]
         div
             block adminNav
         div
             block content
+
+        #signInModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='signInModalLabel', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#signInModalLabel.modal-title  Welcome! Please Sign In
+                    .modal-body
+                        form(role='form')
+                            .form-group
+                                label(for='signInStudentID') Student ID
+                                |
+                                input#signInStudentID.form-control(type='text', placeholder='123456')
+                            .form-group
+                                label(for='signInNickName') Preferred Name
+                                |
+                                input#signInNickName.form-control(type='text', placeholder='Nickname (leave blank for real name)')
+                            .checkbox
+                                label
+                                    input(type='checkbox')
+                                    |  Use preferred name
+                            |
+                            button.btn.btn-primary(type='submit') Sign In
+
+        #adminSignInModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='adminSignInModalLabel', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#adminSignInModalLabel.modal-title Please sign in to access the admin section
+                    .modal-body
+                        form(role='form')
+                            .form-group
+                                label(for='signInCabrilloID') Cabrillo ID
+                                |
+                                input#signInCabrilloID.form-control(type='text', placeholder='ex.: edbrau1234')
+                            .form-group
+                                label(for='adminSignInPassword') Password
+                                |
+                                input#adminSignInPassword.form-control(type='password', placeholder='Password')
+                            |
+                            button.btn.btn-primary(type='submit') Sign In
+                        form(action='/admin')
+                            button.btn.btn-primary(type='submit') Dev: Straight To Admin
