@@ -74,3 +74,4 @@ rt-jenkins/
 *~
 
 fakeData/excelGeneration/*.xlsx
+config/secret/*.json

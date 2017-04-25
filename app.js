@@ -12,9 +12,13 @@ var createAdminRouter = require('./routes/admin');
 
 var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.json'), 'UTF-8'));
 
-//var createDBconnection = require('./db/db');
-//var db = createDBconnection();
-//opts.db = db;
+var createDBconnection = require('./db/db');
+var db = createDBconnection();
+opts.db = db;
+
+opts.db.query('SELECT * FROM students', function(error, results, fields){
+    console.log(results);
+});
 
 
 var index = createIndexRouter(opts);
