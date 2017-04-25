@@ -1,4 +1,5 @@
 doctype html
+
 html(lang='en')
     head
         meta(charset='UTF-8')
@@ -41,6 +42,20 @@ html(lang='en')
         div
             block content
 
+        script.
+            $(function () {
+                toggleNickNameTF();
+                $("#useNickNameCB").on("click", toggleNickNameTF);
+            });
+
+            function toggleNickNameTF() {
+                if ($("#useNickNameCB").is(":checked")) {
+                    $("input.nickName").attr("disabled", false);
+                } else {
+                    $("input.nickName").attr("disabled", true);
+                }
+            }
+
         #signInModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='signInModalLabel', aria-hidden='true')
             .modal-dialog
                 .modal-content
@@ -57,12 +72,12 @@ html(lang='en')
                                 |
                                 input#signInStudentID.form-control(type='text', placeholder='123456')
                             .form-group
-                                label(for='signInNickName') Preferred Name
+                                label(for='nickName') Preferred Name
                                 |
-                                input#signInNickName.form-control(type='text', placeholder='Nickname (leave blank for real name)')
+                                input#nickName.nickName.form-control(type='text', placeholder='Nickname (leave blank for real name)')
                             .checkbox
                                 label
-                                    input(type='checkbox')
+                                    input#useNickNameCB.useNickNameCB(type='checkbox')
                                     |  Use preferred name
                             |
                             button.btn.btn-primary(type='submit') Sign In
@@ -88,5 +103,6 @@ html(lang='en')
                                 input#adminSignInPassword.form-control(type='password', placeholder='Password')
                             |
                             button.btn.btn-primary(type='submit') Sign In
+                    .modal-footer
                         form(action='/admin')
                             button.btn.btn-primary(type='submit') Dev: Straight To Admin
