@@ -31,8 +31,9 @@ html(lang='en')
                         a.navbar-brand(href='/tutorCenter') Polyhedron
                 div.navbar-collapse.collapse(id='navbarContent')
                     ul.nav.navbar-nav
-                        li
-                            a(data-toggle='modal', data-target='#signInModal') [ Student Sign In ]
+                        if(centerLocation)
+                            li
+                                a(data-toggle='modal', data-target='#signInModal') [ Student Sign In ]
                         li
                             a(data-toggle='modal', data-target='#adminSignInModal') [ Admin Section ]
         div
