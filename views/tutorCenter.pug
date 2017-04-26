@@ -94,6 +94,10 @@ block content
                     h3 #{scrollingText.text}
 
     script.
+        var $studentTable = $("#studentTable");
+        var $requestTable = $("#requestsTable");
+        var $tutorsTable = $("#tutorsTable");
+
         var $contextMenuStudent = $("#studentContextMenu");
         var $contextMenuRequest = $("#requestContextMenu");
         var $contextMenuTutor = $("#tutorContextMenu");
@@ -108,8 +112,8 @@ block content
             // display this context menu
             $contextMenuStudent.css({
                 display: "block",
-                left: e.pageX - 360, //magic numbers
-                top: e.pageY - 70 //magic numbers
+                left: e.pageX - $studentTable.offset().left + 15, //magic numbers
+                top: e.pageY - $studentTable.offset().top + 20 //magic numbers
             });
             return false;
         });
@@ -130,8 +134,8 @@ block content
             // display this context menu
             $contextMenuRequest.css({
                 display: "block",
-                left: e.pageX - 960, //magic numbers
-                top: e.pageY - 70 //magic numbers
+                left: e.pageX - $requestTable.offset().left + 15, //magic numbers
+                top: e.pageY - $requestTable.offset().top + 20 //magic numbers
             });
             return false;
         });
@@ -152,8 +156,8 @@ block content
             // display this context menu
             $contextMenuTutor.css({
                 display: "block",
-                left: e.pageX - 960, //magic numbers
-                top: e.pageY - 500 //magic numbers
+                left: e.pageX - $tutorsTable.offset().left + 15, //magic numbers
+                top: e.pageY - $tutorsTable.offset().top + 20 //magic numbers
             });
             return false;
         });
