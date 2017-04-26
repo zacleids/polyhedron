@@ -10,7 +10,7 @@ block content
                         fieldset.tableBorder
                             legend.tableBorder Students
                                 .insideLegend.insideStudentLegend
-                                    table.table.table-striped(id='studentTable' )
+                                    table.table.table-striped.table-hover(id='studentTable')
                                         thead
                                             th Name
                                             th Course
@@ -21,6 +21,16 @@ block content
                                                     td #{students[i].name}
                                                     td #{students[i].course}
                                                     td #{students[i].location}
+                                    ul#studentContextMenu.dropdown-menu
+                                        li(data-item='request')
+                                            a Request Tutor
+                                        li(data-item='changeLocation')
+                                            a Change Location
+                                        li(data-item='changeSubject')
+                                            a Change Subjects
+                                        li.divider
+                                        li(data-item='studentSignOut')
+                                            a Sign Out
             .col-md-4
                 if(requestsTable)
                     .row
@@ -28,7 +38,7 @@ block content
                             fieldset.tableBorder
                                 legend.tableBorder Requests
                                     .insideLegend.insideRequestLegend
-                                        table.table.table-striped(id='requestsTable')
+                                        table.table.table-striped.table-hover(id='requestsTable')
                                             thead
                                                 th Name
                                                 th Course
@@ -45,13 +55,23 @@ block content
                                                         td #{requests[i].waitTime}
                                                         td #{requests[i].request}
                                                         td #{requests[i].tutor}
+                                        ul#requestContextMenu.dropdown-menu
+                                            li(data-item='beginTutoring')
+                                                a Begin Tutoring
+                                            li(data-item='finishTutoring')
+                                                a Finish Tutoring
+                                            li(data-item='requestMaster')
+                                                a Request Master Tutor
+                                            li.divider
+                                            li(data-item='deleteRequest')
+                                                a Delete Request
                 if(tutorTable)
                     .row
                         .col-md-12
                             fieldset.tableBorder
                                 legend.tableBorder Tutors
                                     .insideLegend.insideTutorLegend
-                                        table.table.table-striped(id='tutorsTable')
+                                        table.table.table-striped.table-hover(id='tutorsTable')
                                             thead
                                                 th Name
                                                 th Login Time
@@ -60,8 +80,93 @@ block content
                                                     tr
                                                         td #{tutors[i].name}
                                                         td #{tutors[i].loginTime}
+                                        ul#tutorContextMenu.dropdown-menu
+                                            li(data-item='unrequestable')
+                                                a Become Unrequestable
+                                            li.divider
+                                            li(data-item='clockOut')
+                                                a Clock Out
             .col-md-2
+
         if(scrollingText.enabled)
             .bottom-bar
                 .scrollingText
                     h3 #{scrollingText.text}
+
+    script.
+        var $contextMenuStudent = $("#studentContextMenu");
+        var $contextMenuRequest = $("#requestContextMenu");
+        var $contextMenuTutor = $("#tutorContextMenu");
+
+        // Student Table Context Menu ***********************************
+        // display the menu at the cursor position
+        $("body").on("contextmenu", "#studentTable tr", function (e) {
+            // hide the other context menus
+            $contextMenuRequest.hide();
+            $contextMenuTutor.hide();
+
+            // display this context menu
+            $contextMenuStudent.css({
+                display: "block",
+                left: e.pageX - 360, //magic numbers
+                top: e.pageY - 70 //magic numbers
+            });
+            return false;
+        });
+
+        // hide the menu when you click a link in menu
+        $contextMenuStudent.on("click", "a", function () {
+            alert('a student context menu was clicked');
+            $contextMenuStudent.hide();
+        });
+
+        // Request Table Context Menu ***********************************
+        // display the menu at the cursor position
+        $("body").on("contextmenu", "#requestsTable tr", function (e) {
+            // hide the other context menus
+            $contextMenuStudent.hide();
+            $contextMenuTutor.hide();
+
+            // display this context menu
+            $contextMenuRequest.css({
+                display: "block",
+                left: e.pageX - 960, //magic numbers
+                top: e.pageY - 70 //magic numbers
+            });
+            return false;
+        });
+
+        // hide the menu when you click a link in menu
+        $contextMenuRequest.on("click", "a", function () {
+            alert('a request context menu was clicked');
+            $contextMenuRequest.hide();
+        });
+
+        // Tutor Table Context Menu ***********************************
+        // display the menu at the cursor position
+        $("body").on("contextmenu", "#tutorsTable tr", function (e) {
+            // hide the other context menus
+            $contextMenuStudent.hide();
+            $contextMenuRequest.hide();
+
+            // display this context menu
+            $contextMenuTutor.css({
+                display: "block",
+                left: e.pageX - 960, //magic numbers
+                top: e.pageY - 500 //magic numbers
+            });
+            return false;
+        });
+
+        // hide the menu when you click a link in menu
+        $contextMenuTutor.on("click", "a", function () {
+            alert('a tutor context menu was clicked');
+            $contextMenuTutor.hide();
+        });
+
+        // hide the menu on click anywhere else
+        $("body").click(function () {
+            $contextMenuStudent.hide();
+            $contextMenuRequest.hide();
+            $contextMenuTutor.hide();
+        });

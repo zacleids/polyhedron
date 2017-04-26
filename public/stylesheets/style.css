@@ -119,3 +119,9 @@ a {
 .modal-body .form-horizontal .col-sm-offset-2 {
     margin-left: 15px;
 }
+
+#contextMenuStudent, #contextMenuRequest, #contextMenuTutor {
+    position: absolute;
+    display: none;
+}
+
