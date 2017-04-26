@@ -125,3 +125,12 @@ a {
     display: none;
 }
 
+@-moz-document url-prefix() {
+    li {
+        cursor: hand; /* firefox */
+    }
+}
+
+li {
+    cursor: pointer; /* chrome */
+}
