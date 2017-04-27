@@ -27,16 +27,16 @@ html(lang='en')
                         span.icon-bar
                         span.icon-bar
                     if (centerLocation)
-                        a.navbar-brand(href='/tutorCenter') Polyhedron: #{centerLocation}
+                        a.navbar-brand.navLink(href='/tutorCenter') Polyhedral: #{centerLocation}
                     else
-                        a.navbar-brand(href='/tutorCenter') Polyhedron
+                        a.navbar-brand.navLink(href='/tutorCenter') Polyhedral
                 div.navbar-collapse.collapse(id='navbarContent')
                     ul.nav.navbar-nav
                         if(centerLocation)
                             li
-                                a(data-toggle='modal', data-target='#signInModal') [ Student Sign In ]
+                                a.navLink(data-toggle='modal', data-target='#signInModal') Student Sign In
                         li
-                            a(data-toggle='modal', data-target='#adminSignInModal') [ Admin Section ]
+                            a.navLink(data-toggle='modal', data-target='#adminSignInModal') Admin Section
         div
             block adminNav
         div
