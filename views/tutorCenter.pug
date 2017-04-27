@@ -17,20 +17,20 @@ block content
                                             th Location
                                         tbody
                                             - for(var i = 0; i < students.length; i++)
-                                                tr
+                                                tr(data-name=students[i].name)
                                                     td #{students[i].name}
                                                     td #{students[i].course}
                                                     td #{students[i].location}
                                     ul#studentContextMenu.dropdown-menu
-                                        li(data-item='request')
-                                            a Request Tutor
-                                        li(data-item='changeLocation')
-                                            a Change Location
-                                        li(data-item='changeSubject')
-                                            a Change Subjects
+                                        li
+                                            a(data-action='request') Request Tutor
+                                        li
+                                            a(data-action='changeLocation') Change Location
+                                        li
+                                            a(data-action='changeSubject') Change Subjects
                                         li.divider
-                                        li(data-item='studentSignOut')
-                                            a Sign Out
+                                        li
+                                            a(data-action='studentSignOut') Sign Out
             .col-md-4
                 if(requestsTable)
                     .row
@@ -48,7 +48,7 @@ block content
                                                 th Tutor
                                             tbody
                                                 - for(var i = 0; i < requests.length; i++)
-                                                    tr
+                                                    tr(data-name=requests[i].name)
                                                         td #{requests[i].name}
                                                         td #{requests[i].course}
                                                         td #{requests[i].location}
@@ -56,15 +56,15 @@ block content
                                                         td #{requests[i].request}
                                                         td #{requests[i].tutor}
                                         ul#requestContextMenu.dropdown-menu
-                                            li(data-item='beginTutoring')
-                                                a Begin Tutoring
-                                            li(data-item='finishTutoring')
-                                                a Finish Tutoring
-                                            li(data-item='requestMaster')
-                                                a Request Master Tutor
+                                            li
+                                                a(data-action='beginTutoring') Begin Tutoring
+                                            li
+                                                a(data-action='finishTutoring') Finish Tutoring
+                                            li
+                                                a(data-action='requestMaster') Request Master Tutor
                                             li.divider
-                                            li(data-item='deleteRequest')
-                                                a Delete Request
+                                            li
+                                                a(data-action='deleteRequest') Delete Request
                 if(tutorTable)
                     .row
                         .col-md-12
@@ -77,15 +77,15 @@ block content
                                                 th Login Time
                                             tbody
                                                 - for(var i = 0; i < tutors.length; i++)
-                                                    tr
+                                                    tr(data-name=tutors[i].name)
                                                         td #{tutors[i].name}
                                                         td #{tutors[i].loginTime}
                                         ul#tutorContextMenu.dropdown-menu
-                                            li(data-item='unrequestable')
-                                                a Become Unrequestable
+                                            li
+                                                a(data-action='unrequestable') Become Unrequestable
                                             li.divider
-                                            li(data-item='clockOut')
-                                                a Clock Out
+                                            li
+                                                a(data-action='clockOut') Clock Out
             .col-md-2
 
         if(scrollingText.enabled)
@@ -102,12 +102,18 @@ block content
         var $contextMenuRequest = $("#requestContextMenu");
         var $contextMenuTutor = $("#tutorContextMenu");
 
+        var tableData = "";
+        var actionSelected = "";
+
         // Student Table Context Menu ***********************************
         // display the menu at the cursor position
         $("body").on("contextmenu", "#studentTable tr", function (e) {
             // hide the other context menus
             $contextMenuRequest.hide();
             $contextMenuTutor.hide();
+
+            // get which row they clicked on
+            tableData = $(this).attr("data-name");
 
             // display this context menu
             $contextMenuStudent.css({
@@ -120,7 +126,8 @@ block content
 
         // hide the menu when you click a link in menu
         $contextMenuStudent.on("click", "a", function () {
-            alert('a student context menu was clicked');
+            actionSelected = $(this).attr("data-action");
+            alert("Student: " + tableData + ". Action: " + actionSelected);
             $contextMenuStudent.hide();
         });
 
@@ -130,6 +137,9 @@ block content
             // hide the other context menus
             $contextMenuStudent.hide();
             $contextMenuTutor.hide();
+
+            // get which row they clicked on
+            tableData = $(this).attr("data-name");
 
             // display this context menu
             $contextMenuRequest.css({
@@ -142,7 +152,8 @@ block content
 
         // hide the menu when you click a link in menu
         $contextMenuRequest.on("click", "a", function () {
-            alert('a request context menu was clicked');
+            actionSelected = $(this).attr("data-action");
+            alert("Request: " + tableData + ". Action: " + actionSelected);
             $contextMenuRequest.hide();
         });
 
@@ -152,6 +163,9 @@ block content
             // hide the other context menus
             $contextMenuStudent.hide();
             $contextMenuRequest.hide();
+
+            // get which row they clicked on
+            tableData = $(this).attr("data-name");
 
             // display this context menu
             $contextMenuTutor.css({
@@ -164,7 +178,8 @@ block content
 
         // hide the menu when you click a link in menu
         $contextMenuTutor.on("click", "a", function () {
-            alert('a tutor context menu was clicked');
+            actionSelected = $(this).attr("data-action");
+            alert("Tutor: " + tableData + ". Action: " + actionSelected);
             $contextMenuTutor.hide();
         });
 
