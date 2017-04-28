@@ -16,11 +16,6 @@ var createDBconnection = require('./db/db');
 var db = createDBconnection();
 opts.db = db;
 
-opts.db.query('SELECT * FROM students', function(error, results, fields){
-    console.log(results);
-});
-
-
 var index = createIndexRouter(opts);
 var tutorCenter = createTutorCenterRouter(opts);
 var admin = createAdminRouter(opts);
