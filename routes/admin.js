@@ -24,7 +24,7 @@ function createAdminRouter(opts) {
     
     router.get('/', function (req, res, next) {
         res.render('admin/admin', {
-            title: 'admin',
+            title: 'Admin',
             centerLocation: opts.centerLocation
         });
     });
@@ -44,7 +44,7 @@ function createAdminRouter(opts) {
                 }
             });
             res.render('admin/reports', {
-                title: 'reports',
+                title: 'Reports',
                 centerLocation: opts.centerLocation,
                 files: finalFiles
             });
@@ -133,7 +133,7 @@ function createAdminRouter(opts) {
         centers.sort();
         var center = centers[0];
         res.render('admin/options', {
-            title: 'options',
+            title: 'Options',
             centers: centers,
             tutorTable: opts.tutorCenters[center].tutorTable,
             requestsTable: opts.tutorCenters[center].requestsTable,
@@ -153,7 +153,7 @@ function createAdminRouter(opts) {
         centers.sort();
 
         res.render('admin/options', {
-            title: 'options',
+            title: 'Options',
             centers: centers,
             curCenter: center,
             tutorTable: opts.tutorCenters[center].tutorTable,
@@ -215,7 +215,7 @@ function createAdminRouter(opts) {
                 }
             },
             title: function(cb){
-                cb(null, 'statistics');
+                cb(null, 'Statistics');
             },
             numTutorsInCenter: function (cb) {
                 var tutors = [];
