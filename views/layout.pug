@@ -66,7 +66,8 @@ html(lang='en')
                             span.sr-only Close
                         h4#signInModalLabel.modal-title  Welcome! Please Sign In
                     .modal-body
-                        form(role='form')
+                        form(role='form' action='/tutorCenter/studentSignIn' method='post')
+                            input(type='hidden' value=centerLocation name='center')
                             .form-group
                                 label(for='signInStudentID') Student ID
                                 |
@@ -118,7 +119,7 @@ html(lang='en')
                                 |
                                 input#adminSignInPassword.form-control(type='password', placeholder='Password')
                             |
-                            button.btn.btn-primary(type='submit') Sign In
+                            button#subSignIn.btn.btn-primary(type='submit' onclick='getDateTime();') Sign In
                     .modal-footer
                         form(action='/admin')
                             button.btn.btn-primary(type='submit') Dev: Straight To Admin

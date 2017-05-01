@@ -132,6 +132,26 @@ function createTutorCenterRouter(opts) {
         });
     });
 
+    // getting date and time of student sign in
+    function getDateTime() {
+        var currentdate = new Date();
+        var datetime = "Sign in time: " + (currentdate.getMonth() + 1) + "-"
+            + currentdate.getDate() + "-"
+            + currentdate.getFullYear() + " @ "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
+            + currentdate.getSeconds();
+        return datetime;
+    }
+
+    router.post('/studentSignIn', function (req, res, next) {
+        var center = req.body.center;
+        console.log("center: " + center);
+        var datetime = getDateTime();
+        console.log(datetime);
+        res.redirect(redirectBase + '/' + center);
+    });
+
     return router;
 }
 
