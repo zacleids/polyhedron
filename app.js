@@ -15,6 +15,9 @@ var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.js
 var createDBconnection = require('./db/db');
 var db = createDBconnection();
 opts.db = db;
+var DatabaseHelper = require('./db/dbHelper.js');
+var dbHelper = new DatabaseHelper(opts);
+opts.dbHelper = dbHelper;
 
 var index = createIndexRouter(opts);
 var tutorCenter = createTutorCenterRouter(opts);
