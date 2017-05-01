@@ -9,9 +9,11 @@ a {
 }
 
 .centerChoicebtn {
-    margin:20px;
-    padding:20px;
+    margin: 20px;
+    padding: 20px;
     width: 150px;
+    height: 80px;
+    white-space: normal;
 }
 
 .adminNavWrapper {
