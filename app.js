@@ -10,7 +10,8 @@ var createIndexRouter = require('./routes/index');
 var createTutorCenterRouter = require('./routes/tutorCenter');
 var createAdminRouter = require('./routes/admin');
 
-var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.json'), 'UTF-8'));
+//var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.json'), 'UTF-8'));
+var opts = {tutorCenters:{}};
 
 var createDBconnection = require('./db/db');
 var db = createDBconnection();
@@ -18,6 +19,20 @@ opts.db = db;
 var DatabaseHelper = require('./db/dbHelper.js');
 var dbHelper = new DatabaseHelper(opts);
 opts.dbHelper = dbHelper;
+dbHelper.getTutorCenters(function(err, centers){
+    centers.sort();
+    centers.forEach(function(center){
+        opts.tutorCenters[center] = {
+            "centerLocation": center,
+            "requestsTable": true,
+            "tutorTable": true,
+            "scrollingText": {
+                "enabled": true,
+                "text": "Welcome to " + center + ". Message of the day, announcements, center hours... etc."
+            }
+        }
+    });
+});
 
 var index = createIndexRouter(opts);
 var tutorCenter = createTutorCenterRouter(opts);
