@@ -72,6 +72,22 @@ html(lang='en')
                                 |
                                 input#signInStudentID.form-control(type='text', placeholder='123456')
                             .form-group
+                                label(for='selectLocation') Choose a location
+                                |
+                                select#selectLocation.form-control(name='selectLocation')
+                                    option(value='#') -Select Table-
+                                    - for (var i = 1; i < 11; i++)
+                                        option(value=i) Table #{i}
+                            .form-group
+                                label(for='selectSubject') Choose a subject
+                                |
+                                select#selectSubject.form-control(name='selectSubject')
+                                    option(value='#') -Select Subject-
+                                    option(value='english') English
+                                    option(value='math') Math
+                                    option(value='history') History
+                                    option(value='compSci') Comp. Science
+                            .form-group
                                 label(for='nickName') Preferred Name
                                 |
                                 input#nickName.nickName.form-control(type='text', placeholder='Nickname (leave blank for real name)')
