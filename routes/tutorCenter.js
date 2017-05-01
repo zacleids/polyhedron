@@ -45,13 +45,21 @@ function createTutorCenterRouter(opts) {
     var router = express.Router();
 
     router.get('/', function (req, res, next) {
-        var centers = Object.keys(opts.tutorCenters);
-        centers.sort();
-        res.render('centerList', {
-            tableLen: Math.ceil(Math.sqrt(centers.length)),
-            centers: centers,
-            redirectBase: redirectBase
-        });
+        console.log(opts);
+        opts.dbHelper.getTutorCenters(sendCenters);
+        function sendCenters(err, centers) {
+            if(err){
+                console.error("Whoopsy daisy, something went wrong!" + err.message);
+                return;
+            }
+            console.log(centers);
+            centers.sort();
+            res.render('centerList', {
+                tableLen: Math.ceil(Math.sqrt(centers.length)),
+                centers: centers,
+                redirectBase: redirectBase
+            });
+        }
     });
 
     router.get('/:center', function (req, res, next) {
