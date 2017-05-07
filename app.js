@@ -5,13 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var io = require('./socket/io');
 
 var createIndexRouter = require('./routes/index');
 var createTutorCenterRouter = require('./routes/tutorCenter');
 var createAdminRouter = require('./routes/admin');
 
 //var opts = JSON.parse(fs.readFileSync(path.join(__dirname, 'config', 'options.json'), 'UTF-8'));
-var opts = {tutorCenters:{}};
+var opts = {tutorCenters:{}, centerSockets:{}};
 
 var createDBconnection = require('./db/db');
 var db = createDBconnection();
@@ -30,7 +31,13 @@ dbHelper.getTutorCenters(function(err, centers){
                 "enabled": true,
                 "text": "Welcome to " + center + ". Message of the day, announcements, center hours... etc."
             }
-        }
+        };
+        var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+        var temp = io.of('/' + centerNoSpace);
+        temp.on('connection', function(socket){
+            opts.centerSockets[centerNoSpace] = socket;
+            console.log('someone connected to ' + centerNoSpace);
+        });
     });
 });
 

@@ -45,14 +45,12 @@ function createTutorCenterRouter(opts) {
     var router = express.Router();
 
     router.get('/', function (req, res, next) {
-        console.log(opts);
         opts.dbHelper.getTutorCenters(sendCenters);
         function sendCenters(err, centers) {
             if(err){
                 console.error("Whoopsy daisy, something went wrong!" + err.message);
                 return;
             }
-            console.log(centers);
             centers.sort();
             res.render('centerList', {
                 tableLen: Math.ceil(Math.sqrt(centers.length)),
@@ -154,9 +152,13 @@ function createTutorCenterRouter(opts) {
 
     router.post('/studentSignIn', function (req, res, next) {
         var center = req.body.center;
-        console.log("center: " + center);
         var datetime = getDateTime();
         console.log(datetime);
+        var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+
+        opts.centerSockets[centerNoSpace].broadcast.emit('reload');
+        opts.centerSockets[centerNoSpace].emit('reload');
+
         res.redirect(redirectBase + '/' + center);
     });
 

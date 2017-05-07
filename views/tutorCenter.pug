@@ -189,3 +189,8 @@ block content
             $contextMenuRequest.hide();
             $contextMenuTutor.hide();
         });
+
+        var socket = io.connect('/#{centerLocation}'.replace(new RegExp(' ', 'g'), ''));
+        socket.on('reload', function(){
+            location.reload();
+        });
