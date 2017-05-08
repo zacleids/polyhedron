@@ -50,8 +50,6 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
 //FUNCTIONS DEDICATED TO
 //POPULATING THE SIGNED-IN STUDENTS TABLE ON
 //THE FRONT-FACING TUTOR CENTER PAGES
-
-
 DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
     var self = this;
 
@@ -89,17 +87,17 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
 DatabaseHelper.prototype.getCenterStudentClass = function getCenterStudentClass(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM students, users, centers WHERE centers.description = \'"
-        + center + "\' AND students.centerId = centers.id ORDER BY students.id", function (err, results) {
+    self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
+    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id;", function (err, results) {
         if (err) {
             cb(err, null);
         }
         var classNames = [];
         console.log(results);
         results.forEach(function(result) {
-            studentNames.push(result.nickName);
+            classNames.push(result.code);
         });
-        cb(null, studentNames);
+        cb(null, classNames);
     });
 };
 
