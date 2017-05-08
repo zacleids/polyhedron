@@ -242,22 +242,17 @@ DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(ce
     });
 };
 
-
-
-
-
 //FUNCTIONS DEDICATED TO
 //POPULATING THE SIGNED-IN STUDENTS TABLE AND
 //POPULATING THE CLOCKED-IN TUTORS TABLE AND
 //POPULATING THE TUTORING REQUEST TABLE IN
 //THE BACK-END DATABASE
-
 DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, locationID, center, cb) {
     var self = this;
     var centerID = 0;
-    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err, results) {
-       if (err) {
-
+    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
+       if (err1) {
+            cb(err1, null);
        }
        else {
            console.log(results);
@@ -267,9 +262,9 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
 
     if(centerID != 0) {
         self.db.query("INSERT INTO students VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
-            "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err) {
-            if (err) {
-                cb(err, null);
+            "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
+            if (err2) {
+                cb(err2, null);
             }
         });
     }
