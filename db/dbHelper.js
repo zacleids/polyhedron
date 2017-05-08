@@ -326,7 +326,7 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
 DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, cb) {
     var self = this;
 
-    self.db.query("SELECT locations.id FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+    self.db.query("SELECT * FROM users WHERE id = \'" + userID + "\';", function (err, results) {
         if (err) {
             cb(err, null);
         }
