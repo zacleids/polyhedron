@@ -245,7 +245,7 @@ DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studen
     });
 };
 
-DatabaseHelper.prototype.getCenterStudentRegistrationID = function getCenterStudentClass(center, cb) {
+DatabaseHelper.prototype.getStudentsRegistrationIDs = function getStudentsRegistrationIDs(center, cb) {
     var self = this;
 
     self.db.query("SELECT registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
