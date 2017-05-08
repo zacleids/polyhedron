@@ -84,7 +84,7 @@ DatabaseHelper.prototype.getCenterStudentClasses = function getCenterStudentClas
     var self = this;
 
     self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
-    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registrations.id;", function (err, results) {
+    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id;", function (err, results) {
         if (err) {
             cb(err, null);
         }
