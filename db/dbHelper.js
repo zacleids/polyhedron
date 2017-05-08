@@ -66,7 +66,7 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
 DatabaseHelper.prototype.getCenterStudentNames = function getCenterStudentNames(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM students, users, centers WHERE centers.description = \'"
+    self.db.query("SELECT users.nickName FROM students, users, centers WHERE centers.description = \'"
         + center + "\' AND students.centerId = centers.id", function (err, results) {
         if (err) {
             cb(err, null);
@@ -84,7 +84,7 @@ DatabaseHelper.prototype.getCenterStudentClasses = function getCenterStudentClas
     var self = this;
 
     self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
-    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
+    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registrations.id;", function (err, results) {
         if (err) {
             cb(err, null);
         }
