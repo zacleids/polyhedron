@@ -68,22 +68,11 @@ function createTutorCenterRouter(opts) {
         }
         async.parallel({
             students: function (cb) {
-                var students = [];
-                var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
-                fs.readFile(file, readStudentData);
-
-                function readStudentData(err, data) {
-                    if (err) {
-                        console.log('An unknown error occurred: ', err);
-                        cb(err, null);
-                    }
-
-                    var lines = data.toString().split('\n');
-                    lines.forEach(function (line) {
-                        students.push(makeStudent(line));
-                    });
-                    cb(null, students);
-                }
+                opts.dbHelper.getCenterStudents(center, function (err, result) {
+                    // console.log("srudents from db: ");
+                    // console.log(result);
+                    cb(err, result);
+                });
             },
             requests: function (cb) {
                 var requests = [];
@@ -163,23 +152,14 @@ function createTutorCenterRouter(opts) {
     });
 
     router.get('/REST/getStudents', function (req, res, next) {
-        var students = [];
-        var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
-        fs.readFile(file, readStudentData);
-
-        function readStudentData(err, data) {
-            if (err) {
-                console.log('An unknown error occurred: ', err);
+        var center = req.query.center;
+        opts.dbHelper.getCenterStudents(center, function(err, result){
+            if(err){
+                res.status(500).send({error: 'Something failed!'});
                 return;
             }
-
-            var lines = data.toString().split('\n');
-            lines.forEach(function (line) {
-                students.push(makeStudent(line));
-            });
-
-            res.send({students:students});
-        }
+            res.send({students:result});
+        });
     });
 
     router.get('/REST/getRequests', function (req, res, next) {

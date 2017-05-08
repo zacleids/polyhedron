@@ -207,7 +207,7 @@ block content
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/getStudents',
                 dataType: 'json',
-                data: {},
+                data: {'center': '#{centerLocation}'},
                 success: function (data, status) {
                     refreshStudentTable(data['students']);
                 },
