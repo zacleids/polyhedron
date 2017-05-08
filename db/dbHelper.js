@@ -51,14 +51,14 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
             })
         }
     }, function (err, results) {
-            for(var i = 0; i < results["names"].length; i++) {
-                students.push({
-                    name: results["names"][i],
-                    course: results["classes"][i],
-                    location: results["locations"][i]
-                });
-            }
-            cb(err, students);
+        for(var i = 0; i < results["names"].length; i++) {
+            students.push({
+                name: results["names"][i],
+                course: results["classes"][i],
+                location: results["locations"][i]
+            });
+        }
+        cb(err, students);
         }
     );
 };
