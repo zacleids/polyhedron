@@ -102,17 +102,17 @@ DatabaseHelper.prototype.getCenterStudentClasses = function getCenterStudentClas
 DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLocations(center, cb) {
     var self = this;
 
-    self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
-        "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
+    self.db.query("SELECT locations.description FROM students, locations, centers WHERE students.locationId = locations.id AND students.centerId = centers.id AND centers.description = \'" + center +
+        ";", function (err, results) {
         if (err) {
             cb(err, null);
         }
-        var classNames = [];
+        var locations = [];
         console.log(results);
         results.forEach(function(result) {
-            classNames.push(result.code);
+            locations.push(result.description);
         });
-        cb(null, classNames);
+        cb(null, locations);
     });
 };
 
@@ -288,7 +288,7 @@ DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(ce
         var centerLocationIDs = [];
         console.log(results);
         results.forEach(function(result) {
-            centerLocationIDs.push(result.description);
+            centerLocationIDs.push(result.id);
         });
         cb(null, centerLocationIDs);
     });
