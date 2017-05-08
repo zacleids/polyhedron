@@ -33,9 +33,6 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
 DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, cb) {
     var self = this;
     var students = [];
-    var names = [];
-    var classes = [];
-    var locations = [];
     async.parallel({
         names: function (cb1) {
             self.getCenterStudentNames(center, function (err, result) {
