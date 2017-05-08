@@ -200,10 +200,10 @@ block content
         });
 
         function getStudents() {
-            /*
+
             $.ajax({
                 type: 'get',
-                url: 'http://localhost:3000/tutorCenter/getStudents',
+                url: 'http://localhost:3000/tutorCenter/REST/getStudents',
                 dataType: 'json',
                 data: {},
                 success: function (data, status) {
@@ -213,12 +213,7 @@ block content
                     alert(JSON.stringify(data));
                 }
             });
-            */
 
-            $.get("http://localhost:3000/tutorCenter/getStudents", function(data) {
-                //refreshStudentTable(data['students']);
-                alert(JSON.stringify(data['tester']));
-            });
         }
 
         // redraw student table upon student sign in
