@@ -150,7 +150,7 @@ function createTutorCenterRouter(opts) {
         return datetime;
     }
 
-    router.post('/studentSignIn', function (req, res, next) {
+    router.post('/REST/studentSignIn', function (req, res, next) {
         var center = req.body.center;
         var datetime = getDateTime();
         console.log(datetime);
@@ -162,7 +162,7 @@ function createTutorCenterRouter(opts) {
         res.redirect(redirectBase + '/' + center);
     });
 
-    router.get('/getStudents', function (req, res, next) {
+    router.get('/REST/getStudents', function (req, res, next) {
         var students = [];
         var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
         fs.readFile(file, readStudentData);
