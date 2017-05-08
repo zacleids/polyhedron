@@ -28,6 +28,10 @@ function DatabaseHelper(opts) {
     this.db = opts.db;
 }
 
+
+//FUNCTIONS DEDICATED TO
+//POPULATING THE TUTORING CENTERS BUTTONS ON
+// THE "TUTORING CENTERS" PAGE FOR ADMINISTRATORS
 DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
     var self = this;
 
@@ -43,10 +47,33 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
     });
 };
 
+//FUNCTIONS DEDICATED TO
+//POPULATING THE SIGNED-IN STUDENTS TABLE ON
+//THE FRONT-FACING TUTOR CENTER PAGES
+
+
+DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
+    var self = this;
+
+    self.db.query("SELECT DISTINCT code FROM registrations, users, classes, classTypes WHERE users.id =\'" + studentID + "\' AND users.id = registrations.userId AND registrations.classId =" +
+        "classes.id AND classes.typeId = classTypes.id ORDER BY registrations.classId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var studentsClasses = [];
+        console.log(results);
+        results.forEach(function(result) {
+            studentsClasses.push(result.code);
+        });
+        cb(null, studentsClasses);
+    });
+};
+
 DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM students, users, centers WHERE centers.description = \'" + center + "\' AND students.centerId = centers.id", function (err, results) {
+    self.db.query("SELECT nickName FROM students, users, centers WHERE centers.description = \'"
+        + center + "\' AND students.centerId = centers.id", function (err, results) {
         if (err) {
             cb(err, null);
         }
@@ -59,10 +86,31 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
     });
 };
 
+DatabaseHelper.prototype.getCenterStudentClass = function getCenterStudentClass(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT nickName FROM students, users, centers WHERE centers.description = \'"
+        + center + "\' AND students.centerId = centers.id ORDER BY students.id", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var classNames = [];
+        console.log(results);
+        results.forEach(function(result) {
+            studentNames.push(result.nickName);
+        });
+        cb(null, studentNames);
+    });
+};
+
+//FUNCTIONS DEDICATED TO
+//POPULATING THE ON-THE-CLOCK TUTORS TABLE ON
+//THE FRONT-FACING TUTOR CENTER PAGES
 DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickname FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
+    self.db.query("SELECT nickname FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'"
+        + center + "\';", function (err, results){
        if(err) {
            cb(err, null);
        }
@@ -75,10 +123,31 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
     });
 };
 
-DatabaseHelper.prototype.getRequestedTutors = function getCenterTutors(center, cb) {
+DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+    self.db.query("SELECT loginTime FROM tutors, centers WHERE tutors.centerId = centers.centerId AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var clockinTimes = [];
+        console.log(results);
+        results.forEach(function(result) {
+            clockinTimes.push(result.loginTime);
+        });
+        cb(null, clockinTimes);
+    });
+};
+
+//FUNCTIONS DEDICATED TO
+//POPULATING THE TUTORING REQUESTS TABLE ON
+//THE FRONT-FACING TUTOR CENTER PAGES
+DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
         }
@@ -91,10 +160,11 @@ DatabaseHelper.prototype.getRequestedTutors = function getCenterTutors(center, c
     });
 };
 
-DatabaseHelper.prototype.getRequestingStudents = function getCenterTutors(center, cb) {
+DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
         }
@@ -107,10 +177,11 @@ DatabaseHelper.prototype.getRequestingStudents = function getCenterTutors(center
     });
 };
 
-DatabaseHelper.prototype.getAssignedTutors = function getCenterTutors(center, cb) {
+DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
         }
@@ -123,6 +194,22 @@ DatabaseHelper.prototype.getAssignedTutors = function getCenterTutors(center, cb
     });
 };
 
+DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT requestTime FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var requestTimes = [];
+        console.log(results);
+        results.forEach(function(result) {
+            requestTimes.push(result.requestTime);
+        });
+        cb(null, requestTimes);
+    });
+};
 
 
 
