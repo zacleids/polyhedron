@@ -71,8 +71,59 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
        results.forEach(function(result) {
            tutorNames.push(result.nickName);
        });
+        cb(null, tutorNames);
     });
 };
+
+DatabaseHelper.prototype.getRequestedTutors = function getCenterTutors(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var tutorNames = [];
+        console.log(results);
+        results.forEach(function(result) {
+            tutorNames.push(result.nickName);
+        });
+        cb(null, tutorNames);
+    });
+};
+
+DatabaseHelper.prototype.getRequestingStudents = function getCenterTutors(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var studentNames = [];
+        console.log(results);
+        results.forEach(function(result) {
+            studentNames.push(result.nickName);
+        });
+        cb(null, studentNames);
+    });
+};
+
+DatabaseHelper.prototype.getAssignedTutors = function getCenterTutors(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var tutorNames = [];
+        console.log(results);
+        results.forEach(function(result) {
+            tutorNames.push(result.nickName);
+        });
+        cb(null, tutorNames);
+    });
+};
+
+
 
 
 module.exports = DatabaseHelper;
