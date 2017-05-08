@@ -194,3 +194,52 @@ block content
         socket.on('reload', function(){
             location.reload();
         });
+
+        $("body").click(function () {
+            getStudents();
+        });
+
+        function getStudents() {
+            /*
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/getStudents',
+                dataType: 'json',
+                data: {},
+                success: function (data, status) {
+                    refreshStudentTable(data['students']);
+                }, complete: function (data, status) {
+                    //alert(status);
+                    alert(JSON.stringify(data));
+                }
+            });
+            */
+
+            $.get("http://localhost:3000/tutorCenter/getStudents", function(data) {
+                //refreshStudentTable(data['students']);
+                alert(JSON.stringify(data['tester']));
+            });
+        }
+
+        // redraw student table upon student sign in
+        function refreshStudentTable(students) {
+            // empty the table
+            $('#studentTable tbody').html('');
+
+            // re-draw the table
+            var name = '';
+            var course = '';
+            var location = '';
+
+            for (var i = 0; i < 10; i++) {
+                name = students[i].name;
+                course = students[i].course;
+                location = students[i].location;
+
+                $('#studentTable').append('<tr data-name=' + name + '>');
+                $('#studentTable').append('<td>' + name + '</td>');
+                $('#studentTable').append('<td>' + course + '</td>');
+                $('#studentTable').append('<td>' + location + '</td>')
+                $('#studentTable').append('</tr>');
+            }
+        }
