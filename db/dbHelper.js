@@ -4,26 +4,6 @@
 var fs = require('fs');
 var path = require('path');
 
-// function createDBHelper(opts) {
-//     var db = opts.db;
-//
-//     return {
-//         getTutorCenters: function getTutorCenters() {
-//             db.query("SELECT id, description FROM centers;", function (err, results) {
-//                 if (err) {
-//                     console.error("Whoopsy daisy, something went wrong!" + err.message);
-//                     return;
-//                 }
-//                 var centerNames= [];
-//                 results.forEach(function(result){
-//                    centerNames.push(result.description);
-//                 });
-//                 return centerNames;
-//             });
-//         }
-//     }
-// }
-
 function DatabaseHelper(opts) {
     this.db = opts.db;
 }
@@ -215,22 +195,37 @@ DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studen
     });
 };
 
-DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center, cb) {
+DatabaseHelper.prototype.getCenterLocationNames = function getCenterLocationNames(center, cb) {
     var self = this;
 
     self.db.query("SELECT locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
         if (err) {
             cb(err, null);
         }
-        var centerLocations = [];
+        var centerLocationNames = [];
         console.log(results);
         results.forEach(function(result) {
-            centerLocations.push(result.description);
+            centerLocationNames.push(result.description);
         });
-        cb(null, centerLocations);
+        cb(null, centerLocationNames);
     });
 };
 
+DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT locations.id FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var centerLocationIDs = [];
+        console.log(results);
+        results.forEach(function(result) {
+            centerLocationIDs.push(result.description);
+        });
+        cb(null, centerLocationIDs);
+    });
+};
 
 
 
