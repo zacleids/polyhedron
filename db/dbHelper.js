@@ -48,25 +48,8 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
 };
 
 //FUNCTIONS DEDICATED TO
-//POPULATING THE SIGNED-IN STUDENTS TABLE ON
+//POPULATING THE SIGNED-IN STUDENTS LIST ON
 //THE FRONT-FACING TUTOR CENTER PAGES
-DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
-    var self = this;
-
-    self.db.query("SELECT DISTINCT code FROM registrations, users, classes, classTypes WHERE users.id =\'" + studentID + "\' AND users.id = registrations.userId AND registrations.classId =" +
-        "classes.id AND classes.typeId = classTypes.id ORDER BY registrations.classId;", function (err, results) {
-        if (err) {
-            cb(err, null);
-        }
-        var studentsClasses = [];
-        console.log(results);
-        results.forEach(function(result) {
-            studentsClasses.push(result.code);
-        });
-        cb(null, studentsClasses);
-    });
-};
-
 DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, cb) {
     var self = this;
 
@@ -102,7 +85,7 @@ DatabaseHelper.prototype.getCenterStudentClass = function getCenterStudentClass(
 };
 
 //FUNCTIONS DEDICATED TO
-//POPULATING THE ON-THE-CLOCK TUTORS TABLE ON
+//POPULATING THE ON-THE-CLOCK TUTORS LIST ON
 //THE FRONT-FACING TUTOR CENTER PAGES
 DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) {
     var self = this;
@@ -139,7 +122,7 @@ DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
 };
 
 //FUNCTIONS DEDICATED TO
-//POPULATING THE TUTORING REQUESTS TABLE ON
+//POPULATING THE TUTORING REQUESTS LIST ON
 //THE FRONT-FACING TUTOR CENTER PAGES
 DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center, cb) {
     var self = this;
@@ -208,6 +191,72 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
         cb(null, requestTimes);
     });
 };
+
+
+
+//FUNCTIONS DEDICATED TO
+//UPDATING THE SIGN-IN FORM FOR
+//A STUDENT SIGNING INTO ON
+//THE FRONT-FACING TUTOR CENTER PAGES
+DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
+    var self = this;
+
+    self.db.query("SELECT DISTINCT code FROM registrations, users, classes, classTypes WHERE users.id =\'" + studentID + "\' AND users.id = registrations.userId AND registrations.classId =" +
+        "classes.id AND classes.typeId = classTypes.id ORDER BY registrations.classId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var studentsClasses = [];
+        console.log(results);
+        results.forEach(function(result) {
+            studentsClasses.push(result.code);
+        });
+        cb(null, studentsClasses);
+    });
+};
+
+DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var centerLocations = [];
+        console.log(results);
+        results.forEach(function(result) {
+            centerLocations.push(result.description);
+        });
+        cb(null, centerLocations);
+    });
+};
+
+
+
+
+
+
+//FUNCTIONS DEDICATED TO
+//POPULATING THE SIGNED-IN STUDENTS TABLE AND
+//POPULATING THE CLOCKED-IN TUTORS TABLE AND
+//POPULATING THE TUTORING REQUEST TABLE IN
+//THE BACK-END DATABASE
+/*
+DatabaseHelper.prototype.studentLogin = function studentLogin(studentID, center, cb) {
+    var self = this;
+
+    self.db.query("", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var requestTimes = [];
+        console.log(results);
+        results.forEach(function(result) {
+            requestTimes.push(result.requestTime);
+        });
+        cb(null, requestTimes);
+    });
+};*/
 
 
 
