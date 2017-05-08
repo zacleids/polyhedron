@@ -51,7 +51,24 @@ DatabaseHelper.prototype.getCenterStudentClass = function getCenterStudentClass(
     var self = this;
 
     self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
-    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id;", function (err, results) {
+    "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var classNames = [];
+        console.log(results);
+        results.forEach(function(result) {
+            classNames.push(result.code);
+        });
+        cb(null, classNames);
+    });
+};
+
+DatabaseHelper.prototype.getCenterStudentRegistrationID = function getCenterStudentClass(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT  registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
+        "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
         if (err) {
             cb(err, null);
         }
@@ -172,8 +189,6 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
     });
 };
 
-
-
 //FUNCTIONS DEDICATED TO
 //UPDATING THE SIGN-IN FORM FOR
 //A STUDENT SIGNING INTO ON
@@ -236,22 +251,16 @@ DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(ce
 //POPULATING THE CLOCKED-IN TUTORS TABLE AND
 //POPULATING THE TUTORING REQUEST TABLE IN
 //THE BACK-END DATABASE
-/*
-DatabaseHelper.prototype.studentLogin = function studentLogin(studentID, center, cb) {
+
+DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, center, locationID, cb) {
     var self = this;
 
-    self.db.query("", function (err, results){
+    self.db.query("INSERT INTO students VALUES(" + studentID + ", ", function (err){
         if(err) {
             cb(err, null);
         }
-        var requestTimes = [];
-        console.log(results);
-        results.forEach(function(result) {
-            requestTimes.push(result.requestTime);
-        });
-        cb(null, requestTimes);
     });
-};*/
+};
 
 
 
