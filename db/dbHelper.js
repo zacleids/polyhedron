@@ -321,5 +321,25 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
 };
 
 
+//OTHER FUNCTIONS RELEVANT TO
+//MAKING VALID UPDATES TO TABLES
+DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, cb) {
+    var self = this;
+
+    self.db.query("SELECT locations.id FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var validUser = false;
+        console.log(results);
+        results.forEach(function(result) {
+            if(result) {
+                validUser = true;
+            }
+        });
+        cb(null, validUser);
+    });
+};
+
 
 module.exports = DatabaseHelper;
