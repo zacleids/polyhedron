@@ -32,6 +32,41 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
 //THE FRONT-FACING TUTOR CENTER PAGES
 DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, cb) {
     var self = this;
+    var students = [];
+    var names = [];
+    var classes = [];
+    var locations = [];
+    async.parallel({
+        names: function (cb1) {
+            self.getCenterStudentNames(center, function (err, result) {
+                cb1(err, result);
+            })
+        },
+        classes: function (cb1) {
+            self.getCenterStudentClasses(center, function (err, result) {
+                cb1(err, result);
+            })
+        },
+        locations: function (cb1) {
+            self.getCenterStudentLocations(center, function (err, result) {
+                cb1(err, result);
+            })
+        }
+    }, function (err, results) {
+            for(var i = 0; i < results["names"].length; i++) {
+                students.push({
+                    name: results["names"][i],
+                    course: results["classes"][i],
+                    location: results["locations"][i]
+                });
+            }
+            cb(err, students);
+        }
+    );
+};
+
+DatabaseHelper.prototype.getCenterStudentNames = function getCenterStudentNames(center, cb) {
+    var self = this;
 
     self.db.query("SELECT nickName FROM students, users, centers WHERE centers.description = \'"
         + center + "\' AND students.centerId = centers.id", function (err, results) {
@@ -47,11 +82,28 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
     });
 };
 
-DatabaseHelper.prototype.getCenterStudentClass = function getCenterStudentClass(center, cb) {
+DatabaseHelper.prototype.getCenterStudentClasses = function getCenterStudentClasses(center, cb) {
     var self = this;
 
     self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
     "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var classNames = [];
+        console.log(results);
+        results.forEach(function(result) {
+            classNames.push(result.code);
+        });
+        cb(null, classNames);
+    });
+};
+
+DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLocations(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT code FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
+        "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
         if (err) {
             cb(err, null);
         }
