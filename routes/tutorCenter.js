@@ -162,6 +162,26 @@ function createTutorCenterRouter(opts) {
         res.redirect(redirectBase + '/' + center);
     });
 
+    router.get('/getStudents', function (req, res, next) {
+        var students = [];
+        var file = path.join(__dirname, '..', 'fakeData', 'students.txt');
+        fs.readFile(file, readStudentData);
+
+        function readStudentData(err, data) {
+            if (err) {
+                console.log('An unknown error occurred: ', err);
+                return;
+            }
+
+            var lines = data.toString().split('\n');
+            lines.forEach(function (line) {
+                students.push(makeStudent(line));
+            });
+
+            res.send({students:students, tester: "test success"});
+        }
+    });
+
     return router;
 }
 
