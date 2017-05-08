@@ -67,17 +67,17 @@ DatabaseHelper.prototype.getCenterStudentClass = function getCenterStudentClass(
 DatabaseHelper.prototype.getCenterStudentRegistrationID = function getCenterStudentClass(center, cb) {
     var self = this;
 
-    self.db.query("SELECT  registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
+    self.db.query("SELECT registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
         "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
         if (err) {
             cb(err, null);
         }
-        var classNames = [];
+        var regIDs = [];
         console.log(results);
         results.forEach(function(result) {
-            classNames.push(result.code);
+            regIDs.push(result.id);
         });
-        cb(null, classNames);
+        cb(null, regIDs);
     });
 };
 
@@ -252,14 +252,27 @@ DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(ce
 //POPULATING THE TUTORING REQUEST TABLE IN
 //THE BACK-END DATABASE
 
-DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, center, locationID, cb) {
+DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, locationID, center, cb) {
     var self = this;
+    var centerID = 0;
+    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err, results) {
+       if (err) {
 
-    self.db.query("INSERT INTO students VALUES(" + studentID + ", ", function (err){
-        if(err) {
-            cb(err, null);
-        }
+       }
+       else {
+           console.log(results);
+           centerID = results;
+       }
     });
+
+    if(centerID != 0) {
+        self.db.query("INSERT INTO students VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
+            "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err) {
+            if (err) {
+                cb(err, null);
+            }
+        });
+    }
 };
 
 
