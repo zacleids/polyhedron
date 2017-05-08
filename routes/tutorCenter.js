@@ -178,7 +178,47 @@ function createTutorCenterRouter(opts) {
                 students.push(makeStudent(line));
             });
 
-            res.send({students:students, tester: "test success"});
+            res.send({students:students});
+        }
+    });
+
+    router.get('/REST/getRequests', function (req, res, next) {
+        var requests = [];
+        var file = path.join(__dirname, '..', 'fakeData', 'requests.txt');
+        fs.readFile(file, readRequestData);
+
+        function readRequestData(err, data) {
+            if (err) {
+                console.log('An unknown error occurred: ', err);
+                return;
+            }
+
+            var lines = data.toString().split('\n');
+            lines.forEach(function (line) {
+                requests.push(makeRequest(line));
+            });
+
+            res.send({requests:requests});
+        }
+    });
+
+    router.get('/REST/getTutors', function (req, res, next) {
+        var tutors = [];
+        var file = path.join(__dirname, '..', 'fakeData', 'tutors.txt');
+        fs.readFile(file, readTutorsData);
+
+        function readTutorsData(err, data) {
+            if (err) {
+                console.log('An unknown error occurred: ', err);
+                return;
+            }
+
+            var lines = data.toString().split('\n');
+            lines.forEach(function (line) {
+                tutors.push(makeTutor(line));
+            });
+
+            res.send({tutors:tutors});
         }
     });
 

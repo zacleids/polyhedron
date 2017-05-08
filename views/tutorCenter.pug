@@ -4,6 +4,12 @@ block content
     .container-fluid
         .row
             .col-md-2
+                p
+                    button#testSRefresh.btn.btn-default(type='submit' onclick='getStudents();') Refresh Students
+                p
+                    button#testRRefresh.btn.btn-default(type='submit' onclick='getRequests();') Refresh Requests
+                p
+                    button#testTRefresh.btn.btn-default(type='submit' onclick='getTutors();') Refresh Tutors
             .col-md-4
                 .row
                     .col-md-12
@@ -195,12 +201,8 @@ block content
             location.reload();
         });
 
-        $("body").click(function () {
-            getStudents();
-        });
-
+        // returns list of students from database
         function getStudents() {
-
             $.ajax({
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/getStudents',
@@ -208,12 +210,12 @@ block content
                 data: {},
                 success: function (data, status) {
                     refreshStudentTable(data['students']);
-                }, complete: function (data, status) {
+                },
+                complete: function (data, status) {
                     //alert(status);
-                    alert(JSON.stringify(data));
+                    //alert(JSON.stringify(data));
                 }
             });
-
         }
 
         // redraw student table upon student sign in
@@ -225,16 +227,106 @@ block content
             var name = '';
             var course = '';
             var location = '';
+            for (var row = 0; row < students.length; row++) {
+                name = students[row].name;
+                course = students[row].course;
+                location = students[row].location;
 
-            for (var i = 0; i < 10; i++) {
-                name = students[i].name;
-                course = students[i].course;
-                location = students[i].location;
+                var rowData = '<tr>';
+                rowData += ('<td>' + name + '</td>');
+                rowData += ('<td>' + course + '</td>');
+                rowData += ('<td>' + location + '</td>');
+                rowData += '</tr>';
 
-                $('#studentTable').append('<tr data-name=' + name + '>');
-                $('#studentTable').append('<td>' + name + '</td>');
-                $('#studentTable').append('<td>' + course + '</td>');
-                $('#studentTable').append('<td>' + location + '</td>')
-                $('#studentTable').append('</tr>');
+                $('#studentTable tbody').append(rowData);
+            }
+        }
+
+        // returns list of requests from database
+        function getRequests() {
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/getRequests',
+                dataType: 'json',
+                data: {},
+                success: function (data, status) {
+                    refreshRequestsTable(data['requests']);
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                    //alert(JSON.stringify(data));
+                }
+            });
+        }
+
+        // redraw student table upon student sign in
+        function refreshRequestsTable(requests) {
+            // empty the table
+            $('#requestsTable tbody').html('');
+
+            // re-draw the table
+            var name = '';
+            var course = '';
+            var location = '';
+            var waitTime = '';
+            var request = '';
+            var tutor = '';
+
+            for (var row = 0; row < requests.length; row++) {
+                name = requests[row].name;
+                course = requests[row].course;
+                location = requests[row].location;
+                waitTime = requests[row].waitTime;
+                request = requests[row].request;
+                tutor = requests[row].tutor;
+
+                var rowData = '<tr>';
+                rowData += ('<td>' + name + '</td>');
+                rowData += ('<td>' + course + '</td>');
+                rowData += ('<td>' + location + '</td>');
+                rowData += ('<td>' + waitTime + '</td>');
+                rowData += ('<td>' + request + '</td>');
+                rowData += ('<td>' + tutor + '</td>');
+                rowData += '</tr>';
+
+                $('#requestsTable tbody').append(rowData);
+            }
+        }
+
+        // returns list of tutors from database
+        function getTutors() {
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/getTutors',
+                dataType: 'json',
+                data: {},
+                success: function (data, status) {
+                    refreshTutorsTable(data['tutors']);
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                    //alert(JSON.stringify(data));
+                }
+            });
+        }
+
+        // redraw student table upon student sign in
+        function refreshTutorsTable(tutors) {
+            // empty the table
+            $('#tutorsTable tbody').html('');
+
+            // re-draw the table
+            var name = '';
+            var loginTime = '';
+            for (var row = 0; row < tutors.length; row++) {
+                name = tutors[row].name;
+                loginTime = tutors[row].loginTime;
+
+                var rowData = '<tr>';
+                rowData += ('<td>' + name + '</td>');
+                rowData += ('<td>' + loginTime + '</td>');
+                rowData += '</tr>';
+
+                $('#tutorsTable tbody').append(rowData);
             }
         }
