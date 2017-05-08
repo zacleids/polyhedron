@@ -100,8 +100,7 @@ DatabaseHelper.prototype.getCenterStudentClasses = function getCenterStudentClas
 DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLocations(center, cb) {
     var self = this;
 
-    self.db.query("SELECT locations.description FROM students, locations, centers WHERE students.locationId = locations.id AND students.centerId = centers.id AND centers.description = \'" + center +
-        ";", function (err, results) {
+    self.db.query("SELECT locations.description FROM students, locations, centers WHERE students.locationId = locations.id AND students.centerId = centers.id AND centers.description = \'" + center + ";", function (err, results) {
         if (err) {
             cb(err, null);
         }
