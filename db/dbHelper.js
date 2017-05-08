@@ -3,6 +3,7 @@
  */
 var fs = require('fs');
 var path = require('path');
+var async = require('async');
 
 function DatabaseHelper(opts) {
     this.db = opts.db;
