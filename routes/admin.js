@@ -152,6 +152,9 @@ function createAdminRouter(opts) {
         var centers = Object.keys(opts.tutorCenters);
         centers.sort();
 
+        var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+        opts.centerSockets[centerNoSpace].broadcast.emit('reload');
+
         res.render('admin/options', {
             title: 'Options',
             centers: centers,

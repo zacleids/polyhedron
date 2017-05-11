@@ -23,20 +23,24 @@ opts.dbHelper = dbHelper;
 dbHelper.getTutorCenters(function(err, centers){
     centers.sort();
     centers.forEach(function(center){
-        opts.tutorCenters[center] = {
-            "centerLocation": center,
-            "requestsTable": true,
-            "tutorTable": true,
-            "scrollingText": {
-                "enabled": true,
-                "text": "Welcome to " + center + ". Message of the day, announcements, center hours... etc."
-            }
-        };
+        dbHelper.getCenterLocations(center, function(err, locs){
+            opts.tutorCenters[center] = {
+                "centerLocation": center,
+                "requestsTable": true,
+                "tutorTable": true,
+                "scrollingText": {
+                    "enabled": true,
+                    "text": "Welcome to " + center + ". Message of the day, announcements, center hours... etc."
+                },
+                "locations": locs
+            };
+        });
+
         var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
         var temp = io.of('/' + centerNoSpace);
         temp.on('connection', function(socket){
             opts.centerSockets[centerNoSpace] = socket;
-            console.log('someone connected to ' + centerNoSpace);
+            console.log('Someone connected to the ' + centerNoSpace + ' socket.');
         });
     });
 });

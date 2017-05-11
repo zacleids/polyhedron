@@ -196,9 +196,43 @@ block content
             $contextMenuTutor.hide();
         });
 
+        function handleStudent(){
+            var exists = false;
+            if ($('#signInStudentID').val().length > 4) {
+                exists = userExists($('#signInStudentID').val());
+                getClasses($('#signInStudentID').val());
+            }
+
+            if (exists) {
+                getClasses($('#signInStudentID').val());
+                //make text outline green
+            }
+            else {
+                //make text outline red
+            }
+        }
+
+        $(document).ready(function () {
+            $('#signInStudentID').on('input', function(){
+                handleStudent();
+            });
+        });
+
         var socket = io.connect('/#{centerLocation}'.replace(new RegExp(' ', 'g'), ''));
         socket.on('reload', function(){
             location.reload();
+        });
+
+        socket.on('getStudents', function () {
+            getStudents();
+        });
+
+        socket.on('getRequests', function () {
+            getRequests();
+        });
+
+        socket.on('getTutors', function () {
+            getTutors();
         });
 
         // returns list of students from database
@@ -248,7 +282,7 @@ block content
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/getRequests',
                 dataType: 'json',
-                data: {},
+                data: {'center': '#{centerLocation}'},
                 success: function (data, status) {
                     refreshRequestsTable(data['requests']);
                 },
@@ -299,7 +333,7 @@ block content
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/getTutors',
                 dataType: 'json',
-                data: {},
+                data: {'center': '#{centerLocation}'},
                 success: function (data, status) {
                     refreshTutorsTable(data['tutors']);
                 },
@@ -329,4 +363,38 @@ block content
 
                 $('#tutorsTable tbody').append(rowData);
             }
+        }
+
+        function userExists(studentId){
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/userExists',
+                dataType: 'json',
+                data: {'center': '#{centerLocation}', 'studentId': studentId},
+                success: function (data, status) {
+                    return data['exists'];
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
+        }
+
+        function getClasses(studentId){
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/getClasses',
+                dataType: 'json',
+                data: {'center': '#{centerLocation}', 'studentId': studentId},
+                success: function (data, status) {
+                    //return data['exists'];
+                    $('#selectSubject').html("<option value='#'>-Select Subject-</option>");
+                    for (var i = 0; i < data['classes'].length; i++) {
+                        $('#selectSubject').append("<option value='" + data['classes'][i].id + "'>" + data['classes'][i].name + '</option>');
+                    }
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
         }

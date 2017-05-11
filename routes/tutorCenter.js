@@ -121,6 +121,9 @@ function createTutorCenterRouter(opts) {
             },
             centerLocation: function(cb) {
                 cb(null, opts.tutorCenters[center].centerLocation);
+            },
+            locations: function (cb) {
+                cb(null, opts.tutorCenters[center].locations);
             }
         }, function (err, result) {
             res.render('tutorCenter', result);
@@ -141,6 +144,19 @@ function createTutorCenterRouter(opts) {
 
     router.post('/REST/studentSignIn', function (req, res, next) {
         var center = req.body.center;
+        var studentId = req.body.studentId;
+        var locationId = req.body.selectLocation;
+        var subjectId = req.body.selectSubject;
+        opts.dbHelper.loginStudent(studentId, subjectId, locationId, center, function(err){
+            if(err){
+                console.log("an error occureed logging a student in. info: ", {
+                    studentId:studentId,
+                    subjectId:subjectId,
+                    locationId: locationId,
+                    center: center
+                })
+            }
+        });
         var datetime = getDateTime();
         console.log(datetime);
         var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
@@ -200,6 +216,40 @@ function createTutorCenterRouter(opts) {
 
             res.send({tutors:tutors});
         }
+    });
+
+    router.get('/REST/userExists', function (req, res, next){
+        var center = req.query.center;
+        var studentId = req.query.studentId;
+        console.log("request to see if " + studentId + " exists");
+        opts.dbHelper.existingUserCheck(studentId, function(err, doesExist){
+            if(err){
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
+            res.send({exists: doesExist});
+        });
+    });
+
+    router.get('/REST/getClasses', function (req, res, next){
+        //temporary code until database helper function is made
+        console.log("request for classes from " + req.query.studentId);
+        res.send({
+            classes: [
+                {id: "math", name: "Math"},
+                {id: "history", name: "History"},
+                {id: "pottery", name: "Pottery"}
+            ]
+        });
+        // var center = req.query.center;
+        // var studentId = req.query.studentId;
+        // opts.dbHelper.getStudentClassInfo(studentId, function(err, classes){
+        //     if(err){
+        //         res.status(500).send({error: 'Something failed!'});
+        //         return;
+        //     }
+        //     res.send({classes: classes});
+        // });
     });
 
     return router;

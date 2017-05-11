@@ -291,6 +291,25 @@ DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(ce
     });
 };
 
+DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT locations.id, locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var centerLocations = [];
+        console.log(results);
+        results.forEach(function(result) {
+            centerLocations.push({
+                id: result.id,
+                name: result.description
+            });
+        });
+        cb(null, centerLocations);
+    });
+};
+
 //FUNCTIONS DEDICATED TO
 //POPULATING THE SIGNED-IN STUDENTS TABLE AND
 //POPULATING THE CLOCKED-IN TUTORS TABLE AND
@@ -301,7 +320,7 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
     var centerID = 0;
     self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
        if (err1) {
-            cb(err1, null);
+            cb(err1);
        }
        else {
            console.log(results);
@@ -313,7 +332,7 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
         self.db.query("INSERT INTO students VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
             "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
             if (err2) {
-                cb(err2, null);
+                cb(err2);
             }
         });
     }

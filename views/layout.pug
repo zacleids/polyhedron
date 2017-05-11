@@ -71,14 +71,15 @@ html(lang='en')
                             .form-group
                                 label(for='signInStudentID') Student ID
                                 |
-                                input#signInStudentID.form-control(type='text', placeholder='123456')
-                            .form-group
-                                label(for='selectLocation') Choose a location
-                                |
-                                select#selectLocation.form-control(name='selectLocation')
-                                    option(value='#') -Select Table-
-                                    - for (var i = 1; i < 11; i++)
-                                        option(value=i) Table #{i}
+                                input#signInStudentID.form-control(type='text', placeholder='123456' name='studentId')
+                            if(locations)
+                                .form-group
+                                    label(for='selectLocation') Choose a location
+                                    |
+                                    select#selectLocation.form-control(name='selectLocation')
+                                        option(value='#') -Select Table-
+                                        - for (var i = 0; i < locations.length; i++)
+                                            option(value=locations[i].id) #{locations[i].name}
                             .form-group
                                 label(for='selectSubject') Choose a subject
                                 |
