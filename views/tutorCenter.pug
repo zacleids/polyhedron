@@ -197,19 +197,25 @@ block content
         });
 
         function handleStudent(){
-            var exists = false;
-            if ($('#signInStudentID').val().length > 4) {
-                exists = userExists($('#signInStudentID').val());
-                getClasses($('#signInStudentID').val());
-            }
-
-            if (exists) {
-                getClasses($('#signInStudentID').val());
-                //make text outline green
+            if ($('#signInStudentID').val().length >= 4) {
+                userExists($('#signInStudentID').val(), function(exists){
+                    alert(exists)
+                    if (exists === true) {
+                        getClasses($('#signInStudentID').val());
+                        //make text outline green
+                        $('#signInStudentID').css('color', 'green');
+                    }
+                    else {
+                        //make text outline red
+                        $('#signInStudentID').css('color', 'red');
+                    }
+                });
             }
             else {
                 //make text outline red
+                $('#signInStudentID').css('color', 'red');
             }
+
         }
 
         $(document).ready(function () {
@@ -365,14 +371,17 @@ block content
             }
         }
 
-        function userExists(studentId){
+        function userExists(studentId, cb){
             $.ajax({
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/userExists',
                 dataType: 'json',
                 data: {'center': '#{centerLocation}', 'studentId': studentId},
                 success: function (data, status) {
-                    return data['exists'];
+                    //alert(JSON.stringify(data));
+                    //alert(data['exists'])
+                    //return data['exists'];
+                    cb(data['exists']);
                 },
                 complete: function (data, status) {
                     //alert(status);
