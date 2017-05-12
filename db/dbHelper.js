@@ -302,37 +302,37 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
 //     });
 // };
 
-DatabaseHelper.prototype.getCenterLocationNames = function getCenterLocationNames(center, cb) {
-    var self = this;
-
-    self.db.query("SELECT locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
-        if (err) {
-            cb(err, null);
-        }
-        var centerLocationNames = [];
-        console.log("getCenterLocationNames: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            centerLocationNames.push(result.description);
-        });
-        cb(null, centerLocationNames);
-    });
-};
-
-DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(center, cb) {
-    var self = this;
-
-    self.db.query("SELECT locations.id FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
-        if (err) {
-            cb(err, null);
-        }
-        var centerLocationIDs = [];
-        console.log("getCenterLocationIDs: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            centerLocationIDs.push(result.id);
-        });
-        cb(null, centerLocationIDs);
-    });
-};
+// DatabaseHelper.prototype.getCenterLocationNames = function getCenterLocationNames(center, cb) {
+//     var self = this;
+//
+//     self.db.query("SELECT locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+//         if (err) {
+//             cb(err, null);
+//         }
+//         var centerLocationNames = [];
+//         console.log("getCenterLocationNames: " + JSON.stringify(results));
+//         results.forEach(function(result) {
+//             centerLocationNames.push(result.description);
+//         });
+//         cb(null, centerLocationNames);
+//     });
+// };
+//
+// DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(center, cb) {
+//     var self = this;
+//
+//     self.db.query("SELECT locations.id FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
+//         if (err) {
+//             cb(err, null);
+//         }
+//         var centerLocationIDs = [];
+//         console.log("getCenterLocationIDs: " + JSON.stringify(results));
+//         results.forEach(function(result) {
+//             centerLocationIDs.push(result.id);
+//         });
+//         cb(null, centerLocationIDs);
+//     });
+// };
 
 DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center, cb) {
     var self = this;
@@ -378,6 +378,26 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
     });
 };
 
+DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            console.log("logoutStudent: " + JSON.stringify(results));
+            centerID = results[0].id;
+            self.db.query("DELETE FROM students WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
+                if (err2) {
+                    cb(err2);
+                }
+                cb(null);
+            });
+        }
+    });
+};
+
 DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, center, cb) {
     var self = this;
     var centerID = 0;
@@ -390,6 +410,26 @@ DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, ce
             console.log(results);
             centerID = results[0].id;
             self.db.query("INSERT INTO tutors VALUES(" + parseInt(studentID) + ", " + parseInt(tutorID) + ", " + requestable + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " + centerID + ");", function (err2) {
+                if (err2) {
+                    cb(err2);
+                }
+                cb(null);
+            });
+        }
+    });
+};
+
+DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            console.log("logoutTutor: " + JSON.stringify(results));
+            centerID = results[0].id;
+            self.db.query("DELETE FROM tutors WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
                 if (err2) {
                     cb(err2);
                 }
