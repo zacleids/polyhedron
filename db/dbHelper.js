@@ -41,6 +41,11 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
                 cb1(err, result);
             })
         },
+        ids: function (cb1) {
+            self.getCenterStudentIDs(center, function (err, result) {
+                cb1(err, result);
+            })
+        },
         classes: function (cb1) {
             self.getCenterStudentClasses(center, function (err, result) {
                 cb1(err, result);
@@ -56,6 +61,7 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
         for(var i = 0; i < results["names"].length; i++) {
             students.push({
                 name: results["names"][i],
+                id: results["ids"][i],
                 course: results["classes"][i],
                 location: results["locations"][i]
             });
@@ -79,6 +85,23 @@ DatabaseHelper.prototype.getCenterStudentNames = function getCenterStudentNames(
             studentNames.push(result.nickName);
         });
         cb(null, studentNames);
+    });
+};
+
+DatabaseHelper.prototype.getCenterStudentIDs = function getCenterStudentNames(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT students.id FROM students, centers WHERE centers.description = \'"
+        + center + "\';", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var studentIDs = [];
+        console.log("getCenterStudentIDs: " + JSON.stringify(results));
+        results.forEach(function(result) {
+            studentIDs.push(result.id);
+        });
+        cb(null, studentIDs);
     });
 };
 
