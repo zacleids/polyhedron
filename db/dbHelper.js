@@ -266,73 +266,6 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
         cb(null, studentClassInfo);
     });
 };
-//
-//
-// DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
-//     var self = this;
-//
-//     self.db.query("SELECT DISTINCT code FROM registrations, users, classes, classTypes WHERE users.id =\'" + studentID + "\' AND users.id = registrations.userId AND registrations.classId =" +
-//         "classes.id AND classes.typeId = classTypes.id ORDER BY registrations.classId;", function (err, results) {
-//         if (err) {
-//             cb(err, null);
-//         }
-//         var studentsClasses = [];
-//         console.log(results);
-//         results.forEach(function(result) {
-//             studentsClasses.push(result.code);
-//         });
-//         cb(null, studentsClasses);
-//     });
-// };
-//
-// DatabaseHelper.prototype.getStudentsRegistrationIDs = function getStudentsRegistrationIDs(center, cb) {
-//     var self = this;
-//
-//     self.db.query("SELECT registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
-//         "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
-//         if (err) {
-//             cb(err, null);
-//         }
-//         var regIDs = [];
-//         console.log(results);
-//         results.forEach(function(result) {
-//             regIDs.push(result.id);
-//         });
-//         cb(null, regIDs);
-//     });
-// };
-
-// DatabaseHelper.prototype.getCenterLocationNames = function getCenterLocationNames(center, cb) {
-//     var self = this;
-//
-//     self.db.query("SELECT locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
-//         if (err) {
-//             cb(err, null);
-//         }
-//         var centerLocationNames = [];
-//         console.log("getCenterLocationNames: " + JSON.stringify(results));
-//         results.forEach(function(result) {
-//             centerLocationNames.push(result.description);
-//         });
-//         cb(null, centerLocationNames);
-//     });
-// };
-//
-// DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(center, cb) {
-//     var self = this;
-//
-//     self.db.query("SELECT locations.id FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
-//         if (err) {
-//             cb(err, null);
-//         }
-//         var centerLocationIDs = [];
-//         console.log("getCenterLocationIDs: " + JSON.stringify(results));
-//         results.forEach(function(result) {
-//             centerLocationIDs.push(result.id);
-//         });
-//         cb(null, centerLocationIDs);
-//     });
-// };
 
 DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center, cb) {
     var self = this;
@@ -354,9 +287,9 @@ DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center
 };
 
 //FUNCTIONS DEDICATED TO
-//POPULATING THE SIGNED-IN STUDENTS TABLE AND
-//POPULATING THE CLOCKED-IN TUTORS TABLE AND
-//POPULATING THE TUTORING REQUEST TABLE IN
+//MODIFYING THE SIGNED-IN STUDENTS TABLE (login/logout) AND
+//MODIFYING THE CLOCKED-IN TUTORS TABLE (login/logout) AND
+//MODIFYING THE TUTORING REQUEST TABLE (request/accept request/cancel request) IN
 //THE BACK-END DATABASE
 DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, locationID, center, cb) {
     var self = this;
@@ -441,7 +374,7 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
 
 
 //OTHER FUNCTIONS RELEVANT TO
-//MAKING VALID UPDATES TO TABLES
+//MAKING VALID MySQL QUERIES
 DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, cb) {
     var self = this;
 
