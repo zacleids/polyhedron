@@ -142,7 +142,7 @@ DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
             cb(err, null);
         }
         var clockinTimes = [];
-        console.log(results);
+        console.log("getClockinTime: " + results);
         results.forEach(function(result) {
             clockinTimes.push(result.loginTime);
         });
@@ -162,7 +162,7 @@ DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center
             cb(err, null);
         }
         var tutorNames = [];
-        console.log(results);
+        console.log("getRequestedTutors: " + results);
         results.forEach(function(result) {
             tutorNames.push(result.nickName);
         });
@@ -179,7 +179,7 @@ DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(
             cb(err, null);
         }
         var studentNames = [];
-        console.log(results);
+        console.log("getRequestingStudents: " + results);
         results.forEach(function(result) {
             studentNames.push(result.nickName);
         });
@@ -196,7 +196,7 @@ DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, 
             cb(err, null);
         }
         var tutorNames = [];
-        console.log(results);
+        console.log("getAssignedTutors" + results);
         results.forEach(function(result) {
             tutorNames.push(result.nickName);
         });
@@ -213,7 +213,7 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
             cb(err, null);
         }
         var requestTimes = [];
-        console.log(results);
+        console.log("getRequestTime: " + results);
         results.forEach(function(result) {
             requestTimes.push(result.requestTime);
         });
@@ -234,7 +234,7 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
             cb(err, null);
         }
         var studentClassInfo = [];
-        console.log(results);
+        console.log("getStudentsClassInfo: " + results);
         results.forEach(function(result) {
             studentClassInfo.push({
                 name: result.code,
@@ -288,7 +288,7 @@ DatabaseHelper.prototype.getCenterLocationNames = function getCenterLocationName
             cb(err, null);
         }
         var centerLocationNames = [];
-        console.log(results);
+        console.log("getCenterLocationNames: " + results);
         results.forEach(function(result) {
             centerLocationNames.push(result.description);
         });
@@ -304,7 +304,7 @@ DatabaseHelper.prototype.getCenterLocationIDs = function getCenterLocationIDs(ce
             cb(err, null);
         }
         var centerLocationIDs = [];
-        console.log(results);
+        console.log("getCenterLocationIDs: " + results);
         results.forEach(function(result) {
             centerLocationIDs.push(result.id);
         });
@@ -320,7 +320,7 @@ DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center
             cb(err, null);
         }
         var centerLocations = [];
-        console.log(results);
+        console.log("getCenterLocations: " + results);
         results.forEach(function(result) {
             centerLocations.push({
                 id: result.id,
@@ -344,7 +344,7 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
             cb(err1);
        }
        else {
-           console.log(results);
+           console.log("loginStudent: " + results);
            centerID = results;
            self.db.query("INSERT INTO students VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
                "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
@@ -360,12 +360,12 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
 DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, regID, locationID, center, cb) {
     var self = this;
     var centerID = 0;
-    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
+    self.db.query("SELECT id FROM centers WHERE centers.description = " + center + ";", function (err1, results) {
         if (err1) {
             cb(err1);
         }
         else {
-            console.log(results);
+            console.log("loginTutor: " + results);
             centerID = results;
             self.db.query("INSERT INTO tutors VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
                 "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
@@ -411,7 +411,7 @@ DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, 
             cb(err, null);
         }
         var validUser = false;
-        console.log(results);
+        console.log("existingUserCheck: " + results);
         results.forEach(function(result) {
             if(result) {
                 validUser = true;
