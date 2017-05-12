@@ -382,7 +382,7 @@ DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, ce
     var self = this;
     var centerID = 0;
     var requestable = 1;
-    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
+    self.db.query("SELECT id FROM centers WHERE centers.description = " + center + ";", function (err1, results) {
         if (err1) {
             cb(err1);
         }
