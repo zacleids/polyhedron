@@ -157,9 +157,10 @@ function createTutorCenterRouter(opts) {
     router.post('/REST/studentSignOut', function (req, res, next){
         var center = req.body.center;
         var studentId = req.body.studentId;
+        console.log("request to sign out student: " + studentId);
         opts.dbHelper.logoutStudent(studentId, center, function(err){
             if(err){
-                console.error("an error occurred logging a student in. info: ", {
+                console.error("an error occurred logging a student out. info: ", {
                     err: err,
                     studentId:studentId,
                     center: center
@@ -168,7 +169,6 @@ function createTutorCenterRouter(opts) {
             var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
             opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
             opts.centerSockets[centerNoSpace].emit('getStudents');
-            console.log("signed out student: " + studentId);
         });
     });
 

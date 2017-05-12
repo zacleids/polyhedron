@@ -131,7 +131,7 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
             cb(err, null);
         }
         var locations = [];
-        console.log("getCenterStudentLocations: " +results);
+        console.log("getCenterStudentLocations: " + JSON.stringify(results));
         results.forEach(function(result) {
             locations.push(result.description);
         });

@@ -140,8 +140,10 @@ block content
             switch(actionSelected){
                 case "studentSignOut":
                     studentSignOut(tableData);
+                    break;
                 default:
                     alert('Student: ' + tableData + '. Action: ' + actionSelected);
+                    break;
             }
             $contextMenuStudent.hide();
         });
