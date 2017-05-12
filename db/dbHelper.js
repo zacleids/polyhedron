@@ -237,12 +237,32 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
         }
         var studentClassInfo = [];
         console.log("getStudentsClassInfo: " + JSON.stringify(results));
+        var classNames = [];
         results.forEach(function(result) {
-            studentClassInfo.push({
-                name: result.code,
-                id: result.id
-            });
+            if(classNames.indexOf(result.code) === -1) {
+                studentClassInfo.push({
+                    name: result.code,
+                    id: result.id
+                });
+                classNames.push(result.code)
+            }
         });
+        studentClassInfo.sort(function (a, b) {
+            var ah = a.name;
+            var bh = b.name;
+            var reA = /[^a-zA-Z]/g;
+            var reN = /[^0-9]/g;
+            var aA = ah.replace(reA, '');
+            var bA = bh.replace(reA, '');
+            if (aA === bA) {
+                var aN = parseInt(ah.replace(reN, ''), 10);
+                var bN = parseInt(bh.replace(reN, ''), 10);
+                return aN === bN ? 0 : aN > bN ? 1 : -1;
+            } else {
+                return aA > bA ? 1 : -1;
+            }
+        });
+
         cb(null, studentClassInfo);
     });
 };

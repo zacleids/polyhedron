@@ -149,7 +149,8 @@ function createTutorCenterRouter(opts) {
         var subjectId = req.body.selectSubject;
         opts.dbHelper.loginStudent(studentId, subjectId, locationId, center, function(err){
             if(err){
-                console.log("an error occureed logging a student in. info: ", {
+                console.error("an error occurred logging a student in. info: ", {
+                    err: err,
                     studentId:studentId,
                     subjectId:subjectId,
                     locationId: locationId,
@@ -161,10 +162,10 @@ function createTutorCenterRouter(opts) {
         console.log(datetime);
         var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
-        opts.centerSockets[centerNoSpace].broadcast.emit('reload');
-        opts.centerSockets[centerNoSpace].emit('reload');
-
-        res.redirect(redirectBase + '/' + center);
+        opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
+        opts.centerSockets[centerNoSpace].emit('getStudents');
+        res.status(200)
+        //res.redirect(redirectBase + '/' + center);
     });
 
     router.get('/REST/getStudents', function (req, res, next) {
@@ -232,24 +233,15 @@ function createTutorCenterRouter(opts) {
     });
 
     router.get('/REST/getClasses', function (req, res, next){
-        //temporary code until database helper function is made
         console.log("request for classes from " + req.query.studentId);
-        res.send({
-            classes: [
-                {id: "math", name: "Math"},
-                {id: "history", name: "History"},
-                {id: "pottery", name: "Pottery"}
-            ]
+        var studentId = req.query.studentId;
+        opts.dbHelper.getStudentsClassInfo(studentId, function(err, classes){
+            if(err){
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
+            res.send({classes: classes});
         });
-        // var center = req.query.center;
-        // var studentId = req.query.studentId;
-        // opts.dbHelper.getStudentClassInfo(studentId, function(err, classes){
-        //     if(err){
-        //         res.status(500).send({error: 'Something failed!'});
-        //         return;
-        //     }
-        //     res.send({classes: classes});
-        // });
     });
 
     return router;
