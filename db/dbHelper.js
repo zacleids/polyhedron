@@ -88,10 +88,10 @@ DatabaseHelper.prototype.getCenterStudentNames = function getCenterStudentNames(
     });
 };
 
-DatabaseHelper.prototype.getCenterStudentIDs = function getCenterStudentNames(center, cb) {
+DatabaseHelper.prototype.getCenterStudentIDs = function getCenterStudentIDs(center, cb) {
     var self = this;
 
-    self.db.query("SELECT students.id FROM students, centers WHERE centers.description = \'"
+    self.db.query("SELECT students.id FROM students, centers WHERE centers.id = students.centerId AND centers.description = \'"
         + center + "\';", function (err, results) {
         if (err) {
             cb(err, null);
