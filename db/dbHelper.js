@@ -336,7 +336,7 @@ DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center
 //POPULATING THE CLOCKED-IN TUTORS TABLE AND
 //POPULATING THE TUTORING REQUEST TABLE IN
 //THE BACK-END DATABASE
-DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, locationID, center, cb) {
+DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, locationID, center, cb) {
     var self = this;
     var centerID = 0;
     self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
@@ -369,6 +369,28 @@ DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, regID, loca
             centerID = results;
             self.db.query("INSERT INTO tutors VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
                 "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
+                if (err2) {
+                    cb(err2);
+                }
+                cb(null);
+            });
+        }
+    });
+};
+
+DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    var requestable = 1;
+    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            console.log(results);
+            centerID = results;
+            self.db.query("INSERT INTO tutors VALUES(" + studentID + ", " + tutorID + ", " + requestable + ", " +
+                "convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " + centerID + ";", function (err2) {
                 if (err2) {
                     cb(err2);
                 }
