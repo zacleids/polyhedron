@@ -225,6 +225,24 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
 //UPDATING THE SIGN-IN FORM FOR
 //A STUDENT SIGNING INTO ON
 //THE FRONT-FACING TUTOR CENTER PAGES
+DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(studentID, cb) {
+    var self = this;
+
+    self.db.query("SELECT classTypes.code, registrations.id from registrations, classes, classTypes WHERE registrations.userId = 1198 \'" + studentID +
+    "\' AND registrations.classId = classes.id AND classTypes.id = classes.typeId;", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var studentsClasses = [];
+        console.log(results);
+        results.forEach(function(result) {
+            studentsClasses.push(result.code);
+        });
+        cb(null, studentsClasses);
+    });
+};
+
+
 DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
     var self = this;
 
