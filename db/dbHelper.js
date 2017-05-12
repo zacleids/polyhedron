@@ -233,49 +233,52 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
         if (err) {
             cb(err, null);
         }
-        var studentsClasses = [];
+        var studentClassInfo = [];
         console.log(results);
         results.forEach(function(result) {
-            studentsClasses.push(result.code);
+            studentClassInfo.push({
+                name: result.code,
+                id: result.id
+            });
         });
         cb(null, studentsClasses);
     });
 };
-
-
-DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
-    var self = this;
-
-    self.db.query("SELECT DISTINCT code FROM registrations, users, classes, classTypes WHERE users.id =\'" + studentID + "\' AND users.id = registrations.userId AND registrations.classId =" +
-        "classes.id AND classes.typeId = classTypes.id ORDER BY registrations.classId;", function (err, results) {
-        if (err) {
-            cb(err, null);
-        }
-        var studentsClasses = [];
-        console.log(results);
-        results.forEach(function(result) {
-            studentsClasses.push(result.code);
-        });
-        cb(null, studentsClasses);
-    });
-};
-
-DatabaseHelper.prototype.getStudentsRegistrationIDs = function getStudentsRegistrationIDs(center, cb) {
-    var self = this;
-
-    self.db.query("SELECT registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
-        "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
-        if (err) {
-            cb(err, null);
-        }
-        var regIDs = [];
-        console.log(results);
-        results.forEach(function(result) {
-            regIDs.push(result.id);
-        });
-        cb(null, regIDs);
-    });
-};
+//
+//
+// DatabaseHelper.prototype.getStudentsClasses = function getStudentsClasses(studentID, cb) {
+//     var self = this;
+//
+//     self.db.query("SELECT DISTINCT code FROM registrations, users, classes, classTypes WHERE users.id =\'" + studentID + "\' AND users.id = registrations.userId AND registrations.classId =" +
+//         "classes.id AND classes.typeId = classTypes.id ORDER BY registrations.classId;", function (err, results) {
+//         if (err) {
+//             cb(err, null);
+//         }
+//         var studentsClasses = [];
+//         console.log(results);
+//         results.forEach(function(result) {
+//             studentsClasses.push(result.code);
+//         });
+//         cb(null, studentsClasses);
+//     });
+// };
+//
+// DatabaseHelper.prototype.getStudentsRegistrationIDs = function getStudentsRegistrationIDs(center, cb) {
+//     var self = this;
+//
+//     self.db.query("SELECT registrations.id FROM centers, students, registrations, classes, classTypes WHERE students.centerId = centers.id AND centers.description = \'" + center +
+//         "\' AND students.registrationId = registrations.id AND registrations.classId = classes.id AND classes.typeId = classTypes.id ORDER BY registration.id;", function (err, results) {
+//         if (err) {
+//             cb(err, null);
+//         }
+//         var regIDs = [];
+//         console.log(results);
+//         results.forEach(function(result) {
+//             regIDs.push(result.id);
+//         });
+//         cb(null, regIDs);
+//     });
+// };
 
 DatabaseHelper.prototype.getCenterLocationNames = function getCenterLocationNames(center, cb) {
     var self = this;
