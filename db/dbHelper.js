@@ -228,7 +228,7 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
 DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(studentID, cb) {
     var self = this;
 
-    self.db.query("SELECT classTypes.code, registrations.id from registrations, classes, classTypes WHERE registrations.userId = 1198 \'" + studentID +
+    self.db.query("SELECT classTypes.code, registrations.id from registrations, classes, classTypes WHERE registrations.userId = \'" + studentID +
     "\' AND registrations.classId = classes.id AND classTypes.id = classes.typeId;", function (err, results) {
         if (err) {
             cb(err, null);
@@ -354,6 +354,27 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
                cb(null);
            });
        }
+    });
+};
+
+DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, regID, locationID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    self.db.query("SELECT id FROM centers WHERE center.description = " + center + ";", function (err1, results) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            console.log(results);
+            centerID = results;
+            self.db.query("INSERT INTO tutors VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
+                "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
+                if (err2) {
+                    cb(err2);
+                }
+                cb(null);
+            });
+        }
     });
 };
 
