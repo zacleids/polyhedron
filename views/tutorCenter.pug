@@ -223,6 +223,21 @@ block content
 
         }
 
+        function unpopulateClasses() {
+            var $selectSubject = $('#selectSubject');
+            $selectSubject.empty();
+            $selectSubject.html("<option value='#'>-Select Subject-</option>");
+        }
+
+        function changeInputOutline(color) {
+            var $signInStudentId = $('#signInStudentID');
+            var boxShadow = 'inset 0 1px 1px ' + color + ', 0 0 5px ' + color + '';
+            if(color === '') boxShadow = '';
+
+            $signInStudentId.css('border-color', color);
+            $signInStudentId.css('box-shadow', boxShadow);
+        }
+
         function handleStudent(){
             var $signInStudentId = $('#signInStudentID');
             var $signInButton = $('#studentSignInSubmit');
@@ -233,26 +248,25 @@ block content
                     if (exists === true) {
                         getClasses($signInStudentId.val());
                         //make text outline green
-                        $signInStudentId.css('border-color', 'lightgreen');
-                        $signInStudentId.css('box-shadow', 'inset 0 1px 1px lightgreen, 0 0 8px lightgreen');
+                        changeInputOutline('lightgreen');
                     }
                     else {
                         $signInButton.prop('disabled', true);
                         //make text outline red
-                        $signInStudentId.css('border-color', 'orangered');
-                        $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
+                        changeInputOutline('orangered');
+                        unpopulateClasses()
                     }
                 });
             } else if ($signInStudentId.val().length < 4) {
                 $signInButton.prop('disabled', true);
                 //make text outline default
-                $signInStudentId.css('border-color', '');
-                $signInStudentId.css('box-shadow', '');
+                changeInputOutline('');
+                unpopulateClasses()
             } else {
                 $signInButton.prop('disabled', true);
                 //make text outline red
-                $signInStudentId.css('border-color', 'orangered');
-                $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
+                changeInputOutline('orangered');
+                unpopulateClasses()
             }
         }
 
