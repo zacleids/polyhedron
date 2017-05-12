@@ -23,7 +23,7 @@ block content
                                             th Location
                                         tbody
                                             - for(var i = 0; i < students.length; i++)
-                                                tr(data-name=students[i].name)
+                                                tr(data-id=students[i].id)
                                                     td #{students[i].name}
                                                     td #{students[i].course}
                                                     td #{students[i].location}
@@ -121,7 +121,7 @@ block content
             $contextMenuTutor.hide();
 
             // get which row they clicked on
-            tableData = $(this).attr('data-name');
+            tableData = $(this).attr('data-id');
 
             // display this context menu
             $contextMenuStudent.css({
@@ -135,7 +135,12 @@ block content
         // hide the menu when you click a link in menu
         $contextMenuStudent.on('click', 'a', function () {
             actionSelected = $(this).attr('data-action');
-            alert('Student: ' + tableData + '. Action: ' + actionSelected);
+            switch(actionSelected){
+                case "studentSignOut":
+                    studentSignOut(tableData);
+                default:
+                    alert('Student: ' + tableData + '. Action: ' + actionSelected);
+            }
             $contextMenuStudent.hide();
         });
 
@@ -251,6 +256,21 @@ block content
             getTutors();
         });
 
+        function studentSignOut(studentId){
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:3000/tutorCenter/REST/studentSignOut',
+                dataType: 'json',
+                data: {'center': '#{centerLocation}', 'studentId': studentId },
+                success: function (data, status) {
+                    //refreshStudentTable(data['students']);
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
+        }
+
         // returns list of students from database
         function getStudents() {
             $.ajax({
@@ -277,12 +297,14 @@ block content
             var name = '';
             var course = '';
             var location = '';
+            var id = '';
             for (var row = 0; row < students.length; row++) {
                 name = students[row].name;
                 course = students[row].course;
                 location = students[row].location;
+                id = students[row].id
 
-                var rowData = '<tr>';
+                var rowData = '<tr data-id="' + id + '">';
                 rowData += ('<td>' + name + '</td>');
                 rowData += ('<td>' + course + '</td>');
                 rowData += ('<td>' + location + '</td>');

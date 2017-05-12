@@ -143,19 +143,33 @@ function createTutorCenterRouter(opts) {
                     subjectId:subjectId,
                     locationId: locationId,
                     center: center
-                })
+                });
             }
-        });
-        var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
-        opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
-        opts.centerSockets[centerNoSpace].emit('getStudents');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
+            opts.centerSockets[centerNoSpace].emit('getStudents');
+        });
+
         res.redirect(redirectBase + '/' + center);
     });
 
     router.post('/REST/studentSignOut', function (req, res, next){
         var center = req.body.center;
         var studentId = req.body.studentId;
+        opts.dbHelper.logoutStudent(studentId, center, function(err){
+            if(err){
+                console.error("an error occurred logging a student in. info: ", {
+                    err: err,
+                    studentId:studentId,
+                    center: center
+                });
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
+            opts.centerSockets[centerNoSpace].emit('getStudents');
+            console.log("signed out student: " + studentId);
+        });
     });
 
     router.get('/REST/getStudents', function (req, res, next) {
