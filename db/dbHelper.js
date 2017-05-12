@@ -241,7 +241,7 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
                 id: result.id
             });
         });
-        cb(null, studentsClasses);
+        cb(null, studentClassInfo);
     });
 };
 //
