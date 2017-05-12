@@ -203,18 +203,31 @@ block content
             $contextMenuTutor.hide();
         });
 
+        function toggleAbleToSignIn(enableState) {
+            $('#studentSignInSubmit').enabled(enableState);
+        }
+
         function handleStudent(){
             var $signInStudentId = $('#signInStudentID');
+            var $signInButton = $('#studentSignInSubmit');
 
             if ($signInStudentId.val().length >= 4) {
                 userExists($signInStudentId.val(), function(exists){
                     if (exists === true) {
                         getClasses($signInStudentId.val());
+
+                        if ($('#selectSubject').val() !== '#' && $('#selectLocation').val() !== '#') {
+                            //enable sign in
+                            $signInButton.prop('disabled', false);
+                        }
+
                         //make text outline green
                         $signInStudentId.css('border-color', 'lightgreen');
                         $signInStudentId.css('box-shadow', 'inset 0 1px 1px lightgreen, 0 0 8px lightgreen');
                     }
                     else {
+                        //disable sign in
+                        $signInButton.prop('disabled', true);
                         //make text outline red
                         $signInStudentId.css('border-color', 'orangered');
                         $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
@@ -222,10 +235,14 @@ block content
                 });
             }
             else if ($signInStudentId.val().length < 4) {
+                //disable sign in
+                $signInButton.prop('disabled', true);
                 //make text outline default
                 $signInStudentId.css('border-color', '');
                 $signInStudentId.css('box-shadow', '');
             } else {
+                //disable sign in
+                $signInButton.prop('disabled', true);
                 //make text outline red
                 $signInStudentId.css('border-color', 'orangered');
                 $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
