@@ -100,30 +100,32 @@ block content
                     h3 #{scrollingText.text}
 
     script.
-        var $studentTable = $("#studentTable");
-        var $requestTable = $("#requestsTable");
-        var $tutorsTable = $("#tutorsTable");
+        var $body = $('body');
 
-        var $contextMenuStudent = $("#studentContextMenu");
-        var $contextMenuRequest = $("#requestContextMenu");
-        var $contextMenuTutor = $("#tutorContextMenu");
+        var $studentTable = $('#studentTable');
+        var $requestTable = $('#requestsTable');
+        var $tutorsTable = $('#tutorsTable');
 
-        var tableData = "";
-        var actionSelected = "";
+        var $contextMenuStudent = $('#studentContextMenu');
+        var $contextMenuRequest = $('#requestContextMenu');
+        var $contextMenuTutor = $('#tutorContextMenu');
+
+        var tableData = '';
+        var actionSelected = '';
 
         // Student Table Context Menu ***********************************
         // display the menu at the cursor position
-        $("body").on("contextmenu", "#studentTable tr", function (e) {
+        $body.on('contextmenu', '#studentTable tbody tr', function (e) {
             // hide the other context menus
             $contextMenuRequest.hide();
             $contextMenuTutor.hide();
 
             // get which row they clicked on
-            tableData = $(this).attr("data-name");
+            tableData = $(this).attr('data-name');
 
             // display this context menu
             $contextMenuStudent.css({
-                display: "block",
+                display: 'block',
                 left: e.pageX - $studentTable.offset().left + 15, //magic numbers
                 top: e.pageY - $studentTable.offset().top + 20 //magic numbers
             });
@@ -131,25 +133,25 @@ block content
         });
 
         // hide the menu when you click a link in menu
-        $contextMenuStudent.on("click", "a", function () {
-            actionSelected = $(this).attr("data-action");
-            alert("Student: " + tableData + ". Action: " + actionSelected);
+        $contextMenuStudent.on('click', 'a', function () {
+            actionSelected = $(this).attr('data-action');
+            alert('Student: ' + tableData + '. Action: ' + actionSelected);
             $contextMenuStudent.hide();
         });
 
         // Request Table Context Menu ***********************************
         // display the menu at the cursor position
-        $("body").on("contextmenu", "#requestsTable tr", function (e) {
+        $body.on('contextmenu', '#requestsTable tbody tr', function (e) {
             // hide the other context menus
             $contextMenuStudent.hide();
             $contextMenuTutor.hide();
 
             // get which row they clicked on
-            tableData = $(this).attr("data-name");
+            tableData = $(this).attr('data-name');
 
             // display this context menu
             $contextMenuRequest.css({
-                display: "block",
+                display: 'block',
                 left: e.pageX - $requestTable.offset().left + 15, //magic numbers
                 top: e.pageY - $requestTable.offset().top + 20 //magic numbers
             });
@@ -157,25 +159,25 @@ block content
         });
 
         // hide the menu when you click a link in menu
-        $contextMenuRequest.on("click", "a", function () {
-            actionSelected = $(this).attr("data-action");
-            alert("Request: " + tableData + ". Action: " + actionSelected);
+        $contextMenuRequest.on('click', 'a', function () {
+            actionSelected = $(this).attr('data-action');
+            alert('Request: ' + tableData + '. Action: ' + actionSelected);
             $contextMenuRequest.hide();
         });
 
         // Tutor Table Context Menu ***********************************
         // display the menu at the cursor position
-        $("body").on("contextmenu", "#tutorsTable tr", function (e) {
+        $body.on('contextmenu', '#tutorsTable tbody tr', function (e) {
             // hide the other context menus
             $contextMenuStudent.hide();
             $contextMenuRequest.hide();
 
             // get which row they clicked on
-            tableData = $(this).attr("data-name");
+            tableData = $(this).attr('data-name');
 
             // display this context menu
             $contextMenuTutor.css({
-                display: "block",
+                display: 'block',
                 left: e.pageX - $tutorsTable.offset().left + 15, //magic numbers
                 top: e.pageY - $tutorsTable.offset().top + 20 //magic numbers
             });
@@ -183,37 +185,45 @@ block content
         });
 
         // hide the menu when you click a link in menu
-        $contextMenuTutor.on("click", "a", function () {
+        $contextMenuTutor.on('click', 'a', function () {
             actionSelected = $(this).attr("data-action");
-            alert("Tutor: " + tableData + ". Action: " + actionSelected);
+            alert('Tutor: ' + tableData + '. Action: ' + actionSelected);
             $contextMenuTutor.hide();
         });
 
         // hide the menu on click anywhere else
-        $("body").click(function () {
+        $body.click(function () {
             $contextMenuStudent.hide();
             $contextMenuRequest.hide();
             $contextMenuTutor.hide();
         });
 
         function handleStudent(){
-            if ($('#signInStudentID').val().length >= 4) {
-                userExists($('#signInStudentID').val(), function(exists){
-                    alert(exists)
+            var $signInStudentId = $('#signInStudentID');
+
+            if ($signInStudentId.val().length >= 4) {
+                userExists($signInStudentId.val(), function(exists){
                     if (exists === true) {
-                        getClasses($('#signInStudentID').val());
+                        getClasses($signInStudentId.val());
                         //make text outline green
-                        $('#signInStudentID').css('color', 'green');
+                        $signInStudentId.css('border-color', 'lightgreen');
+                        $signInStudentId.css('box-shadow', 'inset 0 1px 1px lightgreen, 0 0 8px lightgreen');
                     }
                     else {
                         //make text outline red
-                        $('#signInStudentID').css('color', 'red');
+                        $signInStudentId.css('border-color', 'orangered');
+                        $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
                     }
                 });
             }
-            else {
+            else if ($signInStudentId.val().length < 4) {
+                //make text outline default
+                $signInStudentId.css('border-color', '');
+                $signInStudentId.css('box-shadow', '');
+            } else {
                 //make text outline red
-                $('#signInStudentID').css('color', 'red');
+                $signInStudentId.css('border-color', 'orangered');
+                $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
             }
 
         }
@@ -253,15 +263,15 @@ block content
                 },
                 complete: function (data, status) {
                     //alert(status);
-                    //alert(JSON.stringify(data));
                 }
             });
         }
 
         // redraw student table upon student sign in
         function refreshStudentTable(students) {
+            var $studentTableBody = $('#studentTable tbody');
             // empty the table
-            $('#studentTable tbody').html('');
+            $studentTableBody.html('');
 
             // re-draw the table
             var name = '';
@@ -278,7 +288,7 @@ block content
                 rowData += ('<td>' + location + '</td>');
                 rowData += '</tr>';
 
-                $('#studentTable tbody').append(rowData);
+                $studentTableBody.append(rowData);
             }
         }
 
@@ -294,15 +304,15 @@ block content
                 },
                 complete: function (data, status) {
                     //alert(status);
-                    //alert(JSON.stringify(data));
                 }
             });
         }
 
         // redraw student table upon student sign in
         function refreshRequestsTable(requests) {
+            var $requestTableBody = $('#requestsTable tbody');
             // empty the table
-            $('#requestsTable tbody').html('');
+            $requestTableBody.html('');
 
             // re-draw the table
             var name = '';
@@ -329,7 +339,7 @@ block content
                 rowData += ('<td>' + tutor + '</td>');
                 rowData += '</tr>';
 
-                $('#requestsTable tbody').append(rowData);
+                $requestTableBody.append(rowData);
             }
         }
 
@@ -345,15 +355,16 @@ block content
                 },
                 complete: function (data, status) {
                     //alert(status);
-                    //alert(JSON.stringify(data));
                 }
             });
         }
 
         // redraw student table upon student sign in
         function refreshTutorsTable(tutors) {
+            var $tutorTableBody = $('#tutorsTable tbody');
+
             // empty the table
-            $('#tutorsTable tbody').html('');
+            $tutorTableBody.html('');
 
             // re-draw the table
             var name = '';
@@ -367,7 +378,7 @@ block content
                 rowData += ('<td>' + loginTime + '</td>');
                 rowData += '</tr>';
 
-                $('#tutorsTable tbody').append(rowData);
+                $tutorTableBody.append(rowData);
             }
         }
 
@@ -378,9 +389,6 @@ block content
                 dataType: 'json',
                 data: {'center': '#{centerLocation}', 'studentId': studentId},
                 success: function (data, status) {
-                    //alert(JSON.stringify(data));
-                    //alert(data['exists'])
-                    //return data['exists'];
                     cb(data['exists']);
                 },
                 complete: function (data, status) {
@@ -389,17 +397,17 @@ block content
             });
         }
 
-        function getClasses(studentId){
+        function getClasses(studentId) {
+            var $selectSubject = $('#selectSubject');
             $.ajax({
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/getClasses',
                 dataType: 'json',
                 data: {'center': '#{centerLocation}', 'studentId': studentId},
                 success: function (data, status) {
-                    //return data['exists'];
-                    $('#selectSubject').html("<option value='#'>-Select Subject-</option>");
+                    $selectSubject.html("<option value='#'>-Select Subject-</option>");
                     for (var i = 0; i < data['classes'].length; i++) {
-                        $('#selectSubject').append("<option value='" + data['classes'][i].id + "'>" + data['classes'][i].name + '</option>');
+                        $selectSubject.append("<option value='" + data['classes'][i].id + "'>" + data['classes'][i].name + '</option>');
                     }
                 },
                 complete: function (data, status) {
