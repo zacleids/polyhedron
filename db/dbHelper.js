@@ -343,17 +343,15 @@ DatabaseHelper.prototype.loginStudent = function studentLogin(studentID, regID, 
        else {
            console.log(results);
            centerID = results;
+           self.db.query("INSERT INTO students VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
+               "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
+               if (err2) {
+                   cb(err2);
+               }
+               cb(null);
+           });
        }
     });
-
-    if(centerID != 0) {
-        self.db.query("INSERT INTO students VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
-            "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
-            if (err2) {
-                cb(err2);
-            }
-        });
-    }
 };
 
 
