@@ -113,6 +113,8 @@ block content
         var tableData = '';
         var actionSelected = '';
 
+        var currentStudentIdExists = false;
+
         // Student Table Context Menu ***********************************
         // display the menu at the cursor position
         $body.on('contextmenu', '#studentTable tbody tr', function (e) {
@@ -203,8 +205,22 @@ block content
             $contextMenuTutor.hide();
         });
 
-        function toggleAbleToSignIn(enableState) {
-            $('#studentSignInSubmit').enabled(enableState);
+        function toggleAbleToSignIn() {
+            var classSelected = $('#selectSubject').val() !== '#';
+            var locationSelected = $('#selectLocation').val() !== '#';
+
+            var $signInButton = $('#studentSignInSubmit');
+
+            userExists($('#signInStudentID').val(), function(doesExist){
+                if (doesExist && locationSelected && classSelected) {
+                    //enable sign in
+                    $signInButton.prop('disabled', false);
+                } else {
+                    $signInButton.prop('disabled', true);
+                }
+
+            });
+
         }
 
         function handleStudent(){
@@ -213,48 +229,50 @@ block content
 
             if ($signInStudentId.val().length >= 4) {
                 userExists($signInStudentId.val(), function(exists){
+                    currentStudentIdExists = exists;
                     if (exists === true) {
                         getClasses($signInStudentId.val());
-
-                        if ($('#selectSubject').val() !== '#' && $('#selectLocation').val() !== '#') {
-                            //enable sign in
-                            $signInButton.prop('disabled', false);
-                        }
-
                         //make text outline green
                         $signInStudentId.css('border-color', 'lightgreen');
                         $signInStudentId.css('box-shadow', 'inset 0 1px 1px lightgreen, 0 0 8px lightgreen');
                     }
                     else {
-                        //disable sign in
                         $signInButton.prop('disabled', true);
                         //make text outline red
                         $signInStudentId.css('border-color', 'orangered');
                         $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
                     }
                 });
-            }
-            else if ($signInStudentId.val().length < 4) {
-                //disable sign in
+            } else if ($signInStudentId.val().length < 4) {
                 $signInButton.prop('disabled', true);
                 //make text outline default
                 $signInStudentId.css('border-color', '');
                 $signInStudentId.css('box-shadow', '');
             } else {
-                //disable sign in
                 $signInButton.prop('disabled', true);
                 //make text outline red
                 $signInStudentId.css('border-color', 'orangered');
                 $signInStudentId.css('box-shadow', 'inset 0 1px 1px orangered, 0 0 8px orangered');
             }
-
         }
 
-        $(document).ready(function () {
-            $('#signInStudentID').on('input', function(){
+        $(document).ready(function() {
+            // upon changing the value of the ID input
+            $('#signInStudentID').on('input', function () {
                 handleStudent();
             });
+
+            // upon changing the value of the location selector
+            $('#selectLocation').on('change', function () {
+                toggleAbleToSignIn();
+            });
+
+            // upon changing the value of the class selector
+            $('#selectSubject').on('change', function () {
+                toggleAbleToSignIn();
+            });
         });
+
 
         var socket = io.connect('/#{centerLocation}'.replace(new RegExp(' ', 'g'), ''));
         socket.on('reload', function(){
