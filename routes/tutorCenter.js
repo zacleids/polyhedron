@@ -130,18 +130,6 @@ function createTutorCenterRouter(opts) {
         });
     });
 
-    // getting date and time of student sign in
-    function getDateTime() {
-        var currentdate = new Date();
-        var datetime = "Sign in time: " + (currentdate.getMonth() + 1) + "-"
-            + currentdate.getDate() + "-"
-            + currentdate.getFullYear() + " @ "
-            + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":"
-            + currentdate.getSeconds();
-        return datetime;
-    }
-
     router.post('/REST/studentSignIn', function (req, res, next) {
         var center = req.body.center;
         var studentId = req.body.studentId;
@@ -158,14 +146,16 @@ function createTutorCenterRouter(opts) {
                 })
             }
         });
-        var datetime = getDateTime();
-        console.log(datetime);
         var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
         opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
         opts.centerSockets[centerNoSpace].emit('getStudents');
-        res.status(200)
-        //res.redirect(redirectBase + '/' + center);
+        res.redirect(redirectBase + '/' + center);
+    });
+
+    router.post('/REST/studentSignOut', function (req, res, next){
+        var center = req.body.center;
+        var studentId = req.body.studentId;
     });
 
     router.get('/REST/getStudents', function (req, res, next) {
