@@ -349,7 +349,7 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
            console.log("loginStudent: " + JSON.stringify(results));
            centerID = results;
            self.db.query("INSERT INTO students VALUES(" + parseInt(studentID) + ", " + parseInt(regID) + ", " + parseInt(locationID) + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
-               "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (parseInt(studentID) + 1) + ", " + parseInt(centerID) + ";", function (err2) {
+               "convert_tz(current_timestamp(), '+00:00', '-07:00'), NULL, " + parseInt(centerID) + ";", function (err2) {
                if (err2) {
                    cb(err2);
                }
