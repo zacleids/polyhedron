@@ -359,27 +359,6 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
     });
 };
 
-DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, regID, locationID, center, cb) {
-    var self = this;
-    var centerID = 0;
-    self.db.query("SELECT id FROM centers WHERE centers.description = " + center + ";", function (err1, results) {
-        if (err1) {
-            cb(err1);
-        }
-        else {
-            console.log("loginTutor: " + JSON.stringify(results));
-            centerID = results;
-            self.db.query("INSERT INTO tutors VALUES(" + studentID + ", " + regID + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
-                "convert_tz(current_timestamp(), '+00:00', '-07:00'), " + (studentID + 1) + ", " + centerID + ";", function (err2) {
-                if (err2) {
-                    cb(err2);
-                }
-                cb(null);
-            });
-        }
-    });
-};
-
 DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, center, cb) {
     var self = this;
     var centerID = 0;
