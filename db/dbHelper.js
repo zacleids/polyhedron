@@ -21,6 +21,7 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
             cb(err, null);
         }
         var centerNames = [];
+        console.log("getTutorCenters: " + results);
         results.forEach(function(result){
            centerNames.push(result.description);
         });
@@ -51,6 +52,7 @@ DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, 
             })
         }
     }, function (err, results) {
+        console.log("getCenterStudents: " + results);
         for(var i = 0; i < results["names"].length; i++) {
             students.push({
                 name: results["names"][i],
@@ -72,7 +74,7 @@ DatabaseHelper.prototype.getCenterStudentNames = function getCenterStudentNames(
             cb(err, null);
         }
         var studentNames = [];
-        console.log(results);
+        console.log("getCenterStudentNames: " + results);
         results.forEach(function(result) {
             studentNames.push(result.nickName);
         });
@@ -89,7 +91,7 @@ DatabaseHelper.prototype.getCenterStudentClasses = function getCenterStudentClas
             cb(err, null);
         }
         var classNames = [];
-        console.log(results);
+        console.log("getCenterStudentClasses: " + results);
         results.forEach(function(result) {
             classNames.push(result.code);
         });
@@ -106,7 +108,7 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
             cb(err, null);
         }
         var locations = [];
-        console.log(results);
+        console.log("getCenterStudentLocations: " +results);
         results.forEach(function(result) {
             locations.push(result.description);
         });
@@ -125,7 +127,7 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
            cb(err, null);
        }
        var tutorNames = [];
-       console.log(results);
+       console.log("getCenterTutors: " + results);
        results.forEach(function(result) {
            tutorNames.push(result.nickName);
        });
