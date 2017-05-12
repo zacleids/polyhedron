@@ -348,8 +348,7 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
        else {
            console.log("loginStudent: " + JSON.stringify(results));
            centerID = results;
-           self.db.query("INSERT INTO students VALUES(" + parseInt(studentID) + ", " + parseInt(regID) + ", " + parseInt(locationID) + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " +
-               "convert_tz(current_timestamp(), '+00:00', '-07:00'), null, " + parseInt(centerID) + ");", function (err2) {
+           self.db.query("INSERT INTO students VALUES(" + parseInt(studentID) + ", " + parseInt(regID) + ", " + parseInt(locationID) + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), null, " + parseInt(centerID) + ");", function (err2) {
                if (err2) {
                    cb(err2);
                }
@@ -370,8 +369,7 @@ DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, ce
         else {
             console.log(results);
             centerID = results;
-            self.db.query("INSERT INTO tutors VALUES(" + parseInt(studentID) + ", " + parseInt(tutorID) + ", " + requestable + ", " +
-                "convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " + centerID + ");", function (err2) {
+            self.db.query("INSERT INTO tutors VALUES(" + parseInt(studentID) + ", " + parseInt(tutorID) + ", " + requestable + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), convert_tz(current_timestamp(), '+00:00', '-07:00'), " + centerID + ");", function (err2) {
                 if (err2) {
                     cb(err2);
                 }
