@@ -380,27 +380,28 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
     var self = this;
     var centerID = 0;
     var loginTime;
-    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
         if (err1) {
             cb(err1);
         }
         else {
-            self.db.query("SELECT loginTime FROM tutors WHERE id = \'" + studentID + "\';", function (err3, results) {
-                if (err3) {
-                    cb(err3);
+            self.db.query("SELECT loginTime FROM tutors WHERE id = \'" + studentID + "\';", function (err2, results2) {
+                if (err2) {
+                    cb(err2);
                 }
                 else {
                     console.log("logoutTutor: " + JSON.stringify(results));
-                    centerID = results[0].id;
-                    self.db.query("DELETE FROM tutors WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
-                        if (err2) {
-                            cb(err2);
+                    centerID = results1[0].id;
+                    loginTime = results2[0].loginTime;
+                    self.db.query("DELETE FROM tutors WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
+                        if (err3) {
+                            cb(err3);
                         }
                         cb(null);
                     });
-                    self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", " + loginTime + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err2) {
-                        if (err2) {
-                            cb(err2);
+                    self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", " + loginTime + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
+                        if (err4) {
+                            cb(err4);
                         }
                         cb(null);
                     });
