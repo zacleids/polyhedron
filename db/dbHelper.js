@@ -447,7 +447,7 @@ DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, 
     });
 };
 
-DatabaseHelper.prototype.validTutorCheck = function existingUserCheck(userID, cb) {
+DatabaseHelper.prototype.validTutorCheck = function validTutorCheck(userID, cb) {
     var self = this;
 
     self.db.query("SELECT roleId FROM usersRolesRef WHERE id = " + userID + ";", function (err, results) {
