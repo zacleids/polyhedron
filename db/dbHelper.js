@@ -29,6 +29,7 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
     });
 };
 
+
 //FUNCTIONS DEDICATED TO
 //POPULATING THE SIGNED-IN STUDENTS LIST ON
 //THE FRONT-FACING TUTOR CENTER PAGES
@@ -139,6 +140,7 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
     });
 };
 
+
 //FUNCTIONS DEDICATED TO
 //POPULATING THE ON-THE-CLOCK TUTORS LIST ON
 //THE FRONT-FACING TUTOR CENTER PAGES
@@ -174,6 +176,7 @@ DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
         cb(null, clockinTimes);
     });
 };
+
 
 //FUNCTIONS DEDICATED TO
 //POPULATING THE TUTORING REQUESTS LIST ON
@@ -246,6 +249,7 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
     });
 };
 
+
 //FUNCTIONS DEDICATED TO
 //UPDATING THE SIGN-IN FORM FOR
 //A STUDENT SIGNING INTO ON
@@ -308,6 +312,7 @@ DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center
         cb(null, centerLocations);
     });
 };
+
 
 //FUNCTIONS DEDICATED TO
 //MODIFYING THE SIGNED-IN STUDENTS TABLE (login/logout) AND
@@ -460,4 +465,7 @@ DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID
     });
 };
 
+
+//FINAL LINE EXPORTS DBHELPER TO OTHER PORTIONS
+//OF POLYHEDRAL/DRON APPLICATION
 module.exports = DatabaseHelper;
