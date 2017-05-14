@@ -147,7 +147,7 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
 DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickname FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
+    self.db.query("SELECT nickName FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
        if(err) {
            cb(err, null);
        }
@@ -444,6 +444,24 @@ DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, 
             }
         });
         cb(null, validUser);
+    });
+};
+
+DatabaseHelper.prototype.validTutorCheck = function existingUserCheck(userID, cb) {
+    var self = this;
+
+    self.db.query("SELECT roleId FROM usersRolesRef WHERE id = " + userID + ";", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var validTutor = false;
+        console.log("existingUserCheck: " + JSON.stringify(results));
+        results.forEach(function (result) {
+            if (result === 5) {
+                validTutor = true;
+            }
+        });
+        cb(null, validTutor);
     });
 };
 
