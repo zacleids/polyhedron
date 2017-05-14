@@ -332,6 +332,7 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
            });
        }
     });
+    //When logging a student in, store registrationID and centerID in the studentsLog table.
 };
 
 DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, center, cb) {
@@ -378,21 +379,36 @@ DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, ce
 DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, cb) {
     var self = this;
     var centerID = 0;
+    var loginTime;
     self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
         if (err1) {
             cb(err1);
         }
         else {
-            console.log("logoutTutor: " + JSON.stringify(results));
-            centerID = results[0].id;
-            self.db.query("DELETE FROM tutors WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
-                if (err2) {
-                    cb(err2);
+            self.db.query("SELECT loginTime FROM tutors WHERE id = \'" + studentID + "\';", function (err3, results) {
+                if (err3) {
+                    cb(err3);
                 }
-                cb(null);
+                else {
+                    console.log("logoutTutor: " + JSON.stringify(results));
+                    centerID = results[0].id;
+                    self.db.query("DELETE FROM tutors WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
+                        if (err2) {
+                            cb(err2);
+                        }
+                        cb(null);
+                    });
+                    self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", " + loginTime + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err2) {
+                        if (err2) {
+                            cb(err2);
+                        }
+                        cb(null);
+                    });
+                }
             });
         }
     });
+    //When logging a tutor out, we need to add [null], their id, login time, current time adjusted to PST, and centerID
 };
 
 
@@ -416,5 +432,22 @@ DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, 
     });
 };
 
+DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID, password, cb) {
+    var self = this;
+
+    self.db.query("SELECT password FROM users WHERE id = " + userID + ";", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var validPassword = false;
+        console.log("validUserPasswordCheck: " + JSON.stringify(results));
+        results.forEach(function(result) {
+            if(result === password) {
+                validPassword = true;
+            }
+        });
+        cb(null, validPassword);
+    });
+};
 
 module.exports = DatabaseHelper;
