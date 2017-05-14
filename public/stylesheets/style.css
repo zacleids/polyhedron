@@ -8,6 +8,11 @@ a {
     color: #00B7FF;
 }
 
+#tutorSignInButton {
+    /*height: 70px;*/
+    margin-left: 10px;
+}
+
 .centerChoicebtn {
     margin: 20px;
     padding: 20px;

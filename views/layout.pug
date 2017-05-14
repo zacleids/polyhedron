@@ -116,7 +116,29 @@ html(lang='en')
                                 |
                                 input#adminSignInPassword.form-control(type='password', placeholder='Password')
                             |
-                            button#subSignIn.btn.btn-primary(type='submit' onclick='getDateTime();') Sign In
+                            button#subSignIn.btn.btn-primary(type='submit') Sign In
                     .modal-footer
                         form(action='/admin')
                             button.btn.btn-primary(type='submit') Dev: Straight To Admin
+
+        #tutorSignInModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='tutorSignInModalLabel', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#tutorSignInModalLabel.modal-title Please sign in to begin tutoring
+                    .modal-body
+                        form(role='form' action='/tutorCenter/REST/tutorSignIn' method='post')
+                            .form-group
+                                label(for='tutorSignInCabrilloID') Cabrillo ID
+                                |
+                                input#tutorSignInCabrilloID.form-control(type='text', placeholder='ex.: edbrau1234')
+                            .form-group
+                                label(for='tutorSignInPassword') Password
+                                |
+                                input#tutorSignInPassword.form-control(type='password', placeholder='Password')
+                            |
+                            button#subTutorSignIn.btn.btn-primary(type='submit') Sign In
