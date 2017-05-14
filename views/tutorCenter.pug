@@ -4,11 +4,11 @@ block content
     .container-fluid
         .row
             .col-md-2
-                //p
+                p
                     button#testSRefresh.btn.btn-default(type='submit' onclick='getStudents();') Refresh Students
-                //p
+                p
                     button#testRRefresh.btn.btn-default(type='submit' onclick='getRequests();') Refresh Requests
-                //p
+                p
                     button#testTRefresh.btn.btn-default(type='submit' onclick='getTutors();') Refresh Tutors
             .col-md-4
                 .row
@@ -84,7 +84,7 @@ block content
                                                 th Login Time
                                             tbody
                                                 - for(var i = 0; i < tutors.length; i++)
-                                                    tr(data-name=tutors[i].name)
+                                                    tr(data-id=tutors[i].id)
                                                         td #{tutors[i].name}
                                                         td #{tutors[i].loginTime}
                                         ul#tutorContextMenu.dropdown-menu
@@ -349,14 +349,12 @@ block content
             var name = '';
             var course = '';
             var location = '';
-            var id = '';
             for (var row = 0; row < students.length; row++) {
                 name = students[row].name;
                 course = students[row].course;
                 location = students[row].location;
-                id = students[row].id
 
-                var rowData = '<tr data-id="' + id + '">';
+                var rowData = '<tr data-id="' + students[row].id + '">';
                 rowData += ('<td>' + name + '</td>');
                 rowData += ('<td>' + course + '</td>');
                 rowData += ('<td>' + location + '</td>');
@@ -447,7 +445,7 @@ block content
                 name = tutors[row].name;
                 loginTime = tutors[row].loginTime;
 
-                var rowData = '<tr>';
+                var rowData = '<tr data-id="' + tutors[row].id + '">';
                 rowData += ('<td>' + name + '</td>');
                 rowData += ('<td>' + loginTime + '</td>');
                 rowData += '</tr>';
