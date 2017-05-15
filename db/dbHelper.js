@@ -461,7 +461,7 @@ DatabaseHelper.prototype.validTutorCheck = function validTutorCheck(userID, cb) 
 DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID, password, cb) {
     var self = this;
 
-    self.db.query("SELECT password FROM users WHERE id = " + userID + ";", function (err, results) {
+    self.db.query("SELECT userPassword FROM users WHERE id = " + userID + ";", function (err, results) {
         if (err) {
             cb(err, null);
         }
