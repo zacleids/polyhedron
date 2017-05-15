@@ -421,6 +421,35 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
     });
 };
 
+DatabaseHelper.prototype.addTutoringRequest = function addTutoringRequest(studentID, tutorID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    var refID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            self.db.query("SELECT id FROM tutors WHERE tutorId = " + tutorID + ";", function (err2, results2) {
+                if (err2) {
+                    cb(err2);
+                }
+                else {
+                    console.log(results2);
+                    centerID = results1[0].id;
+                    refID = results2[0].id;
+                    self.db.query("INSERT INTO tutoringRequests VALUES(null, " + parseInt(studentID) + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), null, null, " + refID + ", null, null, " + centerID + ");", function (err3) {
+                        if (err3) {
+                            cb(err3);
+                        }
+                        cb(null);
+                    });
+                }
+            });
+        }
+    });
+};
+
 
 //OTHER FUNCTIONS RELEVANT TO   =======================================================================================================================================
 //MAKING VALID MySQL QUERIES    =======================================================================================================================================
