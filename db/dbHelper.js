@@ -147,35 +147,38 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
 DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
+    self.db.query("SELECT users.nickName, tutors.loginTime FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
        if(err) {
            cb(err, null);
        }
-       var tutorNames = [];
+       var centerTutors = [];
        console.log("getCenterTutors: " + JSON.stringify(results));
-       results.forEach(function(result) {
-           tutorNames.push(result.nickName);
-       });
-        cb(null, tutorNames);
+       for(var i = 0; i < results.length; i++) {
+            centerTutors.push({
+                name: results[i].nickName,
+                loginTime: results[i].loginTime
+            });
+       }
+        cb(null, centerTutors);
     });
 };
-
-DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
-    var self = this;
-
-    self.db.query("SELECT loginTime FROM tutors, centers WHERE tutors.centerId = centers.centerId AND centers.description = \'"
-        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
-        if(err) {
-            cb(err, null);
-        }
-        var clockinTimes = [];
-        console.log("getClockinTime: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            clockinTimes.push(result.loginTime);
-        });
-        cb(null, clockinTimes);
-    });
-};
+//
+// DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
+//     var self = this;
+//
+//     self.db.query("SELECT loginTime FROM tutors, centers WHERE tutors.centerId = centers.centerId AND centers.description = \'"
+//         + center + "\';", function (err, results){
+//         if(err) {
+//             cb(err, null);
+//         }
+//         var clockinTimes = [];
+//         console.log("getClockinTime: " + JSON.stringify(results));
+//         results.forEach(function(result) {
+//             clockinTimes.push(result.loginTime);
+//         });
+//         cb(null, clockinTimes);
+//     });
+// };
 
 
 //FUNCTIONS DEDICATED TO
