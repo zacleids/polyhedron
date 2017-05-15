@@ -450,7 +450,7 @@ DatabaseHelper.prototype.validTutorCheck = function validTutorCheck(userID, cb) 
         var validTutor = false;
         console.log("existingUserCheck: " + JSON.stringify(results));
         results.forEach(function (result) {
-            if (result === 5) {
+            if (result === 4) {
                 validTutor = true;
             }
         });
