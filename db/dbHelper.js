@@ -399,12 +399,12 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
                     console.log("logoutTutor: " + JSON.stringify(results2));
                     centerID = results1[0].id;
                     loginTime = results2[0].loginTime;
-                    self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", (SELECT loginTime FROM tutors WHERE tutorId = " + parseInt(studentID) + ";), convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err3) {
+                    self.db.query("DELETE FROM tutors WHERE tutorId = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
                         if (err3) {
                             cb(err3);
                         }
                         else {
-                            self.db.query("DELETE FROM tutors WHERE tutorId = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err4) {
+                            self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", " + loginTime + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
                                 if (err4) {
                                     cb(err4);
                                 }
@@ -417,25 +417,6 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
         }
     });
 };
-
-// else {
-//     console.log("logoutTutor: " + JSON.stringify(results2));
-//     centerID = results1[0].id;
-//     loginTime = results2[0].loginTime;
-//     self.db.query("DELETE FROM tutors WHERE tutorId = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
-//         if (err3) {
-//             cb(err3);
-//         }
-//         else {
-//             self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", " + loginTime + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
-//                 if (err4) {
-//                     cb(err4);
-//                 }
-//                 cb(null);
-//             });
-//         }
-//     });
-// }
 
 
 //OTHER FUNCTIONS RELEVANT TO   =======================================================================================================================================
