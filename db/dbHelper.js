@@ -361,7 +361,7 @@ DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, cente
     });
 };
 
-DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, tutorID, center, cb) {
+DatabaseHelper.prototype.loginTutor = function loginTutor(studentID, center, cb) {
     var self = this;
     var centerID = 0;
     var requestable = 1;
