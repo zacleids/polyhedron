@@ -5,6 +5,9 @@ var async = require('async');
 var excelBuilder = require('msexcel-builder');
 var ExcelWorkbookGenerator = require('../excelGenerator.js');
 
+
+var redirectBase = 'http://localhost:3000/admin';
+
 function request(name, course, location, waitTime, request, tutor) {
     this.name = name || '';
     this.course = course || '';
@@ -26,6 +29,47 @@ function createAdminRouter(opts) {
         res.render('admin/admin', {
             title: 'Admin',
             centerLocation: opts.centerLocation
+        });
+    });
+
+    router.post('/REST/adminSignIn', function (req, res, next) {
+        var studentId = req.body.studentId;
+        var pass = req.body.password;
+        var passHash = crypto.createHash('sha1').update(pass).digest("hex");
+        opts.dbHelper.validPasswordCheck(studentId, passHash, function(err1, isValidPassword){
+            if(err1){
+                console.error("an error occurred checking a admin password:", err1);
+            }
+            if(isValidPassword) {
+                opts.dbHelper.loginTutor(studentId, center, function (err2) {
+                    if (err2) {
+                        console.error("an error occurred logging a admin in. info: ", {
+                            err: err2,
+                            studentId: studentId,
+                        });
+                    }
+                });
+            }
+        });
+
+
+        res.redirect(redirectBase);
+    });
+
+    router.post('/REST/adminSignOut', function (req, res, next){
+        var center = req.body.center;
+        var studentId = req.body.studentId;
+        opts.dbHelper.logoutTutor(studentId, center, function(err){
+            if(err){
+                console.error("an error occurred logging a admin out. info: ", {
+                    err: err,
+                    studentId:studentId,
+                    center: center
+                });
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
+            opts.centerSockets[centerNoSpace].emit('getTutors');
         });
     });
 

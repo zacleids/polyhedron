@@ -2,20 +2,10 @@ var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var async = require('async');
+var crypto = require('crypto');
 
 
 var redirectBase = 'http://localhost:3000/tutorCenter';
-
-function student(name, course, location) {
-    this.name = name || '';
-    this.course = course || '';
-    this.location = location || '';
-}
-
-function makeStudent(line) {
-    var parts = line.split(',');
-    return new student(parts[0], parts[1], parts[2]);
-}
 
 function request(name, course, location, waitTime, request, tutor) {
     this.name = name || '';
@@ -93,22 +83,9 @@ function createTutorCenterRouter(opts) {
                 }
             },
             tutors: function (cb) {
-                var tutors = [];
-                var file = path.join(__dirname, '..', 'fakeData', 'tutors.txt');
-                fs.readFile(file, readtutorsData);
-
-                function readtutorsData(err, data) {
-                    if (err) {
-                        console.log('An unknown error occurred: ', err);
-                        cb(err, null);
-                    }
-
-                    var lines = data.toString().split('\n');
-                    lines.forEach(function (line) {
-                        tutors.push(makeTutor(line));
-                    });
-                    cb(null, tutors);
-                }
+                opts.dbHelper.getCenterTutors(center, function (err, result) {
+                    cb(err, result);
+                });
             },
             requestsTable: function (cb) {
                 cb(null, opts.tutorCenters[center].requestsTable);
@@ -203,28 +180,66 @@ function createTutorCenterRouter(opts) {
         }
     });
 
-    router.get('/REST/getTutors', function (req, res, next) {
-        var tutors = [];
-        var file = path.join(__dirname, '..', 'fakeData', 'tutors.txt');
-        fs.readFile(file, readTutorsData);
+    router.post('/REST/tutorSignIn', function (req, res, next) {
+        var center = req.body.center;
+        var userId = req.body.tutorId;
+        var pass = req.body.tutorPassword;
+        var passHash = crypto.createHash('sha1').update(pass).digest("hex");
+        opts.dbHelper.validPasswordCheck(userId, passHash, function(err1, isValidPassword){
+            if(err1){
+                console.error("an error occurred checking a tutor password:", err1);
+            }
+            console.log({isValidPassword:isValidPassword});
+            if(isValidPassword) {
+                opts.dbHelper.loginTutor(userId, center, function (err2) {
+                    if (err2) {
+                        console.error("an error occurred logging a tutor in. info: ", {
+                            err: err2,
+                            userId: userId,
+                            center: center
+                        });
+                    }
+                    var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
-        function readTutorsData(err, data) {
-            if (err) {
-                console.log('An unknown error occurred: ', err);
+                    opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
+                    opts.centerSockets[centerNoSpace].emit('getTutors');
+                });
+            }
+        });
+
+
+        res.redirect(redirectBase + '/' + center);
+    });
+
+    router.post('/REST/tutorSignOut', function (req, res, next){
+        var center = req.body.center;
+        var userId = req.body.userId;
+        opts.dbHelper.logoutTutor(userId, center, function(err){
+            if(err){
+                console.error("an error occurred logging a tutor out. info: ", {
+                    err: err,
+                    userId:userId,
+                    center: center
+                });
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
+            opts.centerSockets[centerNoSpace].emit('getTutors');
+        });
+    });
+
+    router.get('/REST/getTutors', function (req, res, next) {
+        var center = req.query.center;
+        opts.dbHelper.getCenterTutors(center, function(err, result){
+            if(err){
+                res.status(500).send({error: 'Something failed!'});
                 return;
             }
-
-            var lines = data.toString().split('\n');
-            lines.forEach(function (line) {
-                tutors.push(makeTutor(line));
-            });
-
-            res.send({tutors:tutors});
-        }
+            res.send({tutors:result});
+        });
     });
 
     router.get('/REST/userExists', function (req, res, next){
-        var center = req.query.center;
         var studentId = req.query.studentId;
         console.log("request to see if " + studentId + " exists");
         opts.dbHelper.existingUserCheck(studentId, function(err, doesExist){
