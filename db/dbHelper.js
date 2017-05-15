@@ -467,11 +467,9 @@ DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID
         }
         var validPassword = false;
         console.log("validUserPasswordCheck: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            if(result === password) {
-                validPassword = true;
-            }
-        });
+        if(results[0].userPassword === password) {
+            validPassword = true;
+        }
         cb(null, validPassword);
     });
 };
