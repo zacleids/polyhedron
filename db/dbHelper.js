@@ -192,7 +192,7 @@ DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center
 DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT nickName FROM users, tutors, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
@@ -209,7 +209,7 @@ DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(
 DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
