@@ -400,7 +400,7 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
                     console.log("logoutTutor: " + JSON.stringify(results2));
                     centerID = results1[0].id;
                     loginTime = results2[0].loginTime;
-                    od = results2[0.].id;
+                    id = results2[0].id;
                     self.db.query("DELETE FROM tutors WHERE tutorId = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
                         if (err3) {
                             cb(err3);
