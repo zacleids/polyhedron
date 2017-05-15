@@ -147,7 +147,7 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
 DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT users.nickName, tutors.loginTime FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
+    self.db.query("SELECT users.nickName, tutors.loginTime, tutors.id FROM tutors, users, centers WHERE tutors.id = users.id AND tutors.centerId = centers.id AND centers.description = \'" + center + "\';", function (err, results){
        if(err) {
            cb(err, null);
        }
@@ -156,7 +156,8 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
        for(var i = 0; i < results.length; i++) {
             centerTutors.push({
                 name: results[i].nickName,
-                loginTime: results[i].loginTime
+                loginTime: results[i].loginTime,
+                id: results[i].id
             });
        }
         cb(null, centerTutors);
