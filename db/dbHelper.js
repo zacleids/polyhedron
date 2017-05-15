@@ -405,14 +405,15 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
                         if (err3) {
                             cb(err3);
                         }
-                        else {
-                            self.db.query("INSERT INTO tutorsLog VALUES(" + parseInt(id) + ", " + parseInt(studentID) + ", \'" + loginTime + "\', convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
-                                if (err4) {
-                                    cb(err4);
-                                }
-                                cb(null);
-                            });
-                        }
+                        // else {
+                        //     self.db.query("INSERT INTO tutorsLog VALUES(" + parseInt(id) + ", " + parseInt(studentID) + ", \'" + loginTime + "\', convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
+                        //         if (err4) {
+                        //             cb(err4);
+                        //         }
+                        //         cb(null);
+                        //     });
+                        // }
+                        cb(null);
                     });
                 }
             });
