@@ -131,14 +131,14 @@ html(lang='en')
                             span.sr-only Close
                         h4#tutorSignInModalLabel.modal-title Please sign in to begin tutoring
                     .modal-body
-                        form(role='form' action='/tutorCenter/REST/tutorSignIn' method='post')
+                        form#tutorLoginForm(role='form' action='/tutorCenter/REST/tutorSignIn' method='post')
                             .form-group
-                                label(for='tutorSignInCabrilloID') Cabrillo ID
+                                label(for='tutorSignInID') Cabrillo ID
                                 |
-                                input#tutorSignInCabrilloID.form-control(type='text', placeholder='ex.: edbrau1234')
+                                input#tutorSignInID.form-control(type='text', placeholder='ex.: 1234')
                             .form-group
-                                label(for='tutorSignInPassword') Password
+                                label(for='tutorSignInPass') Password
                                 |
-                                input#tutorSignInPassword.form-control(type='password', placeholder='Password')
+                                input#tutorSignInPass.form-control(type='password', placeholder='Password')
                             |
-                            button#subTutorSignIn.btn.btn-primary(type='submit') Sign In
+                            button#subTutorSignIn.btn.btn-primary(onclick='submitTutorSignIn();') Sign In
