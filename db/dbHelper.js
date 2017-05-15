@@ -391,7 +391,7 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
             cb(err1);
         }
         else {
-            self.db.query("SELECT loginTime FROM tutors WHERE id = \'" + studentID + "\';", function (err2, results2) {
+            self.db.query("SELECT loginTime FROM tutors WHERE tutorId = \'" + studentID + "\';", function (err2, results2) {
                 if (err2) {
                     cb(err2);
                 }
@@ -399,7 +399,7 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
                     console.log("logoutTutor: " + JSON.stringify(results2));
                     centerID = results1[0].id;
                     loginTime = results2[0].loginTime;
-                    self.db.query("DELETE FROM tutors WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
+                    self.db.query("DELETE FROM tutors WHERE tutorId = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
                         if (err3) {
                             cb(err3);
                         }
