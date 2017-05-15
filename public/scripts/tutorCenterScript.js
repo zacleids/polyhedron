@@ -80,7 +80,7 @@ $body.on('contextmenu', '#tutorsTable tbody tr', function (e) {
     $contextMenuRequest.hide();
 
     // get which row they clicked on
-    tableData = $(this).attr('data-name');
+    tableData = $(this).attr('data-id');
 
     // display this context menu
     $contextMenuTutor.css({
@@ -94,7 +94,14 @@ $body.on('contextmenu', '#tutorsTable tbody tr', function (e) {
 // hide the menu when you click a link in menu
 $contextMenuTutor.on('click', 'a', function () {
     actionSelected = $(this).attr("data-action");
-    alert('Tutor: ' + tableData + '. Action: ' + actionSelected);
+    switch(actionSelected){
+        case 'clockOut':
+            tutorSignOut(tableData);
+            break;
+        default:
+            alert('Tutor: ' + tableData + '. Action: ' + actionSelected);
+            break;
+    }
     $contextMenuTutor.hide();
 });
 

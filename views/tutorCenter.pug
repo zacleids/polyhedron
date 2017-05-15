@@ -120,23 +120,35 @@ block content
             getTutors();
         });
 
+        $(document).ready(function(){
+            $('#tutorLoginForm').submit(function(){
+                submitTutorSignIn();
+            });
+        });
+
         function submitTutorSignIn() {
-            var $tutorSignInID = $('#tutorSignInID');
-            var $tutorSignInPass = $('#tutorSignInPass');
-            alert('function was called');
-            /*
+            alert('submitTutorSignIn function called');
             $.ajax({
                 type: "post",
                 url: "http://localhost:3000/tutorCenter/REST/tutorSignIn",
                 data: {
-                    tutorId: $tutorSignInID.val(),
-                    tutorPass: $tutorSignInPass.val()
+                    'center': '#{centerLocation}',
+                    'tutorId': $('#tutorSignInID').val(),
+                    'tutorPass': $('#tutorSignInPass').val()
                 },
-                success: function () {
-                    // not sure what to do here
+                success: function (data, status) {
+                    alert('here i am')
+                    if(data['valid']){
+                        location.reload();
+                    }else{
+                        //alert("invalid username or password");
+                        $("#tutorSignInError").html("Invalid username or password");
+                    }
+                },
+                complete: function (data, status) {
+                    alert(status);
                 }
             });
-            */
         }
 
         function studentSignOut(studentId) {
@@ -145,6 +157,21 @@ block content
                 url: 'http://localhost:3000/tutorCenter/REST/studentSignOut',
                 dataType: 'json',
                 data: {'center': '#{centerLocation}', 'studentId': studentId},
+                success: function (data, status) {
+                    //refreshStudentTable(data['students']);
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
+        }
+
+        function tutorSignOut(userId) {
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:3000/tutorCenter/REST/tutorSignOut',
+                dataType: 'json',
+                data: {'center': '#{centerLocation}', 'userId': userId},
                 success: function (data, status) {
                     //refreshStudentTable(data['students']);
                 },
@@ -185,7 +212,7 @@ block content
                 }
             });
         }
-        
+
         // returns list of tutors from database
         function getTutors() {
             $.ajax({

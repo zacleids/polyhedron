@@ -185,11 +185,18 @@ function createTutorCenterRouter(opts) {
         var userId = req.body.tutorId;
         var pass = req.body.tutorPassword;
         var passHash = crypto.createHash('sha1').update(pass).digest("hex");
+        console.log({
+            center:center,
+            userId: userId,
+            pass: pass,
+            passHash:passHash
+        });
         opts.dbHelper.validPasswordCheck(userId, passHash, function(err1, isValidPassword){
             if(err1){
                 console.error("an error occurred checking a tutor password:", err1);
             }
             console.log({isValidPassword:isValidPassword});
+
             if(isValidPassword) {
                 opts.dbHelper.loginTutor(userId, center, function (err2) {
                     if (err2) {
@@ -199,16 +206,19 @@ function createTutorCenterRouter(opts) {
                             center: center
                         });
                     }
+                    res.send({valid: isValidPassword});
                     var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
                     opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
                     opts.centerSockets[centerNoSpace].emit('getTutors');
                 });
+            }else{
+                res.send({valid: isValidPassword});
             }
         });
 
 
-        res.redirect(redirectBase + '/' + center);
+        //res.redirect(redirectBase + '/' + center);
     });
 
     router.post('/REST/tutorSignOut', function (req, res, next){
