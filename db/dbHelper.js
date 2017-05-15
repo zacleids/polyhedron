@@ -386,12 +386,13 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
     var self = this;
     var centerID = 0;
     var loginTime;
+    var id;
     self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
         if (err1) {
             cb(err1);
         }
         else {
-            self.db.query("SELECT loginTime FROM tutors WHERE tutorId = \'" + studentID + "\';", function (err2, results2) {
+            self.db.query("SELECT loginTime, id FROM tutors WHERE tutorId = \'" + studentID + "\';", function (err2, results2) {
                 if (err2) {
                     cb(err2);
                 }
@@ -399,12 +400,13 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
                     console.log("logoutTutor: " + JSON.stringify(results2));
                     centerID = results1[0].id;
                     loginTime = results2[0].loginTime;
+                    od = results2[0.].id;
                     self.db.query("DELETE FROM tutors WHERE tutorId = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
                         if (err3) {
                             cb(err3);
                         }
                         else {
-                            self.db.query("INSERT INTO tutorsLog VALUES(null, " + parseInt(studentID) + ", \'" + loginTime + "\', convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
+                            self.db.query("INSERT INTO tutorsLog VALUES(" + parseInt(id) + ", " + parseInt(studentID) + ", \'" + loginTime + "\', convert_tz(current_timestamp(), '+00:00', '-07:00'), " + parseInt(centerID) + ";", function (err4) {
                                 if (err4) {
                                     cb(err4);
                                 }
