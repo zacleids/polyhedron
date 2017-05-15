@@ -10,9 +10,10 @@ function DatabaseHelper(opts) {
 }
 
 
-//FUNCTIONS DEDICATED TO
-//POPULATING THE TUTORING CENTERS BUTTONS ON
-//THE "TUTORING CENTERS" PAGE FOR ADMINISTRATORS
+//FUNCTIONS DEDICATED TO                            =======================================================================================================================================
+//POPULATING THE TUTORING CENTERS BUTTONS ON        =======================================================================================================================================
+//THE "TUTORING CENTERS" PAGE FOR ADMINISTRATORS    =======================================================================================================================================
+
 DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
     var self = this;
 
@@ -30,9 +31,10 @@ DatabaseHelper.prototype.getTutorCenters = function getTutorCenters(cb) {
 };
 
 
-//FUNCTIONS DEDICATED TO
-//POPULATING THE SIGNED-IN STUDENTS LIST ON
-//THE FRONT-FACING TUTOR CENTER PAGES
+//FUNCTIONS DEDICATED TO                        =======================================================================================================================================
+//POPULATING THE SIGNED-IN STUDENTS LIST ON     =======================================================================================================================================
+//THE FRONT-FACING TUTOR CENTER PAGES           =======================================================================================================================================
+
 DatabaseHelper.prototype.getCenterStudents = function getCenterStudents(center, cb) {
     var self = this;
     var students = [];
@@ -141,9 +143,10 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
 };
 
 
-//FUNCTIONS DEDICATED TO
-//POPULATING THE ON-THE-CLOCK TUTORS LIST ON
-//THE FRONT-FACING TUTOR CENTER PAGES
+//FUNCTIONS DEDICATED TO                        =======================================================================================================================================
+//POPULATING THE ON-THE-CLOCK TUTORS LIST ON    =======================================================================================================================================
+//THE FRONT-FACING TUTOR CENTER PAGES           =======================================================================================================================================
+
 DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) {
     var self = this;
 
@@ -163,28 +166,12 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
         cb(null, centerTutors);
     });
 };
-//
-// DatabaseHelper.prototype.getClockinTime = function getClockinTime(center, cb) {
-//     var self = this;
-//
-//     self.db.query("SELECT loginTime FROM tutors, centers WHERE tutors.centerId = centers.centerId AND centers.description = \'"
-//         + center + "\';", function (err, results){
-//         if(err) {
-//             cb(err, null);
-//         }
-//         var clockinTimes = [];
-//         console.log("getClockinTime: " + JSON.stringify(results));
-//         results.forEach(function(result) {
-//             clockinTimes.push(result.loginTime);
-//         });
-//         cb(null, clockinTimes);
-//     });
-// };
 
 
-//FUNCTIONS DEDICATED TO
-//POPULATING THE TUTORING REQUESTS LIST ON
-//THE FRONT-FACING TUTOR CENTER PAGES
+//FUNCTIONS DEDICATED TO                    =======================================================================================================================================
+//POPULATING THE TUTORING REQUESTS LIST ON  =======================================================================================================================================
+//THE FRONT-FACING TUTOR CENTER PAGES       =======================================================================================================================================
+
 DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center, cb) {
     var self = this;
 
@@ -254,10 +241,11 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
 };
 
 
-//FUNCTIONS DEDICATED TO
-//UPDATING THE SIGN-IN FORM FOR
-//A STUDENT SIGNING INTO ON
-//THE FRONT-FACING TUTOR CENTER PAGES
+//FUNCTIONS DEDICATED TO                =======================================================================================================================================
+//UPDATING THE SIGN-IN FORM FOR         =======================================================================================================================================
+//A STUDENT SIGNING INTO ON             =======================================================================================================================================
+//THE FRONT-FACING TUTOR CENTER PAGES   =======================================================================================================================================
+
 DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(studentID, cb) {
     var self = this;
 
@@ -318,11 +306,12 @@ DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center
 };
 
 
-//FUNCTIONS DEDICATED TO
-//MODIFYING THE SIGNED-IN STUDENTS TABLE (login/logout) AND
-//MODIFYING THE CLOCKED-IN TUTORS TABLE (login/logout) AND
-//MODIFYING THE TUTORING REQUEST TABLE (request/accept request/cancel request) IN
-//THE BACK-END DATABASE
+//FUNCTIONS DEDICATED TO                                                            =======================================================================================================================================
+//MODIFYING THE SIGNED-IN STUDENTS TABLE (login/logout) AND                         =======================================================================================================================================
+//MODIFYING THE CLOCKED-IN TUTORS TABLE (login/logout) AND                          =======================================================================================================================================
+//MODIFYING THE TUTORING REQUEST TABLE (request/accept request/cancel request) IN   =======================================================================================================================================
+//THE BACK-END DATABASE                                                             =======================================================================================================================================
+
 DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, locationID, center, cb) {
     var self = this;
     var centerID = 0;
@@ -350,7 +339,6 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
            });
        }
     });
-    //When logging a student in, store registrationID and centerID in the studentsLog table.
 };
 
 DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, center, cb) {
@@ -431,8 +419,9 @@ DatabaseHelper.prototype.logoutTutor = function logoutTutor(studentID, center, c
 };
 
 
-//OTHER FUNCTIONS RELEVANT TO
-//MAKING VALID MySQL QUERIES
+//OTHER FUNCTIONS RELEVANT TO   =======================================================================================================================================
+//MAKING VALID MySQL QUERIES    =======================================================================================================================================
+
 DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, cb) {
     var self = this;
 
@@ -488,6 +477,7 @@ DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID
 };
 
 
-//FINAL LINE EXPORTS DBHELPER TO OTHER PORTIONS
-//OF POLYHEDRAL/DRON APPLICATION
+//FINAL LINE EXPORTS DBHELPER TO OTHER PORTIONS     =======================================================================================================================================
+//OF POLYHEDRAL/DRON APPLICATION                    =======================================================================================================================================
+
 module.exports = DatabaseHelper;
