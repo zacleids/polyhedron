@@ -100,6 +100,30 @@ block content
                 .scrollingText
                     h3 #{scrollingText.text}
 
+        #tutorSignInModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='tutorSignInModalLabel', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#tutorSignInModalLabel.modal-title Please sign in to begin tutoring
+                    .modal-body
+                        form#tutorLoginForm(role='form' onsubmit='return submitTutorSignIn();')
+                            input(type='hidden' value=centerLocation name='center')
+                            .form-group
+                                label(for='tutorSignInID') Cabrillo ID
+                                |
+                                input#tutorSignInID.form-control(type='text', placeholder='ex.: edbrau1234' name='tutorId')
+                            .form-group
+                                label(for='tutorSignInPass') Password
+                                |
+                                input#tutorSignInPass.form-control(type='password', placeholder='Password' name='tutorPassword')
+                            |
+                            button#subTutorSignIn.btn.btn-primary(type='submit') Sign In
+                            span#tutorSignInError
+
     script(src='/scripts/tutorCenterScript.js')
 
     script.
@@ -120,35 +144,39 @@ block content
             getTutors();
         });
 
-        $(document).ready(function(){
-            $('#tutorLoginForm').submit(function(){
-                submitTutorSignIn();
-            });
-        });
+        //$(document).ready(function(){
+            //$('#tutorLoginForm').submit(function() {
+                //alert("test");
+                //submitTutorSignIn();
+            //});
+        //});
 
-        function submitTutorSignIn() {
-            alert('submitTutorSignIn function called');
+        function submitTutorSignIn(e) {
+            e.preventDefault();
+            console.log('submitTutorSignIn function called');
             $.ajax({
                 type: "post",
                 url: "http://localhost:3000/tutorCenter/REST/tutorSignIn",
+                dataType: 'json',
                 data: {
                     'center': '#{centerLocation}',
                     'tutorId': $('#tutorSignInID').val(),
                     'tutorPass': $('#tutorSignInPass').val()
                 },
                 success: function (data, status) {
-                    alert('here i am')
-                    if(data['valid']){
+                    console.log('success function for ajax call');
+                    if(data['valid']) {
                         location.reload();
-                    }else{
+                    } else {
                         //alert("invalid username or password");
                         $("#tutorSignInError").html("Invalid username or password");
                     }
                 },
                 complete: function (data, status) {
-                    alert(status);
+                    alert('status: ' + status + ' data[\'valid\']:' + data['valid']);
                 }
             });
+            return false;
         }
 
         function studentSignOut(studentId) {
@@ -156,7 +184,10 @@ block content
                 type: 'post',
                 url: 'http://localhost:3000/tutorCenter/REST/studentSignOut',
                 dataType: 'json',
-                data: {'center': '#{centerLocation}', 'studentId': studentId},
+                data: {
+                    'center': '#{centerLocation}',
+                    'studentId': studentId
+                },
                 success: function (data, status) {
                     //refreshStudentTable(data['students']);
                 },

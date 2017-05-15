@@ -186,10 +186,10 @@ function createTutorCenterRouter(opts) {
         var pass = req.body.tutorPassword;
         var passHash = crypto.createHash('sha1').update(pass).digest("hex");
         console.log({
-            center:center,
+            center: center,
             userId: userId,
             pass: pass,
-            passHash:passHash
+            passHash: passHash
         });
         opts.dbHelper.validPasswordCheck(userId, passHash, function(err1, isValidPassword){
             if(err1){
