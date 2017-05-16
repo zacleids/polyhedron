@@ -450,6 +450,35 @@ DatabaseHelper.prototype.addTutoringRequest = function addTutoringRequest(studen
     });
 };
 
+DatabaseHelper.prototype.removeTutoringRequest = function removeTutoringRequest(studentID, tutorID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    var refID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            self.db.query("SELECT id FROM tutors WHERE tutorId = " + tutorID + ";", function (err2, results2) {
+                if (err2) {
+                    cb(err2);
+                }
+                else {
+                    console.log(results2);
+                    centerID = results1[0].id;
+                    refID = results2[0].id;
+                    self.db.query("DELETE FROM tutoringRequests WHERE studentId = " + parseInt(studentID) + " AND tutorRequestedId = " + refID + " AND centerId =  " + centerID + ");", function (err3) {
+                        if (err3) {
+                            cb(err3);
+                        }
+                        cb(null);
+                    });
+                }
+            });
+        }
+    });
+};
+
 
 //OTHER FUNCTIONS RELEVANT TO   =======================================================================================================================================
 //MAKING VALID MySQL QUERIES    =======================================================================================================================================
