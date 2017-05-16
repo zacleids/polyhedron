@@ -207,13 +207,13 @@ function createTutorCenterRouter(opts) {
 
                     opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
                     opts.centerSockets[centerNoSpace].emit('getTutors');
+                    res.redirect(redirectBase + '/' + center);
                 });
+            }else{
+                rerenderPage(isValidPassword);
             }
-            rerenderPage(isValidPassword);
         });
 
-
-        //res.redirect(redirectBase + '/' + center);
 
         function rerenderPage(isValidPassword){
             async.parallel({
