@@ -59,8 +59,6 @@ function createTutorCenterRouter(opts) {
         async.parallel({
             students: function (cb) {
                 opts.dbHelper.getCenterStudents(center, function (err, result) {
-                    // console.log("srudents from db: ");
-                    // console.log(result);
                     cb(err, result);
                 });
             },
@@ -180,7 +178,7 @@ function createTutorCenterRouter(opts) {
         }
     });
 
-    router.post('/REST/tutorSignIn', function (req, res, next) {
+    router.post('/:center', function (req, res, next) {
         var center = req.body.center;
         var userId = req.body.tutorId;
         var pass = req.body.tutorPassword;
@@ -195,7 +193,6 @@ function createTutorCenterRouter(opts) {
             if(err1){
                 console.error("an error occurred checking a tutor password:", err1);
             }
-            console.log({isValidPassword:isValidPassword});
 
             if(isValidPassword) {
                 opts.dbHelper.loginTutor(userId, center, function (err2) {
@@ -206,19 +203,72 @@ function createTutorCenterRouter(opts) {
                             center: center
                         });
                     }
-                    res.send({valid: isValidPassword});
                     var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
                     opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
                     opts.centerSockets[centerNoSpace].emit('getTutors');
                 });
-            }else{
-                res.send({valid: isValidPassword});
             }
+            rerenderPage(isValidPassword);
         });
 
 
         //res.redirect(redirectBase + '/' + center);
+
+        function rerenderPage(isValidPassword){
+            async.parallel({
+                students: function (cb) {
+                    opts.dbHelper.getCenterStudents(center, function (err, result) {
+                        // console.log("srudents from db: ");
+                        // console.log(result);
+                        cb(err, result);
+                    });
+                },
+                requests: function (cb) {
+                    var requests = [];
+                    var file = path.join(__dirname, '..', 'fakeData', 'requests.txt');
+                    fs.readFile(file, readrequestsData);
+
+                    function readrequestsData(err, data) {
+                        if (err) {
+                            console.log('An unknown error occurred: ', err);
+                            cb(err, null);
+                        }
+
+                        var lines = data.toString().split('\n');
+                        lines.forEach(function (line) {
+                            requests.push(makeRequest(line));
+                        });
+                        cb(null, requests);
+                    }
+                },
+                tutors: function (cb) {
+                    opts.dbHelper.getCenterTutors(center, function (err, result) {
+                        cb(err, result);
+                    });
+                },
+                requestsTable: function (cb) {
+                    cb(null, opts.tutorCenters[center].requestsTable);
+                },
+                tutorTable: function (cb) {
+                    cb(null, opts.tutorCenters[center].tutorTable);
+                },
+                scrollingText: function(cb) {
+                    cb(null, opts.tutorCenters[center].scrollingText);
+                },
+                centerLocation: function(cb) {
+                    cb(null, opts.tutorCenters[center].centerLocation);
+                },
+                locations: function (cb) {
+                    cb(null, opts.tutorCenters[center].locations);
+                },
+                showTutorError: function(cb){
+                    cb(null, !isValidPassword);
+                }
+            }, function (err, result) {
+                res.render('tutorCenter', result);
+            });
+        }
     });
 
     router.post('/REST/tutorSignOut', function (req, res, next){

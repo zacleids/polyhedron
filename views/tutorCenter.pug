@@ -110,7 +110,7 @@ block content
                             span.sr-only Close
                         h4#tutorSignInModalLabel.modal-title Please sign in to begin tutoring
                     .modal-body
-                        form#tutorLoginForm(role='form' onsubmit='return submitTutorSignIn();')
+                        form#tutorLoginForm(role='form' action='/tutorCenter/' + centerLocation method='post')
                             input(type='hidden' value=centerLocation name='center')
                             .form-group
                                 label(for='tutorSignInID') Cabrillo ID
@@ -122,7 +122,15 @@ block content
                                 input#tutorSignInPass.form-control(type='password', placeholder='Password' name='tutorPassword')
                             |
                             button#subTutorSignIn.btn.btn-primary(type='submit') Sign In
-                            span#tutorSignInError
+                            if(showTutorError)
+                                span#tutorSignInError Invalid Username or password
+
+
+    if(showTutorError)
+        script.
+            $(document).ready(function () {
+                $("#tutorSignInModal").modal();
+            });
 
     script(src='/scripts/tutorCenterScript.js')
 
@@ -143,41 +151,6 @@ block content
         socket.on('getTutors', function () {
             getTutors();
         });
-
-        //$(document).ready(function(){
-            //$('#tutorLoginForm').submit(function() {
-                //alert("test");
-                //submitTutorSignIn();
-            //});
-        //});
-
-        function submitTutorSignIn(e) {
-            e.preventDefault();
-            console.log('submitTutorSignIn function called');
-            $.ajax({
-                type: "post",
-                url: "http://localhost:3000/tutorCenter/REST/tutorSignIn",
-                dataType: 'json',
-                data: {
-                    'center': '#{centerLocation}',
-                    'tutorId': $('#tutorSignInID').val(),
-                    'tutorPass': $('#tutorSignInPass').val()
-                },
-                success: function (data, status) {
-                    console.log('success function for ajax call');
-                    if(data['valid']) {
-                        location.reload();
-                    } else {
-                        //alert("invalid username or password");
-                        $("#tutorSignInError").html("Invalid username or password");
-                    }
-                },
-                complete: function (data, status) {
-                    alert('status: ' + status + ' data[\'valid\']:' + data['valid']);
-                }
-            });
-            return false;
-        }
 
         function studentSignOut(studentId) {
             $.ajax({
