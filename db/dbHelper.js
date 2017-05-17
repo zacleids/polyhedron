@@ -279,14 +279,14 @@ DatabaseHelper.prototype.getRequestedCourses = function getRequestedCourses(cent
         if(err) {
             cb(err, null);
         }
-        var studentNames = [];
-        console.log("getRequestingStudents: " + JSON.stringify(results));
+        var courses = [];
+        console.log("getRequestedCourses: " + JSON.stringify(results));
         if(results) {
             results.forEach(function (result) {
-                studentNames.push(result.nickName);
+                courses.push(result.code);
             });
         }
-        cb(null, studentNames);
+        cb(null, courses);
     });
 };
 
@@ -299,14 +299,14 @@ DatabaseHelper.prototype.getRequestLocations = function getRequestLocations(cent
         if(err) {
             cb(err, null);
         }
-        var studentNames = [];
-        console.log("getRequestingStudents: " + JSON.stringify(results));
+        var locations = [];
+        console.log("getRequestLocations: " + JSON.stringify(results));
         if(results) {
             results.forEach(function (result) {
-                studentNames.push(result.nickName);
+                locations.push(result.description);
             });
         }
-        cb(null, studentNames);
+        cb(null, locations);
     });
 };
 
@@ -356,14 +356,14 @@ DatabaseHelper.prototype.getRequestID = function getRequestID(center, cb) {
         if(err) {
             cb(err, null);
         }
-        var requestTimes = [];
+        var requestIDs = [];
         console.log("getRequestTime: " + JSON.stringify(results));
         if(results) {
             results.forEach(function (result) {
-                requestTimes.push(result.requestTime);
+                requestIDs.push(result.id);
             });
         }
-        cb(null, requestTimes);
+        cb(null, requestIDs);
     });
 };
 
