@@ -527,7 +527,7 @@ DatabaseHelper.prototype.validAdminCheck = function validAdminCheck(userID, pass
                 }
                 var validPassword = false;
                 console.log("validUserPasswordCheck: " + JSON.stringify(results2));
-                if(results2[0].userPassword === password) {
+                if(results2[0] && results2[0].userPassword === password) {
                     validPassword = true;
                 }
                 cb(null, validPassword);
@@ -547,11 +547,9 @@ DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, 
         }
         var validUser = false;
         console.log("existingUserCheck: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            if(result) {
-                validUser = true;
-            }
-        });
+        if(results[0]) {
+            validUser = true;
+        }
         cb(null, validUser);
     });
 };
@@ -565,11 +563,9 @@ DatabaseHelper.prototype.validTutorCheck = function validTutorCheck(userID, cb) 
         }
         var validTutor = false;
         console.log("existingUserCheck: " + JSON.stringify(results));
-        results.forEach(function (result) {
-            if (result === 4) {
-                validTutor = true;
-            }
-        });
+        if(results[0] && results[0].roleId === 4) {
+            validTutor = true;
+        }
         cb(null, validTutor);
     });
 };
@@ -583,7 +579,7 @@ DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID
         }
         var validPassword = false;
         console.log("validUserPasswordCheck: " + JSON.stringify(results));
-        if(results[0].userPassword === password) {
+        if(results[0] && results[0].userPassword === password) {
             validPassword = true;
         }
         cb(null, validPassword);
