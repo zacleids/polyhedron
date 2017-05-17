@@ -156,12 +156,14 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
        }
        var centerTutors = [];
        console.log("getCenterTutors: " + JSON.stringify(results));
-       for(var i = 0; i < results.length; i++) {
-            centerTutors.push({
-                name: results[i].nickName,
-                loginTime: results[i].loginTime,
-                id: results[i].tutorId
-            });
+       if(results) {
+           for (var i = 0; i < results.length; i++) {
+               centerTutors.push({
+                   name: results[i].nickName,
+                   loginTime: results[i].loginTime,
+                   id: results[i].tutorId
+               });
+           }
        }
         cb(null, centerTutors);
     });
@@ -240,9 +242,11 @@ DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center
         }
         var tutorNames = [];
         console.log("getRequestedTutors: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            tutorNames.push(result.nickName);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                tutorNames.push(result.nickName);
+            });
+        }
         cb(null, tutorNames);
     });
 };
@@ -257,9 +261,11 @@ DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(
         }
         var studentNames = [];
         console.log("getRequestingStudents: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            studentNames.push(result.nickName);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                studentNames.push(result.nickName);
+            });
+        }
         cb(null, studentNames);
     });
 };
@@ -275,9 +281,11 @@ DatabaseHelper.prototype.getRequestedCourses = function getRequestedCourses(cent
         }
         var studentNames = [];
         console.log("getRequestingStudents: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            studentNames.push(result.nickName);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                studentNames.push(result.nickName);
+            });
+        }
         cb(null, studentNames);
     });
 };
@@ -293,9 +301,11 @@ DatabaseHelper.prototype.getRequestLocations = function getRequestLocations(cent
         }
         var studentNames = [];
         console.log("getRequestingStudents: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            studentNames.push(result.nickName);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                studentNames.push(result.nickName);
+            });
+        }
         cb(null, studentNames);
     });
 };
@@ -310,9 +320,11 @@ DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, 
         }
         var tutorNames = [];
         console.log("getAssignedTutors" + JSON.stringify(results));
-        results.forEach(function(result) {
-            tutorNames.push(result.nickName);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                tutorNames.push(result.nickName);
+            });
+        }
         cb(null, tutorNames);
     });
 };
@@ -327,9 +339,11 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
         }
         var requestTimes = [];
         console.log("getRequestTime: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            requestTimes.push(result.requestTime);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                requestTimes.push(result.requestTime);
+            });
+        }
         cb(null, requestTimes);
     });
 };
@@ -344,9 +358,11 @@ DatabaseHelper.prototype.getRequestID = function getRequestID(center, cb) {
         }
         var requestTimes = [];
         console.log("getRequestTime: " + JSON.stringify(results));
-        results.forEach(function(result) {
-            requestTimes.push(result.requestTime);
-        });
+        if(results) {
+            results.forEach(function (result) {
+                requestTimes.push(result.requestTime);
+            });
+        }
         cb(null, requestTimes);
     });
 };
