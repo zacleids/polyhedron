@@ -4,23 +4,30 @@ block content
     h1= title
     p Welcome to #{title}
     hr
-    p.
-        Here you will be able to see a basic summary of information about who you are and the tutoring center you're in,
-        and generate detailed and very customizable reports based on your specific needs. Reports are downloaded as a
-        Microsoft Excel spreadsheet file into your browsers download bin. Additionally, you can configure and customize
-        options about the tutoring center and it will be saved to your profile. Please sign in to view the admin section.
-
-    form(role='form')
-        .form-group
-            label(for='adminId') Cabrillo ID
-            |
-            input#adminID.form-control(type='text', placeholder='ex.: edbrau1234', name='adminID')
-        .form-group
-            label(for='adminPass') Password
-            |
-            input#adminPass.form-control(type='password', placeholder='Password', name='adminPass')
-        |
-        button#adminSubmit.btn.btn-primary(type='submit') Sign In
-
-    form(action='/admin/options')
-        button.btn.btn-primary(type='submit') Dev: Straight To Admin
+    .row
+        .col-md-6
+            p.
+                Here you will be able to see a basic summary of information about who you are and the tutoring center you're in,
+                and generate detailed and very customizable reports based on your specific needs. Reports are downloaded as a
+                Microsoft Excel spreadsheet file into your browsers download bin. Additionally, you can configure and customize
+                options about the tutoring center and it will be saved to your profile. Please sign in to view the admin section.
+        .col-md-6
+    .row
+        .col-md-3
+            form(role='form')
+                .form-group
+                    label(for='adminId') Cabrillo ID
+                    |
+                    input#adminID.form-control(type='text', placeholder='ex.: edbrau1234', name='adminID')
+                .form-group
+                    label(for='adminPass') Password
+                    |
+                    input#adminPass.form-control(type='password', placeholder='Password', name='adminPass')
+                |
+                button#adminSubmit.btn.btn-primary(type='submit') Sign In
+                if(showAdminError)
+                    span#tutorSignInError Invalid Username or password
+            p
+            form(action='/admin/options')
+                button.btn.btn-default(type='submit') Dev: Straight To Admin
+        .col-md-9
