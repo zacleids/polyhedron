@@ -172,7 +172,7 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
 //POPULATING THE TUTORING REQUESTS LIST ON  =======================================================================================================================================
 //THE FRONT-FACING TUTOR CENTER PAGES       =======================================================================================================================================
 
-DatabaseHelper.prototype.getCenterReqests = function getCenterStudents(center, cb) {
+DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, cb) {
     var self = this;
     var requests = [];
     async.parallel({
@@ -239,6 +239,41 @@ DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(
     var self = this;
 
     self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.studentId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var studentNames = [];
+        console.log("getRequestingStudents: " + JSON.stringify(results));
+        results.forEach(function(result) {
+            studentNames.push(result.nickName);
+        });
+        cb(null, studentNames);
+    });
+};
+
+DatabaseHelper.prototype.getRequestedCourses = function getRequestedCourses(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT code FROM student, tutoringRequests, centers, registrations, classes, classTypes WHERE student.id = tutoringRequests.studentId AND student.registrationId = registrations.id  " +
+        " AND registrations.classId = classes.id AND classes.typeId = classTypes.id AND tutoringRequests.centerId = centers.id AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var studentNames = [];
+        console.log("getRequestingStudents: " + JSON.stringify(results));
+        results.forEach(function(result) {
+            studentNames.push(result.nickName);
+        });
+        cb(null, studentNames);
+    });
+};
+
+DatabaseHelper.prototype.getRequestLocations = function getRequestLocations(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT nickName FROM users, tutoringRequests, centers, locations AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
