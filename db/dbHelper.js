@@ -172,6 +172,52 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
 //POPULATING THE TUTORING REQUESTS LIST ON  =======================================================================================================================================
 //THE FRONT-FACING TUTOR CENTER PAGES       =======================================================================================================================================
 
+DatabaseHelper.prototype.getCenterReqests = function getCenterStudents(center, cb) {
+    var self = this;
+    var requests = [];
+    async.parallel({
+            requestedTutors: function (cb1) {
+                self.getRequestedTutors(center, function (err, result) {
+                    cb1(err, result);
+                })
+            },
+            requestingStudents: function (cb1) {
+                self.getRequestingStudents(center, function (err, result) {
+                    cb1(err, result);
+                })
+            },
+            assignedTutors: function (cb1) {
+                self.getAssignedTutors(center, function (err, result) {
+                    cb1(err, result);
+                })
+            },
+            requestTimes: function (cb1) {
+                self.getRequestTime(center, function (err, result) {
+                    cb1(err, result);
+                })
+            }
+            requestIDs: function (cb1) {
+                self.getRequestID(center, function (err, result) {
+                    cb1(err, result);
+                })
+            }
+        }, function (err, results) {
+            console.log("getCenterStudents: " + JSON.stringify(results));
+            for(var i = 0; i < results["names"].length; i++) {
+                requests.push({
+                    requestedTutors: results["requestedTutors"][i],
+                    requestingStudents: results["requestingStudents"][i],
+                    assignedTutors: results["assignedTutors"][i],
+                    requestTimes: results["requestTimes"][i],
+                    requestIDs: results["requestIDs"][i]
+                });
+            }
+            cb(err, requests);
+        }
+    );
+};
+
+
 DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center, cb) {
     var self = this;
 
@@ -227,6 +273,23 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
     var self = this;
 
     self.db.query("SELECT requestTime FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+        if(err) {
+            cb(err, null);
+        }
+        var requestTimes = [];
+        console.log("getRequestTime: " + JSON.stringify(results));
+        results.forEach(function(result) {
+            requestTimes.push(result.requestTime);
+        });
+        cb(null, requestTimes);
+    });
+};
+
+DatabaseHelper.prototype.getRequestID = function getRequestID(center, cb) {
+    var self = this;
+
+    self.db.query("SELECT tutoringRequests.id FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.centerId AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
