@@ -512,6 +512,22 @@ DatabaseHelper.prototype.removeTutoringRequest = function removeTutoringRequest(
 //OTHER FUNCTIONS RELEVANT TO   =======================================================================================================================================
 //MAKING VALID MySQL QUERIES    =======================================================================================================================================
 
+DatabaseHelper.prototype.validAdminCheck = function validAdminCheck(userID, cb) {
+    var self = this;
+
+    self.db.query("SELECT roleId FROM usersRolesRef WHERE id = " + userID + ";", function (err, results) {
+        if (err) {
+            cb(err, null);
+        }
+        var validAdmin = false;
+        console.log("validAdminCheck: " + JSON.stringify(results));
+        if(results[0].roleId === 1) {
+            validAdmin = true;
+        }
+        cb(null, validAdmin);
+    });
+};
+
 DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, cb) {
     var self = this;
 
