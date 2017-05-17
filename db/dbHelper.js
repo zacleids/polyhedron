@@ -186,6 +186,16 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
                     cb1(err, result);
                 })
             },
+            requestedCourses: function (cb1) {
+                self.getRequestedCourses(center, function (err, result) {
+                    cb1(err, result);
+                })
+            },
+            requestedLocations: function (cb1) {
+                self.getRequestLocations(center, function (err, result) {
+                    cb1(err, result);
+                })
+            },
             assignedTutors: function (cb1) {
                 self.getAssignedTutors(center, function (err, result) {
                     cb1(err, result);
@@ -207,6 +217,8 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
                 requests.push({
                     requestedTutors: results["requestedTutors"][i],
                     requestingStudents: results["requestingStudents"][i],
+                    requestedCourses: results["requestedCourses"][i],
+                    requestedLocations: results["requestedLocations"][i],
                     assignedTutors: results["assignedTutors"][i],
                     requestTimes: results["requestTimes"][i],
                     requestIDs: results["requestIDs"][i]
@@ -273,7 +285,8 @@ DatabaseHelper.prototype.getRequestedCourses = function getRequestedCourses(cent
 DatabaseHelper.prototype.getRequestLocations = function getRequestLocations(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests, centers, locations AND centers.description = \'"
+    self.db.query("SELECT locations.description FROM students, locations, centers, tutoringRequests WHERE tutoringRequests.studentId = students.id AND students.locationId = locations.id AND "
+    + "students.centerId = centers.id AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
