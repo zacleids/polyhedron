@@ -224,20 +224,21 @@ block content
             var scrollbarWidth = getScrollbarWidth();
 
             // insert rule so content doesn't shift on modal
-            var sheet = document.styleSheets[0];
+            var sheet = document.styleSheets[2];
+            //alert(JSON.stringify(sheet.href));
             var selector = '.modal-open .navbar-fixed-top';
-            var rules = 'padding-right: ' + scrollbarWidth + 'px;';
+            var rules = 'padding-right: ' + scrollbarWidth + 'px';
             var index = -1;
 
-            var selector = 'html';
+            var selector = 'div';
             var rules = 'background-color: red';
-            //addCSSRule(sheet, selector, rules, index);
+            addCSSRule(sheet, selector, rules, index);
         });
 
         var socket = io.connect('/#{centerLocation}'.replace(new RegExp(' ', 'g'), ''));
         socket.on('reload', function () {
             location.reload();
-        });
+        })
 
         socket.on('getStudents', function () {
             getStudents();
