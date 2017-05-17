@@ -1,6 +1,5 @@
-.modal-open .navbar-fixed-top,
-.modal-open .navbar-fixed-bottom {
-    padding-right: 10px;
+.modal-open .navbar-fixed-top {
+    padding-right: 15px;
 }
 
 body {

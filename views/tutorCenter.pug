@@ -4,11 +4,11 @@ block content
     .container-fluid
         .row
             .col-md-2
-                p
+                //p
                     button#testSRefresh.btn.btn-default(type='submit' onclick='getStudents();') Refresh Students
-                p
+                //p
                     button#testRRefresh.btn.btn-default(type='submit' onclick='getRequests();') Refresh Requests
-                p
+                //p
                     button#testTRefresh.btn.btn-default(type='submit' onclick='getTutors();') Refresh Tutors
             .col-md-4
                 .row
@@ -224,11 +224,14 @@ block content
             var scrollbarWidth = getScrollbarWidth();
 
             // insert rule so content doesn't shift on modal
-            var sheet = window.document.styleSheets[0];
+            var sheet = document.styleSheets[0];
             var selector = '.modal-open .navbar-fixed-top';
             var rules = 'padding-right: ' + scrollbarWidth + 'px;';
             var index = -1;
-            addCSSRule(sheet, selector, rules, index);
+
+            var selector = 'html';
+            var rules = 'background-color: red';
+            //addCSSRule(sheet, selector, rules, index);
         });
 
         var socket = io.connect('/#{centerLocation}'.replace(new RegExp(' ', 'g'), ''));
@@ -275,10 +278,14 @@ block content
 
         function addCSSRule(sheet, selector, rules, index) {
             if ("insertRule" in sheet) {
+                //alert('insert rule: ' + selector + "{" + rules + "}");
                 sheet.insertRule(selector + "{" + rules + "}", index);
             }
             else if ("addRule" in sheet) {
+                //alert('add rule');
                 sheet.addRule(selector, rules, index);
+            } else {
+                //alert('no css rules applied');
             }
         }
 
