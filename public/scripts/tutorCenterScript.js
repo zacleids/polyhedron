@@ -36,11 +36,20 @@ $body.on('contextmenu', '#studentTable tbody tr', function (e) {
 $contextMenuStudent.on('click', 'a', function () {
     actionSelected = $(this).attr('data-action');
     switch(actionSelected){
+        case 'request':
+            $('#reqStudentID').attr('value', tableData);
+            $('#tutorRequestModal').modal();
+            break;
         case 'studentSignOut':
             studentSignOut(tableData);
             break;
-            $('#reqStudentID').attr('value', tableData);
-            $('#tutorRequestModal').modal();
+        case 'changeLocation':
+            $('#CLStudentID').attr('value', tableData);
+            $('#changeLocationModal').modal();
+            break;
+        case 'changeSubject':
+            $('#CSubStudentID').attr('value', tableData);
+            $('#changeSubjectModal').modal();
             break;
         default:
             alert('Student: ' + tableData + '. Action: ' + actionSelected);

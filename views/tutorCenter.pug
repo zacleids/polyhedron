@@ -146,6 +146,47 @@ block content
                             |
                             button#subTutorRequest.btn.btn-primary(type='submit') Submit Request
 
+        #changeLocationModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='changeLocationModal', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#changeLocationModalLabel.modal-title Please select a new location
+                    .modal-body
+                        form#changeLocationForm(role='form' action='changeLocation();' method='post')
+                            input#CLStudentID(type='hidden' value='' name='CLStudentID')
+                            .form-group
+                                label(for='selectNewLocation') Select a new location
+                                |
+                                select#selectNewLocation.form-control(name='selectNewLocation')
+                                    - for (var i = 0; i < locations.length; i++)
+                                        option(value=locations[i].id) #{locations[i].name}
+                            |
+                            button#subChangeLocation.btn.btn-primary(type='submit') Submit Request
+
+        #changeSubjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='changeSubjectModal', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#changeSubjectModalLabel.modal-title Please select a new subject
+                    .modal-body
+                        form#changeSubjectModalForm(role='form' action='changeSubject();' method='post')
+                            input#CSubStudentID(type='hidden' value='' name='CSubStudentID')
+                            .form-group
+                                label(for='selectNewSubject') Select a new subject
+                                |
+                                select#selectNewSubject.form-control(name='selectNewSubject')
+                                    option(value='#') -Select Subject-
+                            |
+                            button#subChangeSubject.btn.btn-primary(type='submit') Submit Request
+
 
     if(showTutorError)
         script.
