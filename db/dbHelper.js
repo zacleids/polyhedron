@@ -195,7 +195,7 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterStudents(center, c
                 self.getRequestTime(center, function (err, result) {
                     cb1(err, result);
                 })
-            }
+            },
             requestIDs: function (cb1) {
                 self.getRequestID(center, function (err, result) {
                     cb1(err, result);
