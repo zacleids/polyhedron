@@ -311,8 +311,8 @@ block content
             });
         }
 
-        function getClasses(studentId) {
-            var $selectSubject = $('#selectSubject');
+        function getClasses(studentId, selectorId) {
+            var $selectSubject = $('#' + selectorId);
             $.ajax({
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/getClasses',

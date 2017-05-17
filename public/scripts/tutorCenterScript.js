@@ -49,6 +49,7 @@ $contextMenuStudent.on('click', 'a', function () {
             break;
         case 'changeSubject':
             $('#CSubStudentID').attr('value', tableData);
+            getClasses(tableData, 'selectNewSubject');
             $('#changeSubjectModal').modal();
             break;
         default:
@@ -173,7 +174,7 @@ function handleStudent(){
         userExists($signInStudentId.val(), function(exists){
             currentStudentIdExists = exists;
             if (exists === true) {
-                getClasses($signInStudentId.val());
+                getClasses($signInStudentId.val(), 'selectSubject');
                 //make text outline green
                 changeInputOutline('lightgreen');
             }
@@ -263,8 +264,11 @@ function refreshRequestsTable(requests) {
         location = requests[row].requestedLocation;
         waitTime = requests[row].requestTime;
         request = requests[row].requestedTutor;
-        tutor = requests[row].assignedTutor;
-
+        if (requests[row].assignedTutor) {
+            tutor = requests[row].assignedTutor;
+        } else {
+            tutor = '';
+        }
         var rowData = '<tr data-id="' + requests[row].id + '">';
         rowData += ('<td>' + name + '</td>');
         rowData += ('<td>' + course + '</td>');
