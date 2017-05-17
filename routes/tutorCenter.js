@@ -371,6 +371,26 @@ function createTutorCenterRouter(opts) {
         });
     });
 
+    router.get('/REST/changeCourse', function (req, res, next){
+        var center = req.query.center;
+        var studentId = req.query.studentId;
+        var courseId = req.query.courseId;
+        opts.dbHelper.updateStudentCourse(studentId, courseId, center, function(err){
+            if(err){
+                console.error("An error occurred changing the course of a student",{
+                    error: err,
+                    center:center,
+                    studentId:studentId,
+                    courseId:courseId
+                });
+                res.status(500).send({error: 'Something failed!'});
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
+            opts.centerSockets[centerNoSpace].emit('getStudents');
+        });
+    });
+
     router.get('/REST/requestTutor', function (req, res, next){
         var center = req.query.center;
         var studentId = req.query.studentId;

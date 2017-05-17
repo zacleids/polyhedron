@@ -546,14 +546,14 @@ DatabaseHelper.prototype.updateStudentCourse = function updateStudentCourse(stud
     var self = this;
     var centerID = 0;
     var newRegID = regID;
-    self.db.query("SELECT id FROM centers WHERE centers.description = " + center + ";", function (err1, results) {
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
         if (err1) {
             cb(err1);
         }
         else {
             console.log("updateStudentCourse: " + JSON.stringify(results));
             centerID = results[0].id;
-            self.db.query("UPDATE students SET registrationID = " + parseInt(newRegID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
+            self.db.query("UPDATE students SET registrationId = " + parseInt(newRegID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
                 if (err2) {
                     cb(err2);
                 }

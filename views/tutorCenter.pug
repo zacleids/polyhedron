@@ -185,7 +185,7 @@ block content
                                 select#selectNewSubject.form-control(name='selectNewSubject')
                                     option(value='#') -Select Subject-
                             |
-                            button#subChangeSubject.btn.btn-primary(type='submit' onclick='changeSubject();') Submit Request
+                            button#subChangeSubject.btn.btn-primary(type='submit' onclick='changeCourse();') Submit Request
 
 
     if(showTutorError)
@@ -388,4 +388,25 @@ block content
                 }
             });
             $('#changeLocationModal').modal('toggle');
+        }
+
+        function changeCourse() {
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/changeCourse',
+                dataType: 'json',
+                data: {
+                    'center': '#{centerLocation}',
+                    'studentId': $('#CSubStudentID').val(),
+                    'courseId': $('#selectNewSubject').val()
+                },
+                success: function (data, status) {
+
+                },
+                complete: function (data, status) {
+                    //alert(status);
+
+                }
+            });
+            $('#changeSubjectModal').modal('toggle');
         }

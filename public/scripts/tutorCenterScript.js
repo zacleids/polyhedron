@@ -86,6 +86,7 @@ $contextMenuRequest.on('click', 'a', function () {
         case 'beginTutoring':
             break;
         case 'finishTutoring':
+            deleteRequest(tableData);
             break;
         case 'deleteRequest':
             deleteRequest(tableData);
