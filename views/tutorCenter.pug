@@ -156,7 +156,7 @@ block content
                             span.sr-only Close
                         h4#changeLocationModalLabel.modal-title Please select a new location
                     .modal-body
-                        form#changeLocationForm(role='form' action='return false;' method='post')
+                        form#changeLocationForm(role='form' action='#' onsubmit='return false;' method='post')
                             input#CLStudentID(type='hidden' value='' name='CLStudentID')
                             .form-group
                                 label(for='selectNewLocation') Select a new location
@@ -177,7 +177,7 @@ block content
                             span.sr-only Close
                         h4#changeSubjectModalLabel.modal-title Please select a new subject
                     .modal-body
-                        form#changeSubjectModalForm(role='form' action='return false;' method='post')
+                        form#changeSubjectModalForm(role='form' action='#' onsubmit='return false;' method='post')
                             input#CSubStudentID(type='hidden' value='' name='CSubStudentID')
                             .form-group
                                 label(for='selectNewSubject') Select a new subject
@@ -347,4 +347,5 @@ block content
                     //alert(status);
                 }
             });
+            location.reload();
         }
