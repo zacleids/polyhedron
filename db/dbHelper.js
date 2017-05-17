@@ -697,7 +697,7 @@ DatabaseHelper.prototype.removeTutoringRequest = function removeTutoringRequest(
         else {
             console.log(results1);
             centerID = results1[0].id;
-            self.db.query("DELETE FROM tutoringRequests WHERE id = " + parseInt(reqID) + " AND centerId =  " + centerID + ");", function (err2) {
+            self.db.query("DELETE FROM tutoringRequests WHERE id = " + parseInt(reqID) + " AND centerId =  " + centerID + ";", function (err2) {
                 if (err2) {
                     cb(err2);
                 }
