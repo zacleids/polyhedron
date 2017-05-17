@@ -226,6 +226,7 @@ block content
                 data: {'center': '#{centerLocation}'},
                 success: function (data, status) {
                     refreshTutorsTable(data['tutors']);
+                    refreshTutorsList(data['tutors']);
                 },
                 complete: function (data, status) {
                     //alert(status);

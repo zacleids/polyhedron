@@ -279,4 +279,15 @@ function refreshTutorsTable(tutors) {
 
         $tutorTableBody.append(rowData);
     }
+
+    function refreshTutorsList(tutors){
+        var $selectTutor = $('#selectTutor');
+        var $selectTutor2 = $('#selectTutor2');
+        $selectTutor.empty();
+        $selectTutor2.empty();
+        for (var i = 0; i < tutors.length; i++) {
+            $selectTutor.append("<option value='" + tutors[i].id + "'>" + tutors[i].name + '</option>');
+            $selectTutor2.append("<option value='" + tutors[i].id + "'>" + tutors[i].name + '</option>');
+        }
+    }
 }
