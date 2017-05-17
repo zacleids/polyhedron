@@ -528,25 +528,21 @@ DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, cente
     });
 };
 
-DatabaseHelper.prototype.updateStudentLocation = function updateStudentLocation(studentID, location, center, cb) {
+DatabaseHelper.prototype.updateStudentLocation = function updateStudentLocation(studentID, locationID, center, cb) {
     var self = this;
     var centerID = 0;
-    var locationID = 0;
     self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
         if (err1) {
             cb(err1);
         }
         else {
-            self.db.query("SELECT id FROM locations WHERE locations.description = \'" + location + "\';", function (err2, results2) {
-                console.log("updateStudentLocation: " + JSON.stringify(results));
-                centerID = results1[0].id;
-                locationID = results2[0].id;
-                self.db.query("UPDATE students SET locationId = " + parseInt(locationID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
-                    if (err3) {
-                        cb(err3);
-                    }
-                    cb(null);
-                });
+            console.log("updateStudentLocation: " + JSON.stringify(results));
+            centerID = results1[0].id;
+            self.db.query("UPDATE students SET locationId = " + parseInt(locationID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
+                if (err3) {
+                    cb(err3);
+                }
+                cb(null);
             });
         }
     });
@@ -555,24 +551,19 @@ DatabaseHelper.prototype.updateStudentLocation = function updateStudentLocation(
 DatabaseHelper.prototype.updateStudentCourse = function updateStudentCourse(studentID, regID, center, cb) {
     var self = this;
     var centerID = 0;
-    var newRegID = 0;
-    var newCourseName = "";
-    self.db.query("SELECT id FROM centers WHERE registrations.userId = \'" + studentID +
-        "\' AND registrations.classId = classes.id AND classTypes.id = classes.typeId;", function (err1, results) {
+    var newRegID = regID;
+    self.db.query("SELECT id FROM centers WHERE centers.description = " + center + ";", function (err1, results) {
         if (err1) {
             cb(err1);
         }
         else {
-            self.db.query("SELECT registrations.id, classTypes.code FROM locations WHERE locations.description = \'" + location + "\';", function (err2, results2) {
-                console.log("updateStudentLocation: " + JSON.stringify(results));
-                centerID = results1[0].id;
-                locationID = results2[0].id;
-                self.db.query("UPDATE students SET locationId = " + parseInt(locationID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
-                    if (err3) {
-                        cb(err3);
-                    }
-                    cb(null);
-                });
+            console.log("updateStudentCourse: " + JSON.stringify(results));
+            centerID = results[0].id;
+            self.db.query("UPDATE students SET registrationID = " + parseInt(newRegID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
+                if (err3) {
+                    cb(err3);
+                }
+                cb(null);
             });
         }
     });
