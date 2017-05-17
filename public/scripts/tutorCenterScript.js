@@ -84,6 +84,8 @@ $contextMenuRequest.on('click', 'a', function () {
     alert('Request: ' + tableData + '. Action: ' + actionSelected);
     switch (actionSelected) {
         case 'beginTutoring':
+            $('#BTRequestID').attr('value', tableData);
+            $('#beginTutoringModal').modal();
             break;
         case 'finishTutoring':
             deleteRequest(tableData);

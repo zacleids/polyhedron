@@ -187,6 +187,26 @@ block content
                             |
                             button#subChangeSubject.btn.btn-primary(type='submit' onclick='changeCourse();') Submit Request
 
+        #beginTutoringModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='beginTutoringModal', aria-hidden='true')
+            .modal-dialog
+                .modal-content
+                    .modal-header
+                        button.close(type='button', data-dismiss='modal')
+                            span(aria-hidden='true') &times;
+                            |
+                            span.sr-only Close
+                        h4#beginTutoringModalLabel.modal-title Which tutor are you?
+                    .modal-body
+                        form#beginTutoringModalForm(role='form' action='#' onsubmit='return false;' method='post')
+                            input#BTRequestID(type='hidden' value='' name='BTRequestID')
+                            .form-group
+                                label(for='selectNewSubject') Select a tutor
+                                |
+                                select#selectTutor2.form-control(name='selectTutor2')
+                                    option(value='#') -Select Tutor-
+                            |
+                            button#subSelectTutor.btn.btn-primary(type='submit' onclick='updateRequest();') Begin Tutoring
+
 
     if(showTutorError)
         script.
@@ -197,6 +217,18 @@ block content
     script(src='/scripts/tutorCenterScript.js')
 
     script.
+        $(document).ready(function () {
+            // Get the scrollbar width
+            var scrollbarWidth = getScrollbarWidth();
+
+            // insert rule so content doesn't shift on modal
+            var sheet = window.document.styleSheets[0];
+            var selector = '.modal-open .navbar-fixed-top';
+            var rules = 'padding-right: ' + scrollbarWidth + 'px;';
+            var index = -1;
+            addCSSRule(sheet, selector, rules, index);
+        });
+
         var socket = io.connect('/#{centerLocation}'.replace(new RegExp(' ', 'g'), ''));
         socket.on('reload', function () {
             location.reload();
@@ -213,6 +245,40 @@ block content
         socket.on('getTutors', function () {
             getTutors();
         });
+
+        function getScrollbarWidth() {
+            var outer = document.createElement("div");
+            outer.style.visibility = "hidden";
+            outer.style.width = "100px";
+            outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+            document.body.appendChild(outer);
+
+            var widthNoScroll = outer.offsetWidth;
+            // force scrollbars
+            outer.style.overflow = "scroll";
+
+            // add innerdiv
+            var inner = document.createElement("div");
+            inner.style.width = "100%";
+            outer.appendChild(inner);
+
+            var widthWithScroll = inner.offsetWidth;
+
+            // remove divs
+            outer.parentNode.removeChild(outer);
+
+            return widthNoScroll - widthWithScroll;
+        }
+
+        function addCSSRule(sheet, selector, rules, index) {
+            if ("insertRule" in sheet) {
+                sheet.insertRule(selector + "{" + rules + "}", index);
+            }
+            else if ("addRule" in sheet) {
+                sheet.addRule(selector, rules, index);
+            }
+        }
 
         function studentSignOut(studentId) {
             $.ajax({
