@@ -133,14 +133,14 @@ block content
                             span(aria-hidden='true') &times;
                             |
                             span.sr-only Close
-                        h4#tutorRequestModalLabel.modal-title Please sign in to begin tutoring
+                        h4#tutorRequestModalLabel.modal-title Please request a tutor
                     .modal-body
                         form#tutorRequestForm(role='form' action='requestTutor();' method='post')
-                            input(type='hidden' value=centerLocation name='center')
+                            input#reqStudentID(type='hidden' value='' name='reqStudentID')
                             .form-group
                                 label(for='selectTutor') Select a tutor
                                 |
-                                input#selectTutor.form-control(name='selectTutor')
+                                select#selectTutor.form-control(name='selectTutor')
                                     - for (var i = 0; i < tutors.length; i++)
                                         option(value=tutors[i].id) #{tutors[i].name}
                             |
