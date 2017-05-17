@@ -450,7 +450,7 @@ DatabaseHelper.prototype.addTutoringRequest = function addTutoringRequest(studen
     });
 };
 
-DatabaseHelper.prototype.updateTutoringRequest = function addTutoringRequest(requestId, tutorID, center, cb) {
+DatabaseHelper.prototype.updateTutoringRequest = function updateTutoringRequest(requestId, tutorID, center, cb) {
     var self = this;
     var centerID = 0;
     var refID = 0;
