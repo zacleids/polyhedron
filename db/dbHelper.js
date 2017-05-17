@@ -515,12 +515,12 @@ DatabaseHelper.prototype.removeTutoringRequest = function removeTutoringRequest(
 DatabaseHelper.prototype.validAdminCheck = function validAdminCheck(userID, password, cb) {
     var self = this;
 
-    self.db.query("SELECT roleId FROM usersRolesRef WHERE id = " + userID + ";", function (err1, results1) {
+    self.db.query("SELECT roleId FROM usersRolesRef WHERE userId = " + userID + ";", function (err1, results1) {
         if (err1) {
             cb(err1, null);
         }
         var validAdmin = false;
-        console.log("validAdminCheck: " + JSON.stringify(results));
+        console.log("validAdminCheck: " + JSON.stringify(results1));
         if(results1[0].roleId === 1) {
             self.db.query("SELECT userPassword FROM users WHERE id = " + userID + ";", function (err2, results2) {
                 if (err2) {
