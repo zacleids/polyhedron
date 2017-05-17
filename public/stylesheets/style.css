@@ -7,7 +7,10 @@ body {
 a {
     color: #00B7FF;
 }
-
+#tutorSignInError {
+    color: red;
+    margin-left:10px;
+}
 #tutorSignInButton {
     /*height: 70px;*/
     margin-left: 10px;
