@@ -175,8 +175,8 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
 DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests WHERE users.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = \'"
-        + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
+    self.db.query("SELECT nickName FROM users, tutors, centers, tutoringRequests WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = centers.id AND " +
+    "centers.description = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
         }
@@ -192,7 +192,7 @@ DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center
 DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutors, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorRequestedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.studentId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
@@ -209,7 +209,7 @@ DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(
 DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT nickName FROM users, tutors, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
@@ -439,6 +439,35 @@ DatabaseHelper.prototype.addTutoringRequest = function addTutoringRequest(studen
                     centerID = results1[0].id;
                     refID = results2[0].id;
                     self.db.query("INSERT INTO tutoringRequests VALUES(null, " + parseInt(studentID) + ", convert_tz(current_timestamp(), '+00:00', '-07:00'), null, null, " + refID + ", null, null, " + centerID + ");", function (err3) {
+                        if (err3) {
+                            cb(err3);
+                        }
+                        cb(null);
+                    });
+                }
+            });
+        }
+    });
+};
+
+DatabaseHelper.prototype.updateTutoringRequest = function addTutoringRequest(requestId, tutorID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    var refID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            self.db.query("SELECT id FROM tutors WHERE tutorId = " + tutorID + ";", function (err2, results2) {
+                if (err2) {
+                    cb(err2);
+                }
+                else {
+                    console.log(results2);
+                    centerID = results1[0].id;
+                    refID = results2[0].id;
+                    self.db.query("UPDATE tutoringRequests SET assignedTutorId = " + refID + ", tutoringStarted = convert_tz(current_timestamp(), '+00:00', '-07:00') WHERE id = " + requestId + ");", function (err3) {
                         if (err3) {
                             cb(err3);
                         }
