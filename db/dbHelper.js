@@ -414,7 +414,7 @@ DatabaseHelper.prototype.getRequestID = function getRequestID(center, cb) {
 DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(studentID, cb) {
     var self = this;
 
-    self.db.query("SELECT classTypes.code, registrations.id from registrations, classes, classTypes WHERE registrations.userId = \'" + studentID +
+    self.db.query("SELECT classTypes.code, registrations.id FROM registrations, classes, classTypes WHERE registrations.userId = \'" + studentID +
     "\' AND registrations.classId = classes.id AND classTypes.id = classes.typeId;", function (err, results) {
         if (err) {
             cb(err, null);
@@ -509,6 +509,50 @@ DatabaseHelper.prototype.loginStudent = function loginStudent(studentID, regID, 
 };
 
 DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, center, cb) {
+    var self = this;
+    var centerID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            console.log("logoutStudent: " + JSON.stringify(results));
+            centerID = results[0].id;
+            self.db.query("DELETE FROM students WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
+                if (err2) {
+                    cb(err2);
+                }
+                cb(null);
+            });
+        }
+    });
+};
+
+DatabaseHelper.prototype.updateStudentLocation = function updateStudentLocation(studentID, location, center, cb) {
+    var self = this;
+    var centerID = 0;
+    var locationID = 0;
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
+        if (err1) {
+            cb(err1);
+        }
+        else {
+            self.db.query("SELECT id FROM locations WHERE locations.description = \'" + location + "\';", function (err2, results2) {
+                console.log("updateStudentLocation: " + JSON.stringify(results));
+                centerID = results1[0].id;
+                locationID = results2[0].id;
+                self.db.query("UPDATE students SET locationId = " + parseInt(locationID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
+                    if (err3) {
+                        cb(err3);
+                    }
+                    cb(null);
+                });
+            });
+        }
+    });
+};
+
+DatabaseHelper.prototype.updateStudentCourse = function updateStudentCourse(studentID, course, center, cb) {
     var self = this;
     var centerID = 0;
     self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
