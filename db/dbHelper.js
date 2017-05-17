@@ -142,6 +142,11 @@ DatabaseHelper.prototype.getCenterStudentLocations = function getCenterStudentLo
     });
 };
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
 
 //FUNCTIONS DEDICATED TO                        =======================================================================================================================================
 //POPULATING THE ON-THE-CLOCK TUTORS LIST ON    =======================================================================================================================================
@@ -158,9 +163,24 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
        console.log("getCenterTutors: " + JSON.stringify(results));
        if(results) {
            for (var i = 0; i < results.length; i++) {
+               var logedInTime = new Date(results[i].loginTime);
+               var end = " am";
+               var hour = logedInTime.getHours();
+               var min = logedInTime.getMinutes();
+               if(hour > 12){
+                   hour -=12;
+                   end = " pm"
+               }
+               var timeToDisplay = hour.toString() + ":" + pad(min, 2) + end;
+               console.log("time info",{
+                   logedInTime:logedInTime,
+                   hour:hour,
+                   min:min,
+                   timeToDisplay:timeToDisplay
+               });
                centerTutors.push({
                    name: results[i].nickName,
-                   loginTime: results[i].loginTime,
+                   loginTime: timeToDisplay,
                    id: results[i].tutorId
                });
            }
@@ -215,14 +235,19 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
             }
         }, function (err, results) {
             console.log("getCenterStudents: " + JSON.stringify(results));
+            var currentTime = new Date();
             for(var i = 0; i < results["requestedTutors"].length; i++) {
+                var requestTime = new Date(results["requestTimes"][i]);
+                var timeDiff = currentTime - requestTime;
+                var minDiff = Math.round(((timeDiff % 86400000) % 3600000) / 60000); //get minutes
+                var numMins = minDiff + " min(s)";
                 requests.push({
                     requestedTutor: results["requestedTutors"][i],
                     requestingStudent: results["requestingStudents"][i],
                     requestedCourse: results["requestedCourses"][i],
                     requestedLocation: results["requestedLocations"][i],
                     assignedTutor: results["assignedTutors"][i],
-                    requestTime: results["requestTimes"][i],
+                    requestTime: numMins,
                     id: results["requestIDs"][i]
                 });
             }
