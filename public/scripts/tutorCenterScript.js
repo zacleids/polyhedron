@@ -69,6 +69,15 @@ $body.on('contextmenu', '#requestsTable tbody tr', function (e) {
 $contextMenuRequest.on('click', 'a', function () {
     actionSelected = $(this).attr('data-action');
     alert('Request: ' + tableData + '. Action: ' + actionSelected);
+    switch (actionSelected) {
+        case 'beginTutoring':
+            $('#tutorRequestModal').modal();
+            break;
+        case 'finishTutoring':
+            break;
+        case 'deleteRequest':
+            break;
+    }
     $contextMenuRequest.hide();
 });
 
