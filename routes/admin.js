@@ -4,6 +4,7 @@ var fs = require('fs');
 var async = require('async');
 var excelBuilder = require('msexcel-builder');
 var ExcelWorkbookGenerator = require('../excelGenerator.js');
+var crypto = require('crypto');
 
 
 var redirectBase = 'http://localhost:3000/admin';
@@ -27,33 +28,28 @@ function createAdminRouter(opts) {
     
     router.get('/', function (req, res, next) {
         res.render('admin/admin', {
-            title: 'Admin',
-            centerLocation: opts.centerLocation
+            title: 'Admin'
         });
     });
 
-    router.post('/REST/adminSignIn', function (req, res, next) {
-        var studentId = req.body.studentId;
-        var pass = req.body.password;
+    router.post('/', function (req, res, next) {
+        var userId = req.body.adminID;
+        var pass = req.body.adminPass;
         var passHash = crypto.createHash('sha1').update(pass).digest("hex");
-        opts.dbHelper.validPasswordCheck(studentId, passHash, function(err1, isValidPassword){
+        opts.dbHelper.validAdminCheck(userId, passHash, function(err1, isValidPassword){
             if(err1){
                 console.error("an error occurred checking a admin password:", err1);
             }
+            console.log({isValidPassword:isValidPassword});
             if(isValidPassword) {
-                opts.dbHelper.loginTutor(studentId, center, function (err2) {
-                    if (err2) {
-                        console.error("an error occurred logging a admin in. info: ", {
-                            err: err2,
-                            studentId: studentId,
-                        });
-                    }
+                res.redirect(redirectBase + '/options');
+            }else{
+                res.render('admin/admin', {
+                    title: 'Admin',
+                    showAdminError: true
                 });
             }
         });
-
-
-        res.redirect(redirectBase);
     });
 
     router.post('/REST/adminSignOut', function (req, res, next){

@@ -2,7 +2,6 @@ extends ../layout
 
 block content
     h1= title
-    p Welcome to #{title}
     hr
     .row
         .col-md-6
@@ -14,7 +13,7 @@ block content
         .col-md-6
     .row
         .col-md-3
-            form(role='form')
+            form(role='form' action='/admin' method='post')
                 .form-group
                     label(for='adminId') Cabrillo ID
                     |

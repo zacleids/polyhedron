@@ -519,7 +519,6 @@ DatabaseHelper.prototype.validAdminCheck = function validAdminCheck(userID, pass
         if (err1) {
             cb(err1, null);
         }
-        var validAdmin = false;
         console.log("validAdminCheck: " + JSON.stringify(results1));
         if(results1[0].roleId === 1) {
             self.db.query("SELECT userPassword FROM users WHERE id = " + userID + ";", function (err2, results2) {
@@ -533,8 +532,9 @@ DatabaseHelper.prototype.validAdminCheck = function validAdminCheck(userID, pass
                 }
                 cb(null, validPassword);
             });
+        }else{
+            cb(null, false);
         }
-        cb(null, validAdmin);
     });
 };
 
