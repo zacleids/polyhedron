@@ -60,7 +60,7 @@ block content
                                                         td #{requests[i].requestedLocation}
                                                         td #{requests[i].requestTime}
                                                         td #{requests[i].requestedTutor}
-                                                        td #{assignedTutor[i].tutor}
+                                                        td #{requests[i].assignedTutor}
                                         ul#requestContextMenu.dropdown-menu
                                             li
                                                 a(data-action='beginTutoring') Begin Tutoring
@@ -135,7 +135,7 @@ block content
                             span.sr-only Close
                         h4#tutorRequestModalLabel.modal-title Please request a tutor
                     .modal-body
-                        form#tutorRequestForm(role='form' action='return false;' method='post')
+                        form#tutorRequestForm(role='form' action='return false;' onsubmit="return false;" method='post')
                             input#reqStudentID(type='hidden' value='' name='reqStudentID')
                             .form-group
                                 label(for='selectTutor') Select a tutor
@@ -330,21 +330,18 @@ block content
             });
         }
 
-        function requestTutor(studentId){
+        function requestTutor(){
             $.ajax({
                 type: 'get',
                 url: 'http://localhost:3000/tutorCenter/REST/requestTutor',
                 dataType: 'json',
                 data: {
                     'center': '#{centerLocation}',
-                    'studentId': studentId,
+                    'studentId': $('#reqStudentID').val(),
                     'tutorId': $('#selectTutor').val()
                 },
                 success: function (data, status) {
-                    $selectSubject.html("<option value='#'>-Select Subject-</option>");
-                    for (var i = 0; i < data['classes'].length; i++) {
-                        $selectSubject.append("<option value='" + data['classes'][i].id + "'>" + data['classes'][i].name + '</option>');
-                    }
+
                 },
                 complete: function (data, status) {
                     //alert(status);

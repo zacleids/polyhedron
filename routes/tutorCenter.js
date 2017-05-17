@@ -38,7 +38,10 @@ function createTutorCenterRouter(opts) {
         opts.dbHelper.getTutorCenters(sendCenters);
         function sendCenters(err, centers) {
             if(err){
-                console.error("Whoopsy daisy, something went wrong!" + err.message);
+                console.error("an error occurred rendering the tutor center selector page: ", {
+                    err: err
+                });
+                res.status(500).send({error: 'Something failed!'});
                 return;
             }
             centers.sort();
@@ -88,6 +91,14 @@ function createTutorCenterRouter(opts) {
                 cb(null, opts.tutorCenters[center].locations);
             }
         }, function (err, result) {
+            if(err){
+                console.error("an error occurred rendering the tutoring center after a GET request: ", {
+                    err: err,
+                    center: center
+                });
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
             res.render('tutorCenter', result);
         });
     });
@@ -106,6 +117,8 @@ function createTutorCenterRouter(opts) {
                     locationId: locationId,
                     center: center
                 });
+                res.status(500).send({error: 'Something failed!'});
+                return;
             }
             var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
@@ -127,6 +140,8 @@ function createTutorCenterRouter(opts) {
                     studentId:studentId,
                     center: center
                 });
+                res.status(500).send({error: 'Something failed!'});
+                return;
             }
             var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
             opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
@@ -138,6 +153,10 @@ function createTutorCenterRouter(opts) {
         var center = req.query.center;
         opts.dbHelper.getCenterStudents(center, function(err, result){
             if(err){
+                console.error("an error occurred getting the students of a center:", {
+                    err:err,
+                    center: center
+                });
                 res.status(500).send({error: 'Something failed!'});
                 return;
             }
@@ -146,23 +165,18 @@ function createTutorCenterRouter(opts) {
     });
 
     router.get('/REST/getRequests', function (req, res, next) {
-        var requests = [];
-        var file = path.join(__dirname, '..', 'fakeData', 'requests.txt');
-        fs.readFile(file, readRequestData);
-
-        function readRequestData(err, data) {
-            if (err) {
-                console.log('An unknown error occurred: ', err);
+        var center = req.query.center;
+        opts.dbHelper.getCenterReqests(center, function(err, result){
+            if(err){
+                console.error("an error occurred getting the requests of a center:", {
+                    err:err,
+                    center: center
+                });
+                res.status(500).send({error: 'Something failed!'});
                 return;
             }
-
-            var lines = data.toString().split('\n');
-            lines.forEach(function (line) {
-                requests.push(makeRequest(line));
-            });
-
-            res.send({requests:requests});
-        }
+            res.send({requests:result});
+        });
     });
 
     router.post('/:center', function (req, res, next) {
@@ -172,7 +186,13 @@ function createTutorCenterRouter(opts) {
         var passHash = crypto.createHash('sha1').update(pass).digest("hex");
         opts.dbHelper.validPasswordCheck(userId, passHash, function(err1, isValidPassword){
             if(err1){
-                console.error("an error occurred checking a tutor password:", err1);
+                console.error("an error occurred checking a tutor password:", {
+                    err:err1,
+                    userId: userId,
+                    center: center
+                });
+                res.status(500).send({error: 'Something failed!'});
+                return;
             }
 
             if(isValidPassword) {
@@ -183,6 +203,8 @@ function createTutorCenterRouter(opts) {
                             userId: userId,
                             center: center
                         });
+                        res.status(500).send({error: 'Something failed!'});
+                        return;
                     }
                     var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
 
@@ -234,6 +256,15 @@ function createTutorCenterRouter(opts) {
                     cb(null, !isValidPassword);
                 }
             }, function (err, result) {
+                if(err){
+                    console.error("an error occurred rendering the tutoring center after a POST request: ", {
+                        err: err,
+                        userId: userId,
+                        center: center
+                    });
+                    res.status(500).send({error: 'Something failed!'});
+                    return;
+                }
                 res.render('tutorCenter', result);
             });
         }
@@ -249,6 +280,8 @@ function createTutorCenterRouter(opts) {
                     userId:userId,
                     center: center
                 });
+                res.status(500).send({error: 'Something failed!'});
+                return;
             }
             var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
             opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
@@ -260,6 +293,10 @@ function createTutorCenterRouter(opts) {
         var center = req.query.center;
         opts.dbHelper.getCenterTutors(center, function(err, result){
             if(err){
+                console.error("An error occurred getting the tutors of a center",{
+                    error: err,
+                    center:center
+                });
                 res.status(500).send({error: 'Something failed!'});
                 return;
             }
@@ -271,6 +308,10 @@ function createTutorCenterRouter(opts) {
         var center = req.query.center;
         opts.dbHelper.getCenterReqests(center, function(err, result){
             if(err){
+                console.error("An error occurred getting the requests of a center",{
+                    error: err,
+                    center:center
+                });
                 res.status(500).send({error: 'Something failed!'});
                 return;
             }
@@ -283,6 +324,10 @@ function createTutorCenterRouter(opts) {
         console.log("request to see if " + studentId + " exists");
         opts.dbHelper.existingUserCheck(studentId, function(err, doesExist){
             if(err){
+                console.error("An error occurred checking if a user exists",{
+                    error: err,
+                    studentId:studentId
+                });
                 res.status(500).send({error: 'Something failed!'});
                 return;
             }
@@ -295,10 +340,40 @@ function createTutorCenterRouter(opts) {
         var studentId = req.query.studentId;
         opts.dbHelper.getStudentsClassInfo(studentId, function(err, classes){
             if(err){
+                console.error("An error occurred getting the classes of a student",{
+                    error: err,
+                    studentId:studentId
+                });
                 res.status(500).send({error: 'Something failed!'});
                 return;
             }
             res.send({classes: classes});
+        });
+    });
+
+    router.get('/REST/requestTutor', function (req, res, next){
+        var center = req.query.center;
+        var studentId = req.query.studentId;
+        var tutorId = req.query.tutorId;
+        console.log("received request for a tutor", {
+            center:center,
+            studentId:studentId,
+            tutorId:tutorId
+        });
+        opts.dbHelper.addTutoringRequest(studentId, tutorId, center, function(err){
+            if(err){
+                console.error("An error occurred processing a request for a tutor",{
+                    error: err,
+                    center:center,
+                    studentId:studentId,
+                    tutorId:tutorId
+                });
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
+            opts.centerSockets[centerNoSpace].emit('getTutors');
         });
     });
 
