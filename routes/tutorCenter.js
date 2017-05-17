@@ -304,21 +304,6 @@ function createTutorCenterRouter(opts) {
         });
     });
 
-    router.get('/REST/getRequests', function (req, res, next) {
-        var center = req.query.center;
-        opts.dbHelper.getCenterReqests(center, function(err, result){
-            if(err){
-                console.error("An error occurred getting the requests of a center",{
-                    error: err,
-                    center:center
-                });
-                res.status(500).send({error: 'Something failed!'});
-                return;
-            }
-            res.send({tutors:result});
-        });
-    });
-
     router.get('/REST/userExists', function (req, res, next){
         var studentId = req.query.studentId;
         console.log("request to see if " + studentId + " exists");
