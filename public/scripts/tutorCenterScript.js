@@ -81,7 +81,6 @@ $body.on('contextmenu', '#requestsTable tbody tr', function (e) {
 // hide the menu when you click a link in menu
 $contextMenuRequest.on('click', 'a', function () {
     actionSelected = $(this).attr('data-action');
-    alert('Request: ' + tableData + '. Action: ' + actionSelected);
     switch (actionSelected) {
         case 'beginTutoring':
             $('#BTRequestID').attr('value', tableData);

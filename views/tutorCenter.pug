@@ -204,6 +204,8 @@ block content
                                 |
                                 select#selectTutor2.form-control(name='selectTutor2')
                                     option(value='#') -Select Tutor-
+                                    - for (var i = 0; i < tutors.length; i++)
+                                        option(value=tutors[i].id) #{tutors[i].name}
                             |
                             button#subSelectTutor.btn.btn-primary(type='submit' onclick='updateRequest();') Begin Tutoring
 
@@ -433,6 +435,26 @@ block content
                     //alert(status);
                 }
             });
+        }
+
+        function updateRequest(){
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/updateRequest',
+                dataType: 'json',
+                data: {
+                    'center': '#{centerLocation}',
+                    'requestId': $('#BTRequestID').val(),
+                    'tutorId': $('#selectTutor2').val()
+                },
+                success: function (data, status) {
+
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
+            $('#beginTutoringModal').modal('toggle');
         }
 
         function changeLocation(){

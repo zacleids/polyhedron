@@ -416,6 +416,32 @@ function createTutorCenterRouter(opts) {
         });
     });
 
+    router.get('/REST/updateRequest', function (req, res, next){
+        var center = req.query.center;
+        var tutorId = req.query.tutorId;
+        var requestId = req.query.requestId;
+        console.log("update request info", {
+            center:center,
+            tutorId:tutorId,
+            requestId:requestId
+        });
+        opts.dbHelper.updateTutoringRequest(requestId, tutorId, center, function(err){
+            if(err){
+                console.error("An error occurred removing a request for a tutor",{
+                    error: err,
+                    center:center,
+                    tutorId:tutorId,
+                    requestId:requestId
+                });
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getRequests');
+            opts.centerSockets[centerNoSpace].emit('getRequests');
+        });
+    });
+
     return router;
 }
 

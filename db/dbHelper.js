@@ -669,7 +669,7 @@ DatabaseHelper.prototype.updateTutoringRequest = function updateTutoringRequest(
                     console.log(results2);
                     centerID = results1[0].id;
                     refID = results2[0].id;
-                    self.db.query("UPDATE tutoringRequests SET assignedTutorId = " + refID + ", tutoringStarted = convert_tz(current_timestamp(), '+00:00', '-07:00') WHERE id = " + requestId + ");", function (err3) {
+                    self.db.query("UPDATE tutoringRequests SET tutorAssignedId = " + refID + ", tutoringStarted = convert_tz(current_timestamp(), '+00:00', '-07:00') WHERE id = " + requestId + ";", function (err3) {
                         if (err3) {
                             cb(err3);
                         }
