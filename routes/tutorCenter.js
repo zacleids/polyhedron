@@ -63,22 +63,9 @@ function createTutorCenterRouter(opts) {
                 });
             },
             requests: function (cb) {
-                var requests = [];
-                var file = path.join(__dirname, '..', 'fakeData', 'requests.txt');
-                fs.readFile(file, readrequestsData);
-
-                function readrequestsData(err, data) {
-                    if (err) {
-                        console.log('An unknown error occurred: ', err);
-                        cb(err, null);
-                    }
-
-                    var lines = data.toString().split('\n');
-                    lines.forEach(function (line) {
-                        requests.push(makeRequest(line));
-                    });
-                    cb(null, requests);
-                }
+                opts.dbHelper.getCenterReqests(center, function (err, result) {
+                    cb(err, result);
+                });
             },
             tutors: function (cb) {
                 opts.dbHelper.getCenterTutors(center, function (err, result) {
@@ -219,22 +206,9 @@ function createTutorCenterRouter(opts) {
                     });
                 },
                 requests: function (cb) {
-                    var requests = [];
-                    var file = path.join(__dirname, '..', 'fakeData', 'requests.txt');
-                    fs.readFile(file, readrequestsData);
-
-                    function readrequestsData(err, data) {
-                        if (err) {
-                            console.log('An unknown error occurred: ', err);
-                            cb(err, null);
-                        }
-
-                        var lines = data.toString().split('\n');
-                        lines.forEach(function (line) {
-                            requests.push(makeRequest(line));
-                        });
-                        cb(null, requests);
-                    }
+                    opts.dbHelper.getCenterReqests(center, function (err, result) {
+                        cb(err, result);
+                    });
                 },
                 tutors: function (cb) {
                     opts.dbHelper.getCenterTutors(center, function (err, result) {
@@ -285,6 +259,17 @@ function createTutorCenterRouter(opts) {
     router.get('/REST/getTutors', function (req, res, next) {
         var center = req.query.center;
         opts.dbHelper.getCenterTutors(center, function(err, result){
+            if(err){
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
+            res.send({tutors:result});
+        });
+    });
+
+    router.get('/REST/getRequests', function (req, res, next) {
+        var center = req.query.center;
+        opts.dbHelper.getCenterReqests(center, function(err, result){
             if(err){
                 res.status(500).send({error: 'Something failed!'});
                 return;

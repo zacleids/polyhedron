@@ -39,7 +39,6 @@ $contextMenuStudent.on('click', 'a', function () {
         case 'studentSignOut':
             studentSignOut(tableData);
             break;
-        case 'request':
             $('#reqStudentID').attr('value', tableData);
             $('#tutorRequestModal').modal();
             break;
@@ -58,7 +57,7 @@ $body.on('contextmenu', '#requestsTable tbody tr', function (e) {
     $contextMenuTutor.hide();
 
     // get which row they clicked on
-    tableData = $(this).attr('data-name');
+    tableData = $(this).attr('data-id');
 
     // display this context menu
     $contextMenuRequest.css({
@@ -250,14 +249,14 @@ function refreshRequestsTable(requests) {
     var tutor = '';
 
     for (var row = 0; row < requests.length; row++) {
-        name = requests[row].name;
-        course = requests[row].course;
-        location = requests[row].location;
-        waitTime = requests[row].waitTime;
-        request = requests[row].request;
-        tutor = requests[row].tutor;
+        name = requests[row].requestingStudent;
+        course = requests[row].requestedCourse;
+        location = requests[row].requestedLocation;
+        waitTime = requests[row].requestTime;
+        request = requests[row].requestedTutor;
+        tutor = requests[row].assignedTutor;
 
-        var rowData = '<tr>';
+        var rowData = '<tr data-id="' + requests[row].id + '">';
         rowData += ('<td>' + name + '</td>');
         rowData += ('<td>' + course + '</td>');
         rowData += ('<td>' + location + '</td>');

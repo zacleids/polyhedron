@@ -54,13 +54,13 @@ block content
                                                 th Tutor
                                             tbody
                                                 - for(var i = 0; i < requests.length; i++)
-                                                    tr(data-name=requests[i].name)
-                                                        td #{requests[i].name}
-                                                        td #{requests[i].course}
-                                                        td #{requests[i].location}
-                                                        td #{requests[i].waitTime}
-                                                        td #{requests[i].request}
-                                                        td #{requests[i].tutor}
+                                                    tr(data-id=requests[i].id)
+                                                        td #{requests[i].requestingStudent}
+                                                        td #{requests[i].requestedCourse}
+                                                        td #{requests[i].requestedLocation}
+                                                        td #{requests[i].requestTime}
+                                                        td #{requests[i].requestedTutor}
+                                                        td #{assignedTutor[i].tutor}
                                         ul#requestContextMenu.dropdown-menu
                                             li
                                                 a(data-action='beginTutoring') Begin Tutoring
@@ -277,6 +277,28 @@ block content
                 url: 'http://localhost:3000/tutorCenter/REST/getClasses',
                 dataType: 'json',
                 data: {'center': '#{centerLocation}', 'studentId': studentId},
+                success: function (data, status) {
+                    $selectSubject.html("<option value='#'>-Select Subject-</option>");
+                    for (var i = 0; i < data['classes'].length; i++) {
+                        $selectSubject.append("<option value='" + data['classes'][i].id + "'>" + data['classes'][i].name + '</option>');
+                    }
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
+        }
+
+        function requestTutor(studentId){
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/requestTutor',
+                dataType: 'json',
+                data: {
+                    'center': '#{centerLocation}',
+                    'studentId': studentId,
+                    'tutorId': $('#selectTutor').val()
+                },
                 success: function (data, status) {
                     $selectSubject.html("<option value='#'>-Select Subject-</option>");
                     for (var i = 0; i < data['classes'].length; i++) {

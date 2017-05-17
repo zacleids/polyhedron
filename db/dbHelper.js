@@ -215,15 +215,15 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
             }
         }, function (err, results) {
             console.log("getCenterStudents: " + JSON.stringify(results));
-            for(var i = 0; i < results["names"].length; i++) {
+            for(var i = 0; i < results["requestedTutors"].length; i++) {
                 requests.push({
-                    requestedTutors: results["requestedTutors"][i],
-                    requestingStudents: results["requestingStudents"][i],
-                    requestedCourses: results["requestedCourses"][i],
-                    requestedLocations: results["requestedLocations"][i],
-                    assignedTutors: results["assignedTutors"][i],
-                    requestTimes: results["requestTimes"][i],
-                    requestIDs: results["requestIDs"][i]
+                    requestedTutor: results["requestedTutors"][i],
+                    requestingStudent: results["requestingStudents"][i],
+                    requestedCourse: results["requestedCourses"][i],
+                    requestedLocation: results["requestedLocations"][i],
+                    assignedTutor: results["assignedTutors"][i],
+                    requestTime: results["requestTimes"][i],
+                    id: results["requestIDs"][i]
                 });
             }
             cb(err, requests);
@@ -239,6 +239,7 @@ DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center
     "centers.description = \'" + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            return;
         }
         var tutorNames = [];
         console.log("getRequestedTutors: " + JSON.stringify(results));
@@ -254,10 +255,12 @@ DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center
 DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.studentId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT nickName FROM users, tutoringRequests, centers WHERE users.id = tutoringRequests.studentId AND tutoringRequests.centerId = centers.id AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            console.error(err);
+            return;
         }
         var studentNames = [];
         console.log("getRequestingStudents: " + JSON.stringify(results));
@@ -273,11 +276,13 @@ DatabaseHelper.prototype.getRequestingStudents = function getRequestingStudents(
 DatabaseHelper.prototype.getRequestedCourses = function getRequestedCourses(center, cb) {
     var self = this;
 
-    self.db.query("SELECT code FROM student, tutoringRequests, centers, registrations, classes, classTypes WHERE student.id = tutoringRequests.studentId AND student.registrationId = registrations.id  " +
+    self.db.query("SELECT code FROM students, tutoringRequests, centers, registrations, classes, classTypes WHERE students.id = tutoringRequests.studentId AND students.registrationId = registrations.id  " +
         " AND registrations.classId = classes.id AND classes.typeId = classTypes.id AND tutoringRequests.centerId = centers.id AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            console.error(err);
+            return;
         }
         var courses = [];
         console.log("getRequestedCourses: " + JSON.stringify(results));
@@ -298,6 +303,8 @@ DatabaseHelper.prototype.getRequestLocations = function getRequestLocations(cent
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            console.error(err);
+            return;
         }
         var locations = [];
         console.log("getRequestLocations: " + JSON.stringify(results));
@@ -313,10 +320,12 @@ DatabaseHelper.prototype.getRequestLocations = function getRequestLocations(cent
 DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, cb) {
     var self = this;
 
-    self.db.query("SELECT nickName FROM users, tutors, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT nickName FROM users, tutors, tutoringRequests, centers WHERE users.id = tutors.tutorId AND tutors.id = tutoringRequests.tutorAssignedId AND tutoringRequests.centerId = centers.id AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            console.error(err);
+            return;
         }
         var tutorNames = [];
         console.log("getAssignedTutors" + JSON.stringify(results));
@@ -332,10 +341,12 @@ DatabaseHelper.prototype.getAssignedTutors = function getAssignedTutors(center, 
 DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
     var self = this;
 
-    self.db.query("SELECT requestTime FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT requestTime FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.id AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            console.error(err);
+            return;
         }
         var requestTimes = [];
         console.log("getRequestTime: " + JSON.stringify(results));
@@ -351,10 +362,12 @@ DatabaseHelper.prototype.getRequestTime = function getRequestTime(center, cb) {
 DatabaseHelper.prototype.getRequestID = function getRequestID(center, cb) {
     var self = this;
 
-    self.db.query("SELECT tutoringRequests.id FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.centerId AND centers.description = \'"
+    self.db.query("SELECT tutoringRequests.id FROM tutoringRequests, centers WHERE tutoringRequests.centerId = centers.id AND centers.description = \'"
         + center + "\' ORDER BY tutoringRequests.id;", function (err, results){
         if(err) {
             cb(err, null);
+            console.error(err);
+            return;
         }
         var requestIDs = [];
         console.log("getRequestTime: " + JSON.stringify(results));
@@ -380,6 +393,7 @@ DatabaseHelper.prototype.getStudentsClassInfo = function getStudentsClassInfo(st
     "\' AND registrations.classId = classes.id AND classTypes.id = classes.typeId;", function (err, results) {
         if (err) {
             cb(err, null);
+            return;
         }
         var studentClassInfo = [];
         console.log("getStudentsClassInfo: " + JSON.stringify(results));
@@ -419,6 +433,7 @@ DatabaseHelper.prototype.getCenterLocations = function getCenterLocations(center
     self.db.query("SELECT locations.id, locations.description FROM locations, centers WHERE centers.description = \'" + center + "\' AND centers.id = locations.centerId;", function (err, results) {
         if (err) {
             cb(err, null);
+            return;
         }
         var centerLocations = [];
         console.log("getCenterLocations: " + JSON.stringify(results));
@@ -671,6 +686,7 @@ DatabaseHelper.prototype.existingUserCheck = function existingUserCheck(userID, 
     self.db.query("SELECT userName FROM users WHERE id = " + userID + ";", function (err, results) {
         if (err) {
             cb(err, null);
+            return;
         }
         var validUser = false;
         console.log("existingUserCheck: " + JSON.stringify(results));
@@ -687,6 +703,7 @@ DatabaseHelper.prototype.validTutorCheck = function validTutorCheck(userID, cb) 
     self.db.query("SELECT roleId FROM usersRolesRef WHERE id = " + userID + ";", function (err, results) {
         if (err) {
             cb(err, null);
+            return;
         }
         var validTutor = false;
         console.log("existingUserCheck: " + JSON.stringify(results));
@@ -703,6 +720,7 @@ DatabaseHelper.prototype.validPasswordCheck = function validPasswordCheck(userID
     self.db.query("SELECT userPassword FROM users WHERE id = " + userID + ";", function (err, results) {
         if (err) {
             cb(err, null);
+            return;
         }
         var validPassword = false;
         console.log("validUserPasswordCheck: " + JSON.stringify(results));
