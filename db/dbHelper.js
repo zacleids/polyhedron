@@ -552,21 +552,27 @@ DatabaseHelper.prototype.updateStudentLocation = function updateStudentLocation(
     });
 };
 
-DatabaseHelper.prototype.updateStudentCourse = function updateStudentCourse(studentID, course, center, cb) {
+DatabaseHelper.prototype.updateStudentCourse = function updateStudentCourse(studentID, regID, center, cb) {
     var self = this;
     var centerID = 0;
-    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
+    var newRegID = 0;
+    var newCourseName = "";
+    self.db.query("SELECT id FROM centers WHERE registrations.userId = \'" + studentID +
+        "\' AND registrations.classId = classes.id AND classTypes.id = classes.typeId;", function (err1, results) {
         if (err1) {
             cb(err1);
         }
         else {
-            console.log("logoutStudent: " + JSON.stringify(results));
-            centerID = results[0].id;
-            self.db.query("DELETE FROM students WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
-                if (err2) {
-                    cb(err2);
-                }
-                cb(null);
+            self.db.query("SELECT registrations.id, classTypes.code FROM locations WHERE locations.description = \'" + location + "\';", function (err2, results2) {
+                console.log("updateStudentLocation: " + JSON.stringify(results));
+                centerID = results1[0].id;
+                locationID = results2[0].id;
+                self.db.query("UPDATE students SET locationId = " + parseInt(locationID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err3) {
+                    if (err3) {
+                        cb(err3);
+                    }
+                    cb(null);
+                });
             });
         }
     });
@@ -690,30 +696,21 @@ DatabaseHelper.prototype.updateTutoringRequest = function updateTutoringRequest(
     });
 };
 
-DatabaseHelper.prototype.removeTutoringRequest = function removeTutoringRequest(studentID, tutorID, center, cb) {
+DatabaseHelper.prototype.removeTutoringRequest = function removeTutoringRequest(reqID, center, cb) {
     var self = this;
     var centerID = 0;
-    var refID = 0;
     self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
         if (err1) {
             cb(err1);
         }
         else {
-            self.db.query("SELECT id FROM tutors WHERE tutorId = " + tutorID + ";", function (err2, results2) {
+            console.log(results1);
+            centerID = results1[0].id;
+            self.db.query("DELETE FROM tutoringRequests WHERE id = " + parseInt(reqID) + " AND centerId =  " + centerID + ");", function (err2) {
                 if (err2) {
                     cb(err2);
                 }
-                else {
-                    console.log(results2);
-                    centerID = results1[0].id;
-                    refID = results2[0].id;
-                    self.db.query("DELETE FROM tutoringRequests WHERE studentId = " + parseInt(studentID) + " AND tutorRequestedId = " + refID + " AND centerId =  " + centerID + ");", function (err3) {
-                        if (err3) {
-                            cb(err3);
-                        }
-                        cb(null);
-                    });
-                }
+                cb(null);
             });
         }
     });
