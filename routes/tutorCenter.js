@@ -351,15 +351,30 @@ function createTutorCenterRouter(opts) {
         });
     });
 
+    router.get('/REST/changeLocation', function (req, res, next){
+        var center = req.query.center;
+        var studentId = req.query.studentId;
+        var newLocId = req.query.locationId;
+        opts.dbHelper.updateStudentLocation(studentId, newLocId, center, function(err){
+            if(err){
+                console.error("An error occurred changing the location of a student",{
+                    error: err,
+                    center:center,
+                    studentId:studentId,
+                    newLocId:newLocId
+                });
+                res.status(500).send({error: 'Something failed!'});
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getStudents');
+            opts.centerSockets[centerNoSpace].emit('getStudents');
+        });
+    });
+
     router.get('/REST/requestTutor', function (req, res, next){
         var center = req.query.center;
         var studentId = req.query.studentId;
         var tutorId = req.query.tutorId;
-        console.log("received request for a tutor", {
-            center:center,
-            studentId:studentId,
-            tutorId:tutorId
-        });
         opts.dbHelper.addTutoringRequest(studentId, tutorId, center, function(err){
             if(err){
                 console.error("An error occurred processing a request for a tutor",{
@@ -372,8 +387,27 @@ function createTutorCenterRouter(opts) {
                 return;
             }
             var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
-            opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
-            opts.centerSockets[centerNoSpace].emit('getTutors');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getRequests');
+            opts.centerSockets[centerNoSpace].emit('getRequests');
+        });
+    });
+
+    router.get('/REST/deleteRequest', function (req, res, next){
+        var center = req.query.center;
+        var requestId = req.query.requestId;
+        opts.dbHelper.removeTutoringRequest(requestId, center, function(err){
+            if(err){
+                console.error("An error occurred removing a request for a tutor",{
+                    error: err,
+                    center:center,
+                    requestId:requestId
+                });
+                res.status(500).send({error: 'Something failed!'});
+                return;
+            }
+            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
+            opts.centerSockets[centerNoSpace].broadcast.emit('getRequests');
+            opts.centerSockets[centerNoSpace].emit('getRequests');
         });
     });
 

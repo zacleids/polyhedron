@@ -345,7 +345,47 @@ block content
                 },
                 complete: function (data, status) {
                     //alert(status);
+                    $('#tutorRequestModal').modal('toggle');
                 }
             });
-            location.reload();
+
+        }
+
+        function deleteRequest(requestId){
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/deleteRequest',
+                dataType: 'json',
+                data: {
+                    'center': '#{centerLocation}',
+                    'requestId': requestId
+                },
+                success: function (data, status) {
+
+                },
+                complete: function (data, status) {
+                    //alert(status);
+                }
+            });
+        }
+
+        function changeLocation(){
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:3000/tutorCenter/REST/changeLocation',
+                dataType: 'json',
+                data: {
+                    'center': '#{centerLocation}',
+                    'studentId': $('#CLStudentID').val(),
+                    'locationId': $('#selectNewLocation').val()
+                },
+                success: function (data, status) {
+
+                },
+                complete: function (data, status) {
+                    //alert(status);
+
+                }
+            });
+            $('#changeLocationModal').modal('toggle');
         }

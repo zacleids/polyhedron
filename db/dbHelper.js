@@ -172,12 +172,6 @@ DatabaseHelper.prototype.getCenterTutors = function getCenterTutors(center, cb) 
                    end = " pm"
                }
                var timeToDisplay = hour.toString() + ":" + pad(min, 2) + end;
-               console.log("time info",{
-                   logedInTime:logedInTime,
-                   hour:hour,
-                   min:min,
-                   timeToDisplay:timeToDisplay
-               });
                centerTutors.push({
                    name: results[i].nickName,
                    loginTime: timeToDisplay,
@@ -531,13 +525,13 @@ DatabaseHelper.prototype.logoutStudent = function logoutStudent(studentID, cente
 DatabaseHelper.prototype.updateStudentLocation = function updateStudentLocation(studentID, locationID, center, cb) {
     var self = this;
     var centerID = 0;
-    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results1) {
+    self.db.query("SELECT id FROM centers WHERE centers.description = \'" + center + "\';", function (err1, results) {
         if (err1) {
             cb(err1);
         }
         else {
             console.log("updateStudentLocation: " + JSON.stringify(results));
-            centerID = results1[0].id;
+            centerID = results[0].id;
             self.db.query("UPDATE students SET locationId = " + parseInt(locationID) + " WHERE id = " + parseInt(studentID) + " AND centerId = " + parseInt(centerID) + ";", function (err2) {
                 if (err2) {
                     cb(err2);
