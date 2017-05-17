@@ -135,7 +135,7 @@ block content
                             span.sr-only Close
                         h4#tutorRequestModalLabel.modal-title Please request a tutor
                     .modal-body
-                        form#tutorRequestForm(role='form' action='requestTutor();' method='post')
+                        form#tutorRequestForm(role='form' action='return false;' method='post')
                             input#reqStudentID(type='hidden' value='' name='reqStudentID')
                             .form-group
                                 label(for='selectTutor') Select a tutor
@@ -144,7 +144,7 @@ block content
                                     - for (var i = 0; i < tutors.length; i++)
                                         option(value=tutors[i].id) #{tutors[i].name}
                             |
-                            button#subTutorRequest.btn.btn-primary(type='submit') Submit Request
+                            button#subTutorRequest.btn.btn-primary(type='submit' onclick='requestTutor();') Submit Request
 
         #changeLocationModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='changeLocationModal', aria-hidden='true')
             .modal-dialog
@@ -156,7 +156,7 @@ block content
                             span.sr-only Close
                         h4#changeLocationModalLabel.modal-title Please select a new location
                     .modal-body
-                        form#changeLocationForm(role='form' action='changeLocation();' method='post')
+                        form#changeLocationForm(role='form' action='return false;' method='post')
                             input#CLStudentID(type='hidden' value='' name='CLStudentID')
                             .form-group
                                 label(for='selectNewLocation') Select a new location
@@ -165,7 +165,7 @@ block content
                                     - for (var i = 0; i < locations.length; i++)
                                         option(value=locations[i].id) #{locations[i].name}
                             |
-                            button#subChangeLocation.btn.btn-primary(type='submit') Submit Request
+                            button#subChangeLocation.btn.btn-primary(type='submit' onclick='changeLocation();') Submit Request
 
         #changeSubjectModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='changeSubjectModal', aria-hidden='true')
             .modal-dialog
@@ -177,7 +177,7 @@ block content
                             span.sr-only Close
                         h4#changeSubjectModalLabel.modal-title Please select a new subject
                     .modal-body
-                        form#changeSubjectModalForm(role='form' action='changeSubject();' method='post')
+                        form#changeSubjectModalForm(role='form' action='return false;' method='post')
                             input#CSubStudentID(type='hidden' value='' name='CSubStudentID')
                             .form-group
                                 label(for='selectNewSubject') Select a new subject
@@ -185,7 +185,7 @@ block content
                                 select#selectNewSubject.form-control(name='selectNewSubject')
                                     option(value='#') -Select Subject-
                             |
-                            button#subChangeSubject.btn.btn-primary(type='submit') Submit Request
+                            button#subChangeSubject.btn.btn-primary(type='submit' onclick='changeSubject();') Submit Request
 
 
     if(showTutorError)
