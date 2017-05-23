@@ -235,6 +235,7 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
                 var timeDiff = currentTime - requestTime;
                 var minDiff = Math.round(((timeDiff % 86400000) % 3600000) / 60000); //get minutes
                 var numMins = minDiff + " min(s)";
+                var color = getColor(minDiff);
                 requests.push({
                     requestedTutor: results["requestedTutors"][i],
                     requestingStudent: results["requestingStudents"][i],
@@ -242,6 +243,7 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
                     requestedLocation: results["requestedLocations"][i],
                     assignedTutor: results["assignedTutors"][i],
                     requestTime: numMins,
+                    color: color,
                     id: results["requestIDs"][i]
                 });
             }
@@ -249,6 +251,197 @@ DatabaseHelper.prototype.getCenterReqests = function getCenterRequests(center, c
         }
     );
 };
+
+function getColor(numMins){
+    switch(numMins){
+        case 0:
+            return '#3399FF';
+            break;
+        case 1:
+            return '#3399FF';
+            break;
+        case 2:
+            return '#3399FF';
+            break;
+        case 3:
+            return '#3399FF';
+            break;
+        case 4:
+            return '#3399FF';
+            break;
+        case 5:
+            return '#3399FF';
+            break;
+        case 6:
+            return '#3399FF';
+            break;
+        case 7:
+            return '#3399FF';
+            break;
+        case 8:
+            return '#3399FF';
+            break;
+        case 9:
+            return '#3399FF';
+            break;
+        case 10:
+            return '#3399FF';
+            break;
+        case 11:
+            return '#33FF33';
+            break;
+        case 12:
+            return '#33FF33';
+            break;
+        case 13:
+            return '#33FF33';
+            break;
+        case 14:
+            return '#33FF33';
+            break;
+        case 15:
+            return '#33FF33';
+            break;
+        case 16:
+            return '#33FF33';
+            break;
+        case 17:
+            return '#33FF33';
+            break;
+        case 18:
+            return '#33FF33';
+            break;
+        case 19:
+            return '#33FF33';
+            break;
+        case 20:
+            return '#33FF33';
+            break;
+        case 21:
+            return '#FFFF33';
+            break;
+        case 22:
+            return '#FFFF33';
+            break;
+        case 23:
+            return '#FFFF33';
+            break;
+        case 24:
+            return '#FFFF33';
+            break;
+        case 25:
+            return '#FFFF33';
+            break;
+        case 26:
+            return '#FFFF33';
+            break;
+        case 27:
+            return '#FFFF33';
+            break;
+        case 28:
+            return '#FFFF33';
+            break;
+        case 29:
+            return '#FFFF33';
+            break;
+        case 30:
+            return '#FFFF33';
+            break;
+        case 31:
+            return '#FF9933';
+            break;
+        case 32:
+            return '#FF9933';
+            break;
+        case 33:
+            return '#FF9933';
+            break;
+        case 34:
+            return '#FF9933';
+            break;
+        case 35:
+            return '#FF9933';
+            break;
+        case 36:
+            return '#FF9933';
+            break;
+        case 37:
+            return '#FF9933';
+            break;
+        case 38:
+            return '#FF9933';
+            break;
+        case 39:
+            return '#FF9933';
+            break;
+        case 40:
+            return '#FF9933';
+            break;
+        case 41:
+            return '#FF0000';
+            break;
+        case 42:
+            return '#FF0000';
+            break;
+        case 43:
+            return '#FF0000';
+            break;
+        case 44:
+            return '#FF0000';
+            break;
+        case 45:
+            return '#FF0000';
+            break;
+        case 46:
+            return '#FF0000';
+            break;
+        case 47:
+            return '#FF0000';
+            break;
+        case 48:
+            return '#FF0000';
+            break;
+        case 49:
+            return '#FF0000';
+            break;
+        case 50:
+            return '#990000';
+            break;
+        case 51:
+            return '#990000';
+            break;
+        case 52:
+            return '#990000';
+            break;
+        case 53:
+            return '#990000';
+            break;
+        case 54:
+            return '#990000';
+            break;
+        case 55:
+            return '#990000';
+            break;
+        case 56:
+            return '#990000';
+            break;
+        case 57:
+            return '#990000';
+            break;
+        case 58:
+            return '#990000';
+            break;
+        case 59:
+            return '#990000';
+            break;
+        case 60:
+            return '#990000';
+            break;
+        default:
+            return '#990000';
+            break;
+    }
+}
 
 
 DatabaseHelper.prototype.getRequestedTutors = function getRequestedTutors(center, cb) {

@@ -54,7 +54,7 @@ block content
                                                 th Tutor
                                             tbody
                                                 - for(var i = 0; i < requests.length; i++)
-                                                    tr(data-id=requests[i].id)
+                                                    tr(data-id=requests[i].id style="background-color:" + requests[i].color)
                                                         td #{requests[i].requestingStudent}
                                                         td #{requests[i].requestedCourse}
                                                         td #{requests[i].requestedLocation}
@@ -220,6 +220,7 @@ block content
 
     script.
         $(document).ready(function () {
+            setTimeout(getRequests, 30000);
             // Get the scrollbar width
             var scrollbarWidth = getScrollbarWidth();
 
@@ -421,10 +422,9 @@ block content
                 },
                 complete: function (data, status) {
                     //alert(status);
-                    $('#tutorRequestModal').modal('toggle');
                 }
             });
-
+            $('#tutorRequestModal').modal('toggle');
         }
 
         function deleteRequest(requestId){

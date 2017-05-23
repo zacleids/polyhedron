@@ -272,7 +272,7 @@ function refreshRequestsTable(requests) {
         } else {
             tutor = '';
         }
-        var rowData = '<tr data-id="' + requests[row].id + '">';
+        var rowData = '<tr data-id="' + requests[row].id + '"  style="background-color:' + requests[row].color + '">';
         rowData += ('<td>' + name + '</td>');
         rowData += ('<td>' + course + '</td>');
         rowData += ('<td>' + location + '</td>');
