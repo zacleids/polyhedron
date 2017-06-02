@@ -69,11 +69,11 @@ passport.use(new Strategy({
         session: false
     },
     function(req, username, password, cb) {
-        console.log("in passport.use function", {
-            username:username,
-            password:password,
-            user:req.user
-        });
+        // console.log("in passport.use function", {
+        //     username:username,
+        //     password:password,
+        //     user:req.user
+        // });
         var passHash = crypto.createHash('sha1').update(password).digest("hex");
         opts.dbHelper.validAdminCheck(username, passHash, function(err, isValidPassword) {
             if (err) {
@@ -100,12 +100,12 @@ passport.use(new Strategy({
 // deserializing.
 
 passport.serializeUser(function(user, cb) {
-    console.log("in passport.serializeUser function", {user:user});
+    // console.log("in passport.serializeUser function", {user:user});
     cb(null, user.username);
 });
 
 passport.deserializeUser(function(id, cb) {
-    console.log("in passport.deserializeUser function", {id:id});
+    // console.log("in passport.deserializeUser function", {id:id});
     opts.dbHelper.existingUserCheck(id, function (err, user) {
         if (err) { return cb(err); }
         cb(null, user);
