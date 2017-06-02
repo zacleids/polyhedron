@@ -37,6 +37,9 @@ html(lang='en')
                                 a.navLink(data-toggle='modal', data-target='#signInModal') Student Sign In
                         li
                             a.navLink(href='/admin') Admin Section
+                        if(user)
+                            li
+                                a.navLink(href='/admin/logout') Admin Logout
         div
             block adminNav
         div

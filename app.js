@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var crypto = require('crypto');
+var passport = require('passport');
+var Strategy = require('passport-local').Strategy;
 var fs = require('fs');
 var io = require('./socket/io');
 
@@ -51,17 +55,81 @@ var admin = createAdminRouter(opts);
 
 var app = express();
 
+// Configure the local strategy for use by Passport.
+//
+// The local strategy require a `verify` function which receives the credentials
+// (`username` and `password`) submitted by the user.  The function must verify
+// that the password is correct and then invoke `cb` with a user object, which
+// will be set at `req.user` in route handlers after authentication.
+
+passport.use(new Strategy({
+        usernameField: 'adminID',
+        passwordField: 'adminPass',
+        passReqToCallback: true,
+        session: false
+    },
+    function(req, username, password, cb) {
+        console.log("in passport.use function", {
+            username:username,
+            password:password,
+            user:req.user
+        });
+        var passHash = crypto.createHash('sha1').update(password).digest("hex");
+        opts.dbHelper.validAdminCheck(username, passHash, function(err, isValidPassword) {
+            if (err) {
+                return cb(err);
+            }
+            if (!isValidPassword) {
+                return cb(null, false);
+            }
+            var user = {
+                username: username,
+                password: password
+            };
+            return cb(null, user);
+        });
+    }
+));
+
+// Configure Passport authenticated session persistence.
+//
+// In order to restore authentication state across HTTP requests, Passport needs
+// to serialize users into and deserialize users out of the session.  The
+// typical implementation of this is as simple as supplying the user ID when
+// serializing, and querying the user record by ID from the database when
+// deserializing.
+
+passport.serializeUser(function(user, cb) {
+    console.log("in passport.serializeUser function", {user:user});
+    cb(null, user.username);
+});
+
+passport.deserializeUser(function(id, cb) {
+    console.log("in passport.deserializeUser function", {id:id});
+    opts.dbHelper.existingUserCheck(id, function (err, user) {
+        if (err) { return cb(err); }
+        cb(null, user);
+    });
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 app.use('/tutorCenter', tutorCenter);

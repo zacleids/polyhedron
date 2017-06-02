@@ -5,6 +5,7 @@ var async = require('async');
 var excelBuilder = require('msexcel-builder');
 var ExcelWorkbookGenerator = require('../excelGenerator.js');
 var crypto = require('crypto');
+var passport = require('passport');
 
 
 var redirectBase = 'http://localhost:3000/admin';
@@ -25,48 +26,102 @@ function makeRequest(line) {
 
 function createAdminRouter(opts) {
     var router = express.Router();
+
+    // router.use(passport.initialize());
+    // router.use(passport.session());
+    // Configure the local strategy for use by Passport.
+    //
+    // The local strategy require a `verify` function which receives the credentials
+    // (`username` and `password`) submitted by the user.  The function must verify
+    // that the password is correct and then invoke `cb` with a user object, which
+    // will be set at `req.user` in route handlers after authentication.
+
+    /*passport.use(new Strategy({
+            usernameField: 'adminID',
+            passwordField: 'adminPass',
+            passReqToCallback: true,
+            session: false
+        },
+        function(req, username, password, cb) {
+            // console.log("in passport.use function", {
+            //     username:username,
+            //     password:password,
+            //     user:req.user
+            // });
+            var passHash = crypto.createHash('sha1').update(password).digest("hex");
+            opts.dbHelper.validAdminCheck(username, passHash, function(err, isValidPassword) {
+                if (err) {
+                    return cb(err);
+                }
+                if (!isValidPassword) {
+                    return cb(null, false);
+                }
+                var user = {
+                    username: username,
+                    password: password
+                };
+                return cb(null, user);
+            });
+        }
+    ));*/
+
+
+// Configure Passport authenticated session persistence.
+//
+// In order to restore authentication state across HTTP requests, Passport needs
+// to serialize users into and deserialize users out of the session.  The
+// typical implementation of this is as simple as supplying the user ID when
+// serializing, and querying the user record by ID from the database when
+// deserializing.
+/*    passport.serializeUser(function(user, cb) {
+        // console.log("in passport.serializeUser function", {user:user});
+        cb(null, user.username);
+    });
+
+    passport.deserializeUser(function(id, cb) {
+        // console.log("in passport.deserializeUser function", {id:id});
+        opts.dbHelper.existingUserCheck(id, function (err, user) {
+            if (err) { return cb(err); }
+            cb(null, user);
+        });
+    });*/
+
+
     
     router.get('/', function (req, res, next) {
+        // console.log("in admin / GET method", {user:req.user});
         res.render('admin/admin', {
-            title: 'Admin'
+            title: 'Admin',
+            user: req.user
         });
     });
 
-    router.post('/', function (req, res, next) {
-        var userId = req.body.adminID;
-        var pass = req.body.adminPass;
-        var passHash = crypto.createHash('sha1').update(pass).digest("hex");
-        opts.dbHelper.validAdminCheck(userId, passHash, function(err1, isValidPassword){
-            if(err1){
-                console.error("an error occurred checking a admin password:", err1);
-            }
-            console.log({isValidPassword:isValidPassword});
-            if(isValidPassword) {
-                res.redirect(redirectBase + '/options');
-            }else{
-                res.render('admin/admin', {
-                    title: 'Admin',
-                    showAdminError: true
-                });
-            }
-        });
+    router.get('/*', function (req, res, next) {
+        // console.log("in admin /* GET method", {user:req.user});
+        //next();
+        if(req.user){
+            next();
+            return;
+        }
+        res.redirect(redirectBase);
     });
 
-    router.post('/REST/adminSignOut', function (req, res, next){
-        var center = req.body.center;
-        var studentId = req.body.studentId;
-        opts.dbHelper.logoutTutor(studentId, center, function(err){
-            if(err){
-                console.error("an error occurred logging a admin out. info: ", {
-                    err: err,
-                    studentId:studentId,
-                    center: center
-                });
-            }
-            var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
-            opts.centerSockets[centerNoSpace].broadcast.emit('getTutors');
-            opts.centerSockets[centerNoSpace].emit('getTutors');
-        });
+    router.post('/*', function (req, res, next) {
+        //console.log("in admin /* POST method", {user:req.user});
+        if(req.originalUrl === '/admin' || req.user){
+            next();
+            return;
+        }
+        res.redirect(redirectBase);
+    });
+
+    router.post('/', passport.authenticate('local', { failureRedirect: redirectBase,  successRedirect: redirectBase + '/options'}), function (req, res, next) {
+        //console.log("in admin / POST method");
+    });
+
+    router.get('/logout', function(req, res){
+        req.logout();
+        res.redirect(req.headers.referer);
     });
 
     // *************** reports page ***************
@@ -86,7 +141,8 @@ function createAdminRouter(opts) {
             res.render('admin/reports', {
                 title: 'Reports',
                 centerLocation: opts.centerLocation,
-                files: finalFiles
+                files: finalFiles,
+                user: req.user
             });
         });
     });
@@ -177,7 +233,8 @@ function createAdminRouter(opts) {
             centers: centers,
             tutorTable: opts.tutorCenters[center].tutorTable,
             requestsTable: opts.tutorCenters[center].requestsTable,
-            scrollingText: opts.tutorCenters[center].scrollingText
+            scrollingText: opts.tutorCenters[center].scrollingText,
+            user: req.user
         });
     });
 
@@ -193,8 +250,10 @@ function createAdminRouter(opts) {
         centers.sort();
 
         var centerNoSpace = center.replace(new RegExp(' ', 'g'), '');
-        opts.centerSockets[centerNoSpace].broadcast.emit('reload');
-        opts.centerSockets[centerNoSpace].emit('reload');
+        if(opts.centerSockets[centerNoSpace]){
+            opts.centerSockets[centerNoSpace].broadcast.emit('reload');
+            opts.centerSockets[centerNoSpace].emit('reload');
+        }
 
         res.render('admin/options', {
             title: 'Options',
@@ -203,7 +262,8 @@ function createAdminRouter(opts) {
             tutorTable: opts.tutorCenters[center].tutorTable,
             requestsTable: opts.tutorCenters[center].requestsTable,
             scrollingText: opts.tutorCenters[center].scrollingText,
-            done: true
+            done: true,
+            user: req.user
         });
     });
 
@@ -304,6 +364,7 @@ function createAdminRouter(opts) {
                 cb(null, opts.centerLocation);
             }
         }, function (err, result) {
+            result['user'] = req.user;
             res.render('admin/statistics', result);
         });
 

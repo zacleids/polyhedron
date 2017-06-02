@@ -48,7 +48,8 @@ function createTutorCenterRouter(opts) {
             res.render('centerList', {
                 tableLen: Math.ceil(Math.sqrt(centers.length)),
                 centers: centers,
-                redirectBase: redirectBase
+                redirectBase: redirectBase,
+                user: req.user
             });
         }
     });
@@ -99,6 +100,7 @@ function createTutorCenterRouter(opts) {
                 res.status(500).send({error: 'Something failed!'});
                 return;
             }
+            result['user'] = req.user;
             res.render('tutorCenter', result);
         });
     });
@@ -265,6 +267,7 @@ function createTutorCenterRouter(opts) {
                     res.status(500).send({error: 'Something failed!'});
                     return;
                 }
+                result['user'] = req.user;
                 res.render('tutorCenter', result);
             });
         }
