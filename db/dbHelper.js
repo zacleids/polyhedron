@@ -906,7 +906,7 @@ DatabaseHelper.prototype.validAdminCheck = function validAdminCheck(userID, pass
             cb(err1, null);
         }
         console.log("validAdminCheck: " + JSON.stringify(results1));
-        if(results1[0].roleId === 1) {
+        if(results1[0] && results1[0].roleId === 1) {
             self.db.query("SELECT userPassword FROM users WHERE id = " + userID + ";", function (err2, results2) {
                 if (err2) {
                     cb(err2, null);
